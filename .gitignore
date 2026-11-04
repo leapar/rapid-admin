@@ -1,0 +1,15 @@
+# 依赖与产物(各子目录有自己的 .gitignore,这里是全局兜底)
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+
+# 本地数据 / 配置
+server/data/
+server/configs/config.dev.yaml
+
+# 编辑器
+.idea/
+.vscode/
+*.iml
