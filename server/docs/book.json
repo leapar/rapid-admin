@@ -1,0 +1,29 @@
+{
+  "title": "通用后台管理框架手册",
+  "description": "Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。",
+  "plugins": [
+    "betterchinese",
+    "highlight",
+    "-fontsettings",
+    "-lunr",
+    "-search",
+    "search-pro",
+    "theme-default",
+    "-toolbar",
+    "-sharing",
+    "chapter-fold",
+    "back-to-top-button",
+    "hide-element",
+    "custom-favicon",
+    "addcssjs"
+  ],
+  "pluginsConfig": {
+    "hide-element": {
+      "elements": [".gitbook-link"]
+    },
+    "favicon": "favicon.ico",
+    "addcssjs": {
+      "css": ["styles/website.css"]
+    }
+  }
+}

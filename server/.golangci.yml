@@ -1,0 +1,81 @@
+# golangci-lint 配置
+# 详细规则见:https://golangci-lint.run/usage/configuration/
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - errcheck      # 未检查错误
+    - gosimple      # 简化建议
+    - govet         # 标准 vet
+    - ineffassign   # 无效赋值
+    - staticcheck   # 静态分析
+    - unused        # 未使用
+    - gofmt         # 格式
+    - goimports     # import 排序
+    - misspell      # 拼写
+    - prealloc      # slice 预分配
+    - sqlclosecheck # sql 未关闭
+    - bodyclose     # http body 未关闭
+    - exportloopref # 循环变量捕获(go 1.22+ 不需要,但保留)
+    - gocritic      # 代码味道
+    - gocyclo       # 圈复杂度(< 15)
+    - dupl          # 重复代码
+    - errorlint     # error 包装
+    - nilerr        # nil error
+    - revive        # golint 替代
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+  dupl:
+    threshold: 150
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+    disabled-checks:
+      - dupImport
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+  revive:
+    rules:
+      - name: var-naming
+        severity: warning
+        disabled: false
+      - name: package-comments
+        severity: warning
+        disabled: false
+
+issues:
+  exclude-dirs:
+    # 手册构建依赖(npm 装的第三方包)。⚠️ **flatted 带了 .go 文件** ——
+    # 它会被 `go list ./...` 扫成一个包,但它不是本仓的代码,
+    # 按本仓的规矩(复杂度 < 15、要有包注释)去 lint 它只会报一堆无关的错。
+    # 真正的成因是 node_modules 在 module 内部 —— 见 server/docs/.bookignore。
+    - docs/node_modules
+  exclude-rules:
+    # 测试文件允许长函数/复杂逻辑
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gocritic
+    # main.go / seed / scripts 允许 main 函数
+    - path: (main\.go|cmd/.*|scripts/.*)
+      linters:
+        - gocyclo
+        - dupl
+  exclude-use-default: false
+  max-issues-per-linter: 50
+  max-same-issues: 3
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true

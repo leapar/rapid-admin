@@ -1,0 +1,70 @@
+# =============================================================================
+# systemd unit —— 单机部署(非 k8s)
+# 文档 §11.5
+# 关键点:
+#   - Type=notify              sd_notify 上报 Ready/Stopping
+#   - LimitNOFILE=1048576      高并发文件描述符
+#   - WatchdogSec=30s          watchdog(主进程未喂狗则重启)
+#   - StartLimitIntervalSec    启动抖动保护
+#   - RuntimeDirectory         自动 /run/rapid-admin
+#   - LogsDirectory            自动 /var/log/rapid-admin
+#   - ConfigurationDirectory   自动 /etc/rapid-admin
+#   - 不再设 GIN_MODE          (这是 Gin 框架变量,与 Hertz 无关)
+#   - Restart=always
+#   - ProtectSystem=strict + ReadWritePaths 仅日志目录
+# =============================================================================
+
+[Unit]
+Description=RapidAdmin API (Hertz)
+Documentation=https://wiki.rapid-admin.local/deploy
+After=network-online.target mysql.service redis-server.service
+Wants=network-online.target
+Requires=mysql.service redis-server.service
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=notify
+NotifyAccess=main
+WatchdogSec=30s
+ExecStart=/usr/local/bin/rapid-admin -c /etc/rapid-admin/configs/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30s
+User=rapid-admin
+Group=rapid-admin
+WorkingDirectory=/var/lib/rapid-admin
+LimitNOFILE=1048576
+LimitNPROC=65536
+MemoryMax=4G
+TasksMax=8192
+RuntimeDirectory=rapid-admin
+RuntimeDirectoryMode=0750
+LogsDirectory=rapid-admin
+LogsDirectoryMode=0750
+ConfigurationDirectory=rapid-admin
+ConfigurationDirectoryMode=0750
+StateDirectory=rapid-admin
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+ReadWritePaths=/var/log/rapid-admin /var/lib/rapid-admin /var/lib/rapid-admin/tmp
+EnvironmentFile=-/etc/rapid-admin/api.env
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

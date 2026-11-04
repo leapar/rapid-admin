@@ -1,0 +1,1785 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>approvalx(通用审批) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../api-docs/swaggerx.html" />
+    
+    
+    <link rel="prev" href="dyn.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../messaging/inbox.html">
+            
+                <a href="../messaging/inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../messaging/notifyx.html">
+            
+                <a href="../messaging/notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../messaging/push.html">
+            
+                <a href="../messaging/push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../messaging/pushx.html">
+            
+                <a href="../messaging/pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../messaging/permnotify.html">
+            
+                <a href="../messaging/permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../messaging/msn.html">
+            
+                <a href="../messaging/msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../messaging/smslimit.html">
+            
+                <a href="../messaging/smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../messaging/smstpl.html">
+            
+                <a href="../messaging/smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="../messaging/emailx.html">
+            
+                <a href="../messaging/emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../scheduling/cronx.html">
+            
+                <a href="../scheduling/cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../scheduling/jobs.html">
+            
+                <a href="../scheduling/jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../scheduling/slowquery.html">
+            
+                <a href="../scheduling/slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="dyn.html">
+            
+                <a href="dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="9.2" data-path="approval.html">
+            
+                <a href="approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >approvalx(通用审批)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="approvalx-——-通用审批系统使用教程">approvalx —— 通用审批系统使用教程</h1>
+<blockquote>
+<p>这一章回答五个问题,全部按真实操作顺序写,每一步都标注了「系统内部发生了什么」:</p>
+<ol>
+<li><strong>审批是怎么逻辑走的</strong>(§1)—— 先建立整体图景,后面每一步都能对上号;</li>
+<li><strong>什么是或签、什么是会签</strong>(§2)—— 配错这一步,整条流程就白配;</li>
+<li><strong>怎么使用审批模板功能</strong>(§3-§5)—— 配置页导览 + 建模板前的准备;</li>
+<li><strong>怎么把模板跑起来</strong>:请假三级(§6)与报销四级(§7)两个完整教程;</li>
+<li><strong>用户日常怎么用</strong>(§8)—— 发起、待办、通过/拒绝/打回、重提。</li>
+</ol>
+<p>本章全部流程于 2026-11-03 在本机 dev server 上<strong>真实跑通验证</strong>过(§11 实测记录),
+不是照设计稿抄的。引擎内部机制(七张表 / SPI / 事务纪律)的完整定义见设计方案
+§3-§6,本章只讲用得上的部分。</p>
+</blockquote>
+<h2 id="§1-先看懂一张单子的旅程">§1 先看懂:一张单子的旅程</h2>
+<p>审批系统的核心是一条<strong>单向状态机</strong>:</p>
+<pre><code>                    ┌────────── 打回(rollback,备注≥5字)──────────┐
+                    ▼                                              │
+ ┌───────┐ 发起/送审  ┌─────────┐   逐关通过    ┌──────────┐          │
+ │ draft │──────────▶│ running │──────────────▶│ approved │          │
+ └───────┘           └─────────┘               └──────────┘          │
+    │                    │                                            │
+    │ 作废               │ 任何一关:拒绝(reject,备注≥5字)            │
+    ▼                    │            ┌──────────┐                   │
+ ┌───────────┐            ├───────────▶│ rejected │                   │
+ │ cancelled │            │            └──────────┘                   │
+ └───────────┘            └───────────────────────────────────────────┘
+                 (returned 状态即"停在发起人手里等重提",
+                  重提后回到 running、从第 1 关重走)
+
+ 红线:cancelled 只有 draft/returned 能去(D9:running 的单子可能有人正在审,
+      悄悄作废会让他审到一张不存在的单);rejected/approved 是终态,不可逆。
+</code></pre><p>一次「提交」背后,系统在<strong>同一个数据库事务</strong>里做完这些事:</p>
+<ol>
+<li><strong>校验单子</strong>:状态必须是 <code>draft</code>(首次)或 <code>returned</code>(重提);重提要过两道闸
+—— 内容必须真的变了(逐字节比较标题和表单变量),且打回次数没到 5 次上限;</li>
+<li><strong>解析第 1 关的审批人</strong>:按规则查角色成员 / 指定人 / 部门主管,
+<strong>剔除发起人自己</strong>(D11:自己不能审自己的单),去重;</li>
+<li><strong>生成审批任务(task)</strong>:解析出的每个人各得一行 pending task;</li>
+<li><strong>落一轮次(round)</strong>:把本轮的标题和表单内容快照存档(打回重提时留痕就靠它);</li>
+<li>实例置 <code>running</code>、<code>current_stage = 1</code>。</li>
+</ol>
+<p>之后每有一个人<strong>处理</strong>(通过/拒绝/打回),引擎在锁住实例行的事务里判定走向
+(会签数票数、或签直接定局,见 §2),该进下一关就生成下一关的任务,
+该终局就把剩余没人处理的任务标成 <code>skipped</code>。</p>
+<p><strong>通知链路</strong>:每个动作落地后发一条事件——前端靠它刷新待办角标;
+同时旁路投一条<strong>站内信</strong>给相关人(「你有新的审批任务」「你的单子被通过了」)。
+站内信是尽力而为:投不出去只记日志,绝不会让审批本身失败。</p>
+<p><strong>后台巡检</strong>:有单子在某一关停了太久?cron 巡检任务会发站内信<strong>告警</strong>,
+但<strong>绝不自动改单</strong>——"审批人离职了自动转办"这类聪明的修复会改动一张
+正被人认真审的单子,V1 明确不做。真卡死了联系管理员处理。</p>
+<h2 id="§2-🔴-什么是或签、什么是会签配错整条流程白配">§2 🔴 什么是或签、什么是会签(配错整条流程白配)</h2>
+<p>每一关都要选「审批方式」(<code>review_type</code>),它决定<strong>这一关有人处理之后怎么走</strong>:</p>
+<table>
+<thead>
+<tr>
+<th><code>review_type</code></th>
+<th>名字</th>
+<th>某人<strong>通过</strong>时</th>
+<th>某人<strong>拒绝</strong>时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all</code></td>
+<td><strong>会签</strong>(全签)</td>
+<td>这一关<strong>还有别人没批?等</strong>。全部通过 → 进下一关;<strong>最后一关</strong>通过 → 整单 <code>approved</code></td>
+<td>整单立即 <code>rejected</code>,其余没批的人的任务标 <code>skipped</code></td>
+</tr>
+<tr>
+<td><code>any</code></td>
+<td><strong>或签</strong>(任签)</td>
+<td><strong>整张单立即 <code>approved</code> 终局</strong>——后面还有关卡也<strong>不会启动</strong></td>
+<td>整单立即 <code>rejected</code></td>
+</tr>
+</tbody>
+</table>
+<p>一句话记:<strong>会签"全过才过、一票否决";或签"谁先处理谁说了算"——
+或签的第一个动作就是整张单的终局。</strong></p>
+<h3 id="三个场景对照">三个场景对照</h3>
+<p><strong>场景 A:部门经理关,规则解析出 2 个人(老王、老李)</strong></p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>老王批了「通过」之后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>会签 <code>all</code></td>
+<td>什么都没发生——实例还停在这一关,老李的待办还在,等老李也批了才进下一关</td>
+</tr>
+<tr>
+<td>或签 <code>any</code></td>
+<td>整单立刻 <code>approved</code>,老李的任务标 <code>skipped</code>,<strong>后面的关卡全部不启动</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>场景 B:报销四级链(项目经理 → 部门经理 → 总经理 → 财务)</strong></p>
+<p>必须每一关都配<strong>会签</strong>。任何一关有人拒绝 → 整单 <code>rejected</code>;
+每一关所有人都通过 → 进下一关;财务那关通过 → <code>approved</code>,财务打款。</p>
+<p><strong>场景 C:有人想把「部门经理关」配成或签,想着"经理们谁批都行,批完找总经理"</strong></p>
+<p>❌ <strong>不行</strong>。或签的语义就是"首个动作终局",不存在"或签批完再到下一关"
+(这是设计稿 D5 的拍板,不是实现 bug)。经理关想要"任何一个经理批了就算这关过、
+再找总经理",V1 的等价配置是:<strong>这关配会签,规则只指向一个只有一个成员的角色,
+或者用「指定人」规则精确到一个人</strong>——单人会签 = 这一个人批完即过,逐级推进。</p>
+<h3 id="实测证据2026-11-03">实测证据(2026-11-03)</h3>
+<p>教程准备期把一条两关测试模板的两关都配成 <code>any</code>:部门经理一批,
+实例<strong>直接 <code>approved</code>、<code>current_stage</code> 归零</strong>,总经理那一关的任务压根没生成;
+把两关改成 <code>all</code> 后,部门经理批完 <code>status=running, current_stage=2</code>,
+总经理的待办才出现。两条路径都截图级验证过。</p>
+<blockquote>
+<p>⚠️ 配置页上「审批方式」下拉的两个选项文案就是「会签(全签)/ 或签(任签)」,
+别凭直觉选——"逐级上报"选或签,整条链只剩第一关有人审。</p>
+</blockquote>
+<h2 id="§3-使用审批模板功能配置页导览">§3 使用审批模板功能:配置页导览</h2>
+<p>入口:<strong>审批流程配置</strong>(<code>/flow</code>),需要 <code>flow:read</code> 权限 + <code>menu.flow</code> 菜单。</p>
+<table>
+<thead>
+<tr>
+<th>页面</th>
+<th>能做什么</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模板列表 <code>/flow</code></td>
+<td>看所有模板(编码/名称/业务类型/启停),新建、删除,点进详情</td>
+<td><code>flow:read</code> / <code>flow:create</code> / <code>flow:delete</code></td>
+</tr>
+<tr>
+<td>模板详情 <code>/flow/:id</code></td>
+<td>改基本信息、整树编辑关卡(加/删/改关名、审批方式)</td>
+<td><code>flow:update</code></td>
+</tr>
+<tr>
+<td>规则子页 <code>/flow/:id/stage/:stageId</code></td>
+<td>管理某一关的审批人规则:增删改、选来源(指定人/指定角色/部门主管)</td>
+<td><code>flow:update</code></td>
+</tr>
+</tbody>
+</table>
+<p>配置期的行为,写代码对接的人要知道:</p>
+<ul>
+<li><strong>保存即预检</strong>:建/改模板时,每一关的规则都会<strong>当场解析一次</strong>,
+解析不出任何在职用户 → 拒绝保存(20601)。所以模板永远不是"配了但没人审"的状态。</li>
+<li><strong>编辑是整树替换</strong>:<code>PUT /system/flows/:id</code> 要传<strong>完整</strong>的关卡+规则结构,
+后端删旧写新——只传想改的那一关,其它关卡会被当成"删掉了"。
+页面上不用操心(它总是传整棵树),直接调 API 的人要。</li>
+<li><strong>有单子在审就锁编辑</strong>(D7):存在非终态实例时,模板整树改不了。
+想换流程就停用旧模板、新建一条(编码不能重复)。</li>
+<li><strong>启停</strong>:<code>is_active=false</code> 的模板不接新单,在跑的单子不受影响;
+同一 <code>biz_type</code> 有多条启用模板时,发起必须显式指 <code>template_code</code>。</li>
+</ul>
+<h2 id="§4-第-0-步先给角色配人再建模板">§4 第 0 步:先给角色配人,再建模板</h2>
+<p>规则按「指定角色」配置时,保存模板会预检解析该角色下的在职用户。
+角色里没有人,模板存不进去:</p>
+<pre><code class="lang-json">{<span class="hljs-string">"code"</span>: <span class="hljs-number">20601</span>, <span class="hljs-string">"message"</span>: <span class="hljs-string">"审批模板 leave_approval 第 1 关:这一关的审批人规则当前都解析不出人(指定的人已停用/离职,或该角色下没有在职用户)"</span>}
+</code></pre>
+<p>(实测踩过:先建模板后配人,第一次保存就是这个错。)</p>
+<p>正确顺序:</p>
+<ol>
+<li><strong>系统管理 → 角色管理</strong>:建业务角色——<code>role_project_manager</code>(项目经理)、
+<code>role_dept_manager</code>(部门经理)、<code>role_general_manager</code>(总经理)、
+<code>role_hr</code>(人事专员)、<code>role_finance</code>(财务专员),按你的组织定;</li>
+<li><strong>系统管理 → 用户管理</strong>:给具体的人挂上角色身份(一个用户可以有多个身份,
+审批按"当前身份"判定权限、按角色成员关系解析审批人);</li>
+<li>回到「审批流程配置」建模板。</li>
+</ol>
+<p>⚠️ <strong>改角色的 API 陷阱</strong>:<code>PATCH /system/roles/:id</code> 收的是<strong>整个角色对象</strong>。
+只传 <code>{"name": "新名字"}</code> 的话,没传的 <code>is_active</code> 会被解码成 <code>false</code>
+⇒ <strong>角色被顺手停用</strong>,且停用会级联停用所有挂该角色的用户身份
+(重新启用角色<strong>不会</strong>级联恢复身份,要去用户管理逐个开)。
+调这个接口要么传全量字段,要么走页面操作。</p>
+<h2 id="§5-模板的三个真实示例">§5 模板的三个真实示例</h2>
+<blockquote>
+<p>📦 <strong>系统内置了三条案例模板</strong>(启动期自动落库,在「审批流程配置」页能直接看到):
+<code>leave_approval</code> 请假审批(3 关)、<code>expense_approval</code> 报销审批(4 关,最后一关
+双规则会签)、<code>purchase_approval</code> 采购申请(2 关,末关或签)。
+<strong>默认全部停用</strong>(<code>is_active=false</code>,发起侧零影响)—— 它们是起手案例,不是你
+组织的审批流:把关卡/规则改成自己的组织后<strong>启用</strong>即可用。
+内置规则的审批人全部按<strong>部门层级</strong>预配(<code>dept_leader</code>,<code>levels</code> 1=直属主管 /
+2=上级主管 / ≤0=爬到顶),因为角色成员是运行期数据,seed 里写死角色 id 只会
+落出一堆悬空引用;按角色配置的"正式版"就是下面三个示例的 JSON。
+⚠️ seed 的 upsert 是 <strong>create-if-missing</strong>:你改过的案例(改名/启用/改流程)
+重启后原样保留,不会被冲掉。</p>
+</blockquote>
+<h3 id="示例一请假审批3-关">示例一:请假审批(3 关)</h3>
+<p>业务逻辑:员工请假,项目经理先批 → 部门经理批 → 人事备案存档。
+第三关配<strong>两条规则(或的关系)</strong>:人事专员能备案,发起人的直属主管也能备案——
+小团队没有专职人事时主管兜底。</p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">"code"</span>: <span class="hljs-string">"leave_approval"</span>,
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"请假审批"</span>,
+  <span class="hljs-string">"biz_type"</span>: <span class="hljs-string">"leave"</span>,
+  <span class="hljs-string">"remark"</span>: <span class="hljs-string">"请假需项目经理→部门经理逐级审批,人事备案"</span>,
+  <span class="hljs-string">"is_active"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">"stages"</span>: [
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"项目经理审批"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_project_manager 的 id&gt;"</span> } ] },
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"部门经理审批"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_dept_manager 的 id&gt;"</span> } ] },
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"人事备案"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_hr 的 id&gt;"</span> },
+                  { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"dept_leader"</span>, <span class="hljs-string">"levels"</span>: <span class="hljs-number">1</span> } ] }
+  ]
+}
+</code></pre>
+<p>字段说明:</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>全局唯一,<code>^[a-z][a-z0-9_]{1,63}$</code>。大写/连字符/中文 → 40002;重复 → 40900</td>
+</tr>
+<tr>
+<td><code>biz_type</code></td>
+<td>这条链归属的业务类型,<strong>必须是已注册审批处理器的类型</strong>(§7),否则单子发起不了(50100)</td>
+</tr>
+<tr>
+<td><code>stages[].review_type</code></td>
+<td>逐级链路一律 <code>all</code>(§2)</td>
+</tr>
+<tr>
+<td><code>rules[]</code></td>
+<td>同关多条 = <strong>或</strong>。<code>rule_type</code> 三选一:<code>user</code>(填 <code>user_id</code>)/ <code>role</code>(填 <code>role_id</code>)/ <code>dept_leader</code>(填 <code>levels</code>,<code>1</code>=直属主管,<code>≤0</code>=爬到顶)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ 一条规则<strong>只认一种来源</strong>:同时带 <code>user_id</code> 和 <code>role_id</code> 不报错,
+后端按 <code>rule_type</code> <strong>静默清掉另一个</strong>(存进去就是 0)。想要"或"就写两条规则。</p>
+<h3 id="示例二报销审批4-关">示例二:报销审批(4 关)</h3>
+<p>业务逻辑:报销单逐级上报,最后财务复核确认打款。四级链路,每关一个角色:</p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">"code"</span>: <span class="hljs-string">"expense_approval"</span>,
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"报销审批"</span>,
+  <span class="hljs-string">"biz_type"</span>: <span class="hljs-string">"expense"</span>,
+  <span class="hljs-string">"remark"</span>: <span class="hljs-string">"报销需项目经理→部门经理→总经理逐级审批,财务复核打款"</span>,
+  <span class="hljs-string">"is_active"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">"stages"</span>: [
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"项目经理审批"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_project_manager 的 id&gt;"</span> } ] },
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"部门经理审批"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_dept_manager 的 id&gt;"</span> } ] },
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"总经理审批"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_general_manager 的 id&gt;"</span> } ] },
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"财务复核打款"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_finance 的 id&gt;"</span> } ] }
+  ]
+}
+</code></pre>
+<p>和示例一的差别只在深度。两个都值得记住的行为差异:</p>
+<ul>
+<li><strong>任何一关有人拒绝</strong> → 整单终局 <code>rejected</code>,后面的关卡(包括财务)不再启动;</li>
+<li><strong>打回重提从第 1 关重走</strong>(D6:打回只回发起人)。总经理打回的报销单,
+张三改完后项目经理要<strong>重新批一遍</strong>——没有"回到某一关"的语义。</li>
+</ul>
+<p><strong>财务关想双人复核?</strong> 给 <code>role_finance</code> 配两个成员即可:两人都批才过(会签),
+任何一人拒绝整单即黄。这是 §2 场景 A 的会签行。</p>
+<h3 id="示例三采购申请2-关-——-会签--或签各占一关">示例三:采购申请(2 关 —— 会签 + 或签各占一关)</h3>
+<p>前两个示例的每一关都是会签,这一条演示<strong>或签</strong>怎么用、用在哪。
+业务逻辑:采购先由项目经理确认需求 → 归口审核<strong>谁先看到谁办</strong>
+(采购专员、财务专员都在归口组里,任一人审完即整单结束,不必等第二个人):</p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">"code"</span>: <span class="hljs-string">"purchase_approval"</span>,
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"采购申请"</span>,
+  <span class="hljs-string">"biz_type"</span>: <span class="hljs-string">"purchase"</span>,
+  <span class="hljs-string">"remark"</span>: <span class="hljs-string">"项目经理确认需求后,归口审核(采购/财务任一人,或签)"</span>,
+  <span class="hljs-string">"is_active"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">"stages"</span>: [
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"项目经理确认需求"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"all"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_project_manager 的 id&gt;"</span> } ] },
+    { <span class="hljs-string">"name"</span>: <span class="hljs-string">"归口审核"</span>, <span class="hljs-string">"review_type"</span>: <span class="hljs-string">"any"</span>,
+      <span class="hljs-string">"rules"</span>: [ { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_purchase 的 id&gt;"</span> },
+                  { <span class="hljs-string">"rule_type"</span>: <span class="hljs-string">"role"</span>, <span class="hljs-string">"role_id"</span>: <span class="hljs-string">"&lt;role_finance 的 id&gt;"</span> } ] }
+  ]
+}
+</code></pre>
+<p><strong>或签为什么只能放在最后一关</strong> —— §2 场景 C 说过:或签的语义是
+"首个动作即整单终局",<strong>通过 = 整单 <code>approved</code>,后面还有关卡也不会启动</strong>。
+所以:</p>
+<ul>
+<li>链路<strong>中间</strong>的关配或签 = 白配(链条走到那关就停,后面的关卡永远不启动);</li>
+<li>链路<strong>最后一关</strong>(或单关模板)配或签 = 正确用法 —— 业务含义是
+"这一关的几个人共享一个职责,谁先处理谁说了算",典型如归口审核、
+备案确认、值班主管放行。</li>
+</ul>
+<p><strong>跑起来长什么样(时间线)</strong>:设归口组有采购小赵、财务小钱 ——</p>
+<ol>
+<li>张三提交采购单 → 第 1 关生成:项目经理小王的 pending task;</li>
+<li>小王批「通过」→ 会签只有他一个人,数票即过 → 进第 2 关,
+<strong>小赵和小钱各得一条 pending task</strong>(同关多条规则 = 或,两边的解析结果取并集);</li>
+<li><strong>小赵先批「通过」→ 整单立刻 <code>approved</code> 终局</strong>:小钱的任务自动标
+<code>skipped</code>,不需要任何人再动作;</li>
+<li>反过来,若小赵批的是「拒绝」→ 整单同样立刻 <code>rejected</code> 终局,
+小钱的任务同样 <code>skipped</code> —— 或签下<strong>通过和拒绝都只看第一个动作</strong>;</li>
+<li>谁也没处理?两条待办都挂在各自待办列表里,直到其中一人处理;
+巡检任务会对停太久的单子发站内信告警(不会自动转办,§1)。</li>
+</ol>
+<p>对照记忆:把第 2 关改成 <code>all</code>,就变成"小赵小钱<strong>都</strong>批了才算过"
+—— 那是示例二财务双人复核的形态。<strong>"任一人审完即完成"用 <code>any</code>,
+"必须人人过目"用 <code>all</code></strong>,选错了不是报错,是业务含义整个变掉。</p>
+<p>⚠️ 同关两条规则的角色<strong>都要有人</strong>(§4 的预检):归口审核的规则解析出
+空集(两个角色都没人)→ 模板保存直接被拒(20601);
+只有一边有人 → 预检能过(并集非空),单子只会派给有人的那边 ——
+这通常就是你要的"专职岗 + 兜底岗"形态,和示例一第 3 关的人事备案同理。</p>
+<h2 id="§6-教程把请假审批从零跑到通过">§6 教程:把请假审批从零跑到通过</h2>
+<p>以「张三请假 3 天」为例,从零开始每一步(页面上点哪里 / 系统内部做什么):</p>
+<p><strong>① 建角色、配人</strong>(§4)——完成后:张三挂 <code>role_employee</code>,
+项目经理小王挂 <code>role_project_manager</code>,部门经理老陈挂 <code>role_dept_manager</code>,
+人事小刘挂 <code>role_hr</code>。</p>
+<p><strong>② 建模板</strong>(§5 示例一的 JSON)——系统内部:逐关预检解析(20601 就在这拦),
+通过后模板 + 3 关 + 4 条规则一次落库。</p>
+<p><strong>③ 把模板接到业务上</strong>。本仓两条路:</p>
+<ul>
+<li><strong>路 A(零代码)</strong>:「自定义业务」→ 目标集合(如"请假申请"集合)→ 设置 →
+「审批模板」选中 <code>leave_approval</code>。之后集合的每条记录出现「送审」动作,
+权限沿用 <code>dyn:&lt;集合编码&gt;:update</code>。</li>
+<li><strong>路 B(代码接)</strong>:业务侧实现 <code>BizHandler</code> 四个钩子
+(<code>ValidateBiz</code> 校验单子存在 / <code>OnApproved</code> 通过后改业务状态 /
+<code>OnRejected</code> 驳回后改状态 / <code>OnCancelled</code> 作废后善后),
+在 <code>main.go</code> 装配期以 <code>biz_type</code> 为键注册进引擎。然后业务代码调
+<code>POST /system/approvals</code>(<code>biz_type</code>+<code>biz_id</code>+<code>title</code>+<code>template_code</code>)建单、
+<code>POST /system/approvals/:id/submit</code> 送审。</li>
+</ul>
+<p>⚠️ <strong>未注册的 <code>biz_type</code> 连草稿都建不了</strong>:</p>
+<pre><code class="lang-json">{<span class="hljs-string">"code"</span>: <span class="hljs-number">50100</span>, <span class="hljs-string">"message"</span>: <span class="hljs-string">"业务类型 leave 未注册审批处理器,不能发起审批"</span>}
+</code></pre>
+<p>(实测——创建时就拦,不是审到最后才失败。"审批通过了但业务状态永远不变"
+的单子比报错糟糕得多。dyn 路线的 <code>biz_type</code> 恒为 <code>dyn</code>,代码侧注册了哪些以 <code>main.go</code> 装配处为准。</p>
+<p><strong>④ 张三发起</strong>:在集合里填好请假表单(天数、事由),点「送审」。
+系统内部:引擎建审批实例(草稿)+ 立即提交——解析第 1 关(项目经理角色 →
+小王),生成小王的 pending task,落第 1 轮快照,实例 <code>running @ 第1关</code>,
+事件发出去,小王的待办角标 +1、收到站内信。</p>
+<p><strong>⑤ 小王审批</strong>:「我的审批 → 待我审批」看到"请假申请 #记录id",
+点开看表单内容,批「通过」。系统内部:他的 task 置 <code>approved</code>,
+落一条审批日志(带他的意见);这是会签关、分母 1/1 齐 → 推进到第 2 关,
+解析部门经理角色 → 老陈的 task 生成,老陈角标 +1。</p>
+<p><strong>⑥ 老陈通过</strong> → 同样推进到第 3 关;「人事备案」关的规则解析出
+小刘(或张三的直属主管),那人收到待办。</p>
+<p><strong>⑦ 备案人通过</strong> → 最后一关通过,实例终局 <code>approved</code>。
+系统内部:剩余 pending 任务标 <code>skipped</code>,落终局日志,发终局事件
+(张三收到"你的请假已通过"站内信);<strong>业务回调</strong> <code>OnApproved</code> 被调——
+路 A(dyn)的回调是空转(记录不动,审批状态以 <code>(biz_type, biz_id)</code> 连出,
+挂在记录上的 <code>_approval</code> 徽标变成 <code>approved</code>);路 B 的回调由你的业务代码
+把"请假单"置成"已批准"。</p>
+<p><strong>任何一步有人拒绝</strong>:整单立刻 <code>rejected</code>(备注必填 ≥5 字),
+张三收到站内信,单子进「我发起的」列表可查看完整审批日志(谁在哪一关说了什么)。</p>
+<p><strong>任何一步打回</strong>:整单回到张三(<code>returned</code>),备注 ≥5 字;
+张三<strong>必须真的改内容</strong>再重提(逐字节比较,原样重提报"重提内容没有变化"),
+重提后从<strong>第 1 关重走</strong>,之前批过的人重新审。打回上限 5 次,
+第 6 次硬拒"该单已打回 5 次,请联系管理员"。</p>
+<h2 id="§7-教程报销审批4-级链路跑一遍">§7 教程:报销审批(4 级链路)跑一遍</h2>
+<p>配置(§5 示例二)和请假完全同构,直接跑行为验证——
+2026-11-03 在 dev server 上用一条两关测试模板(与报销同构)实测的完整时序:</p>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>操作</th>
+<th>系统状态</th>
+<th>谁能看到什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>t0</td>
+<td>发起人送审</td>
+<td><code>running @ 第1关</code></td>
+<td>第一关审批人 todo +1,发起人「我发起的」可见</td>
+</tr>
+<tr>
+<td>t1</td>
+<td>第 1 关审批人通过</td>
+<td><code>running @ 第2关</code></td>
+<td>第一关的人挪到「我已办理」;第二关的人 todo +1</td>
+</tr>
+<tr>
+<td>t2</td>
+<td>第二关审批人<strong>误点拒绝</strong></td>
+<td><code>rejected</code>(终态)</td>
+<td>发起人收到站内信;后面关卡不启动</td>
+</tr>
+<tr>
+<td>t3</td>
+<td>发起人改内容重提</td>
+<td>新一轮,<code>running @ 第1关</code></td>
+<td>第 1 关重新出待办(轮次 +1,上一轮留痕可查)</td>
+</tr>
+<tr>
+<td>t4</td>
+<td>第 1 关通过 → 第 2 关通过</td>
+<td><code>running @ 第2关</code> → <code>approved</code></td>
+<td>记录上的 <code>_approval</code> 徽标同步变 <code>approved</code></td>
+</tr>
+</tbody>
+</table>
+<p>差异点(相对 2 关的实测模板,4 关同理逐关类推):
+每一关通过都是"数会签分母 → 齐 → 解析下一关审批人 → 生成 task → 角标 +1",
+第 4 关(财务)通过才触发终局 <code>approved</code> 和业务回调。
+多关的<strong>会签中间票</strong>也发事件(同 <code>approved</code> action、语义是"这一票记下了"),
+前端拿它刷新角标——所以会签里"还有几个人没批"大家都能看到(§8.3 的决策)。</p>
+<h2 id="§8-用户日常三个盒子和六个动作">§8 用户日常:三个盒子和六个动作</h2>
+<p>「我的审批」(<code>/approval</code>)一个页面,搜索栏里一个<strong>必选</strong>下拉选盒子:</p>
+<table>
+<thead>
+<tr>
+<th>盒子</th>
+<th><code>box</code> 参数</th>
+<th>装什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>待我审批</td>
+<td><code>todo</code></td>
+<td>实例 <code>running</code> <strong>且</strong> 本关有我的 pending task。⚠️ 打回后旧轮的 task 是 <code>stale</code>,不会再出现</td>
+</tr>
+<tr>
+<td>我发起的</td>
+<td><code>mine</code></td>
+<td>我是申请人的全部单(含草稿/终态),看进度、改草稿、作废、重提</td>
+</tr>
+<tr>
+<td>我已办理</td>
+<td><code>done</code></td>
+<td>我批过(通过或拒绝)的单</td>
+</tr>
+</tbody>
+</table>
+<p>六个动作和它们的前提:</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>谁能做</th>
+<th>前提</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发起</td>
+<td>任何人</td>
+<td>业务侧入口(dyn 送审 / 代码建单)</td>
+<td>建实例并进第 1 关</td>
+</tr>
+<tr>
+<td>改草稿</td>
+<td>发起人</td>
+<td><code>draft</code> 态</td>
+<td>改标题/内容</td>
+</tr>
+<tr>
+<td>作废</td>
+<td>发起人</td>
+<td><code>draft</code> 或 <code>returned</code></td>
+<td><code>cancelled</code>,业务回调 OnCancelled</td>
+</tr>
+<tr>
+<td>通过</td>
+<td>本关任务持有人</td>
+<td>实例 <code>running</code> + 我的 task 是 pending</td>
+<td>会签数票/或签定局</td>
+</tr>
+<tr>
+<td>拒绝</td>
+<td>同上</td>
+<td>同上,<strong>备注 ≥5 字</strong></td>
+<td>整单终局 <code>rejected</code></td>
+</tr>
+<tr>
+<td>打回</td>
+<td>同上</td>
+<td>同上,<strong>备注 ≥5 字</strong></td>
+<td>整单回发起人 <code>returned</code>,重提从第 1 关重走</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>自己不能审自己的单</strong>(D11):规则解析时自动剔除发起人。
+极端情况——某一关解析出来只剩发起人自己 → 空集 → 提交报错
+"第 N 关解析不到审批人"(不降级、不自动跳过,见 §3 的预检哲学)。</p>
+<h2 id="§9-api-速查表">§9 API 速查表</h2>
+<p>前缀 <code>/rapid-admin/v1</code>。配置类挂 <code>flow:*</code> + <code>menu.flow</code>;实例类挂 <code>approval:*</code> + <code>menu.approval</code>。</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>接口</th>
+<th>权限码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模板列表 / 详情</td>
+<td><code>GET /system/flows</code> / <code>GET /system/flows/:id</code></td>
+<td><code>flow:read</code></td>
+</tr>
+<tr>
+<td>建模板</td>
+<td><code>POST /system/flows</code></td>
+<td><code>flow:create</code></td>
+</tr>
+<tr>
+<td>整树改模板</td>
+<td><code>PUT /system/flows/:id</code>(传完整结构)</td>
+<td><code>flow:update</code></td>
+</tr>
+<tr>
+<td>删模板</td>
+<td><code>DELETE /system/flows/:id</code></td>
+<td><code>flow:delete</code></td>
+</tr>
+<tr>
+<td>发起审批(建草稿)</td>
+<td><code>POST /system/approvals</code></td>
+<td><code>approval:create</code></td>
+</tr>
+<tr>
+<td>改草稿 / 送审 / 作废</td>
+<td><code>PUT /system/approvals/:id/draft</code>、<code>POST .../submit</code>、<code>POST .../cancel</code></td>
+<td><code>approval:read</code></td>
+</tr>
+<tr>
+<td>通过 / 拒绝 / 打回</td>
+<td><code>POST /system/approvals/:id/act</code>(`action: approve\</td>
+<td>reject\</td>
+<td>rollback<code>+</code>comment`)</td>
+<td><code>approval:read</code></td>
+</tr>
+<tr>
+<td>三个盒子</td>
+<td>`GET /system/approvals?box=todo\</td>
+<td>mine\</td>
+<td>done`(<strong>box 必填</strong>,漏传 400)</td>
+<td><code>approval:list</code></td>
+</tr>
+<tr>
+<td>实例详情(关卡/任务/日志/轮次)</td>
+<td><code>GET /system/approvals/:id</code></td>
+<td><code>approval:read</code></td>
+</tr>
+<tr>
+<td>集合记录送审(一步)</td>
+<td><code>POST /biz/dyn/:collection/records/:id/approval</code></td>
+<td><code>dyn:&lt;编码&gt;:update</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="§10-审批逻辑-internals对接代码前值得知道的三件事">§10 审批逻辑 internals:对接代码前值得知道的三件事</h2>
+<ol>
+<li><strong>审批人是提交时快照的,不是每关现算</strong>。发起(或重提)那一刻把每一关的
+审批人解析好落库;中途调整组织架构、给角色加人,<strong>不影响在跑的单子</strong>
+(它用旧名单)。代价:组织调整后要靠巡检告警兜底。想让人数变化生效,
+只能等重提(重提重新解析)。</li>
+<li><strong>业务回调在审批事务内</strong>。<code>OnApproved/OnRejected/OnCancelled</code> 拿到的
+<code>tx</code> 和审批状态变更同一个事务:回调里改业务表,要么和审批结果一起提交,
+要么一起回滚——不会出现"审批过了但业务没改"的半截状态。
+(dyn 的回调故意空转:记录不动,状态靠连查。)</li>
+<li><strong>事件是广播不是指令</strong>。前端收到审批事件只做一件事:重拉待办角标总数
+(不 ±1——广播可能合并、可能乱序)。接前端的人不要试图从事件里推断
+"角标应该变成几"。</li>
+</ol>
+<h2 id="§11-实测记录2026-11-03dev-全链路">§11 实测记录(2026-11-03,dev 全链路)</h2>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先建模板后配人</td>
+<td>❌ 20601——§4 第 0 步的存在依据</td>
+</tr>
+<tr>
+<td>5 条校验(code 重复 40900 / 格式 40002 / 空 rules、双 ID、未知 rule_type)</td>
+<td>✅ 全部按预期拒绝/清零</td>
+</tr>
+<tr>
+<td>请假 3 关 / 报销 4 关模板建 + 整树 PUT + round-trip</td>
+<td>✅ 一致</td>
+</tr>
+<tr>
+<td>dyn 集合绑模板 → 建记录 → 送审</td>
+<td>✅ 一步进 <code>running @ 第1关</code></td>
+</tr>
+<tr>
+<td>会签逐关推进(2 关)</td>
+<td>✅ 第 1 关批完 <code>running @ 第2关</code>,第 2 关批完 <code>approved</code>,记录徽标同步</td>
+</tr>
+<tr>
+<td>或签关(旧配置对照)</td>
+<td>✅ 第 1 关一票 → 整单 <code>approved</code>,第 2 关未启动(D5 实证)</td>
+</tr>
+<tr>
+<td>未注册 biz_type 发起</td>
+<td>❌ 50100,创建时即拦</td>
+</tr>
+<tr>
+<td>审批人 todo / act 的隔离</td>
+<td>✅ 非本关审批人看不到单、动不了单</td>
+</tr>
+</tbody>
+</table>
+<p>顺带这轮实测抓出并修掉一个真 bug:<strong>dyn 送审曾把 <code>engine.Submit</code> 包在
+<code>CreateDraft</code> 的外层事务里</strong>,而 Submit 自己再开一个事务——SQLite 上两个连接
+嵌套等锁死锁,整库焊死(server 所有请求 30s 超时)。已改为草稿事务先落袋、
+Submit 在外(资料线的两步走),并加了全链路回归用例
+(<code>TestDyn_审批_送审全链路_建草稿与提交不嵌套事务</code>,带 10s 超时防挂死)。</p>
+<h2 id="§12-注意事项汇总">§12 注意事项汇总</h2>
+<ol>
+<li><strong>先配人,再建模板</strong>(20601)。改绑模板的角色前,确认角色里有在职用户。</li>
+<li><strong>逐级审批 = 每关会签(all)</strong>;或签(any)首个动作即整单终局(D5)。</li>
+<li><strong><code>biz_type</code> 必须已注册</strong>,否则发起时 50100。内置的 dyn 路线 <code>biz_type</code> 恒为 <code>dyn</code>;代码侧注册了哪些以 <code>main.go</code> 装配处为准。</li>
+<li><strong>一条规则一种来源</strong>,多填的 ID 被静默清零;多条规则才是"或"。</li>
+<li><strong><code>stage_index</code> 从 1 开始</strong>(详情接口、日志、事件里的关号都是 1 基)。</li>
+<li><strong>box 必填</strong>:<code>GET /approvals</code> 不带 <code>box=todo|mine|done</code> 直接 400,不退化成"全部"。</li>
+<li><strong>有非终态实例时改不了模板</strong>(D7);改模板是整树替换,别只传变更的关卡。</li>
+<li><strong>改角色 <code>PATCH /system/roles/:id</code> 要传全量字段</strong>,只传 name 会把角色停用并级联停用身份。</li>
+<li>拒绝/打回备注 <strong>≥5 字</strong>;打回重提<strong>必须改内容</strong>;打回上限 5 次。</li>
+<li>审批人是<strong>提交时快照</strong>:中途改组织不影响在跑的单子,重提才会重新解析。</li>
+</ol>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="dyn.html" class="navigation navigation-prev " aria-label="Previous page: dynx(动态业务集合)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../api-docs/swaggerx.html" class="navigation navigation-next " aria-label="Next page: swaggerx(接口文档)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"approvalx(通用审批)","level":"9.2","depth":1,"next":{"title":"swaggerx(接口文档)","level":"10.1","depth":1,"path":"api-docs/swaggerx.md","ref":"api-docs/swaggerx.md","articles":[]},"previous":{"title":"dynx(动态业务集合)","level":"9.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"business/approval.md","mtime":"2026-11-04T13:23:47.210Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

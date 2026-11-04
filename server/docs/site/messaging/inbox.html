@@ -1,0 +1,1270 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>inbox(站内信) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="notifyx.html" />
+    
+    
+    <link rel="prev" href="../audit/smsaudit.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter active" data-level="7.1" data-path="inbox.html">
+            
+                <a href="inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="notifyx.html">
+            
+                <a href="notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="push.html">
+            
+                <a href="push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="pushx.html">
+            
+                <a href="pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="permnotify.html">
+            
+                <a href="permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="msn.html">
+            
+                <a href="msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="smslimit.html">
+            
+                <a href="smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="smstpl.html">
+            
+                <a href="smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="emailx.html">
+            
+                <a href="emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../scheduling/cronx.html">
+            
+                <a href="../scheduling/cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../scheduling/jobs.html">
+            
+                <a href="../scheduling/jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../scheduling/slowquery.html">
+            
+                <a href="../scheduling/slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+            
+                <a href="../business/dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+            
+                <a href="../business/approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >inbox(站内信)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="inbox-——-站内信--通知中心">inbox —— 站内信 + 通知中心</h1>
+<blockquote>
+<p>业务模块(审批、订单、系统通知……)要给某个用户发一条站内信时,
+只依赖一个接口:<code>Notifier.Notify(ctx, Message)</code> —— 不依赖具体实现、
+不依赖 DB、不依赖 Redis。
+通知中心那一侧(列表 / 未读数 / 标已读)也在这里。</p>
+</blockquote>
+<h2 id="功能">功能</h2>
+<p>inbox 提供四件事:</p>
+<ol>
+<li><strong>投递</strong>:<code>Notifier</code> 接口(<code>Notify</code> / <code>NotifyBatch</code>)。
+业务模块依赖<strong>接口</strong>而不是 <code>Manager</code>,换存储(比如换成 MQ)时业务代码一行不用改。</li>
+<li><strong>通知中心查询</strong>:<code>Manager.List</code> / <code>UnreadCount</code> / <code>MarkRead</code> / <code>MarkAllRead</code> / <code>Delete</code>。</li>
+<li><strong>未读变更信号</strong>:投递 / 标已读之后,经 <a href="push.html">push</a> 推 <code>push:user:&lt;id&gt;</code> 频道,
+前端 SSE 实时刷角标。Redis 不可用 ⇒ 推送静默丢弃,前端轮询 <code>unread-count</code> 兜底。</li>
+<li><strong>防 IDOR</strong>:<code>List</code> / <code>MarkRead</code> / <code>MarkAllRead</code> / <code>Delete</code> 全部带 <code>user_id</code> 条件 ——
+不属于自己的那条<strong>返 nil(不报错,也不动)</strong>。</li>
+</ol>
+<p><strong>不解决什么</strong>:</p>
+<ul>
+<li>不做投递幂等(见「注意事项」第 1 条 —— 同一业务事件调两次 <code>Notify</code> 会写两条);</li>
+<li>不做权限判定(RBAC 码挂在 handler 上,不在这个包里);</li>
+<li>不做离线推送(App 侧离线通知是 <a href="pushx.html">pushx</a>);</li>
+<li>不做多通道分发(那层是 <a href="notifyx.html">notifyx</a>)。</li>
+</ul>
+<h2 id="配置">配置</h2>
+<h3 id="yaml-侧">yaml 侧</h3>
+<p><strong>该包无 yaml 配置。</strong> 没有 <code>inbox:</code> 块,也没有任何配置项 —— 它只有一个 <code>*gorm.DB</code> 依赖,
+表 <code>sys_inbox_message</code> 由 GORM AutoMigrate 建(<code>internal/migrate/migrate.go</code> 里注册了
+<code>&amp;model.InboxMessage{}</code>)。示例里手写 DDL,是因为框架示例不许 import <code>internal/model</code>。</p>
+<h3 id="代码侧构造选项">代码侧(构造选项)</h3>
+<pre><code class="lang-go">mgr := inbox.New(db)   <span class="hljs-comment">// 唯一构造函数,没有 opts</span>
+</code></pre>
+<p>生产上由 <code>cmd/server</code> 装配(<code>inboxMgr := inbox.New(db)</code>),
+业务模块拿的是 <code>registry.InboxNotifier</code>(<code>inbox.Notifier</code> 接口)。</p>
+<h2 id="使用方法">使用方法</h2>
+<h3 id="投递">投递</h3>
+<pre><code class="lang-go"><span class="hljs-comment">// 业务模块依赖的是 Notifier 接口,不是 Manager</span>
+<span class="hljs-keyword">var</span> notifier inbox.Notifier = mgr
+
+err := notifier.Notify(ctx, inbox.Message{
+    UserID:   userID,
+    MsgType:  <span class="hljs-string">"biz"</span>,
+    Title:    <span class="hljs-string">"订单确认单待确认"</span>,
+    Content:  <span class="hljs-string">"您的订单已生成,请在 7 天内确认。"</span>,
+    Link:     <span class="hljs-string">"/order/confirm/20260301"</span>,
+    RefType:  <span class="hljs-string">"order"</span>,
+    RefID:    <span class="hljs-number">20260301</span>,
+    SenderID: <span class="hljs-number">1</span>,
+})
+</code></pre>
+<p>批量投递(同事务,失败整批回滚;<code>msgs</code> 里允许不同 <code>UserID</code>):</p>
+<pre><code class="lang-go">err := notifier.NotifyBatch(ctx, []inbox.Message{
+    {UserID: userID, MsgType: <span class="hljs-string">"system"</span>, Title: <span class="hljs-string">"系统公告"</span>, Content: <span class="hljs-string">"本周六 02:00-04:00 系统维护。"</span>},
+    {UserID: userID, MsgType: <span class="hljs-string">"notice"</span>, Title: <span class="hljs-string">"费用提醒"</span>, Content: <span class="hljs-string">"第三季度账单将于 10 月 15 日开始计收。"</span>},
+})
+</code></pre>
+<h3 id="未读数--列表">未读数 / 列表</h3>
+<pre><code class="lang-go">n, err := mgr.UnreadCount(ctx, userID, <span class="hljs-string">""</span>)    <span class="hljs-comment">// 全部未读;msgType 非空则按类型过滤</span>
+views, total, err := mgr.List(ctx, inbox.ListFilter{
+    UserID:     userID,
+    MsgType:    <span class="hljs-string">"biz"</span>,   <span class="hljs-comment">// 空 = 全部</span>
+    OnlyUnread: <span class="hljs-literal">false</span>,
+    Page:       <span class="hljs-number">1</span>,
+    Size:       <span class="hljs-number">20</span>,
+})
+</code></pre>
+<p>⚠️ <strong>角标数字以 <code>UnreadCount</code> 为准,推送里只带 delta(信号)</strong>。</p>
+<h3 id="标已读--删除">标已读 / 删除</h3>
+<pre><code class="lang-go">err := mgr.MarkRead(ctx, userID, msgID)          <span class="hljs-comment">// 幂等:已读的不报错</span>
+affected, err := mgr.MarkAllRead(ctx, userID, <span class="hljs-string">""</span>) <span class="hljs-comment">// 返回影响条数</span>
+err := mgr.Delete(ctx, userID, msgID)            <span class="hljs-comment">// 防 IDOR:只能删自己的</span>
+</code></pre>
+<h3 id="wire-契约">wire 契约</h3>
+<p><code>List</code> 返回 <code>[]inbox.MessageView</code>(<code>id</code> / <code>ref_id</code> / <code>sender_id</code> 是 <strong>string</strong>,
+<code>read_at</code> 未读为 <code>null</code>)。完整字段说明见 <a href="../getting-started/conventions.html">框架约定 §4</a>。</p>
+<h2 id="注意事项">注意事项</h2>
+<ul>
+<li>⚠️ <strong>投递侧没有幂等键</strong>。<code>inbox.Message</code> 里没有去重字段,同一个业务事件调两次
+<code>Notify</code> 会<strong>写两条</strong>。要"同一事件只发一次"得靠调用方自己带业务键去重
+(或走 <a href="../security/idempotentx.html">idempotentx</a> 的幂等键)。包里唯一的幂等是
+<strong>标已读</strong>:已读再标一次返 nil、不动数据。</li>
+<li>⚠️ <strong><code>Message.Validate()</code> 里的"默认 system"是无效的</strong>。它的签名是值接收者
+<code>func (m Message) Validate() error</code>,函数体里的 <code>m.MsgType = "system"</code> 改的是<strong>副本</strong>,
+调用方看不到 —— <code>Notify</code> 里 <code>msg</code> 原样落库,<code>msg_type</code> 是<strong>空串</strong>而不是 <code>"system"</code>。
+后果:按 <code>msg_type</code> 过滤(<code>ListFilter.MsgType</code> / <code>UnreadCount</code> 的 msgType 参数)
+永远筛不到这些消息。要按类型分类,<strong>调用方必须自己填 <code>MsgType</code></strong>。</li>
+<li>⚠️ <strong>推的 delta 恒为 +1,连"标已读"也是 +1</strong>。<code>publishUnread</code> 不区分方向,
+因为并发投递 / 标已读会让 delta 累加漂移。所以前端<strong>必须重拉 <code>unread-count</code> 拿绝对值</strong>,
+拿 delta 做 +1/-1 会在标已读之后让角标反而上涨。
+前端 <code>useEventStream.refreshUnread</code> 就是这么做的。</li>
+<li>⚠️ <strong>动作完成后前端要自己拉一次角标,不等广播</strong>。广播是"状态变了"的信号,
+不是"当前状态";连接建立之前发生的事件收不到。<code>InboxBell</code> 在
+<code>markRead</code> / <code>markAllRead</code> 之后都直接调了一次 <code>refreshUnread()</code>。</li>
+<li>⚠️ <strong>雪花 ID 在应用侧生成,不能交给 DB 自增</strong>。<code>BaseModel.ID</code> 的 tag 是
+<code>primaryKey;autoIncrement:false</code>,列是 <code>bigint unsigned</code> 且<strong>没有 AUTO_INCREMENT</strong> ——
+MySQL 严格模式下直接报 1364「Field 'id' doesn't have a default value」,一条都投不出去;
+非严格模式更糟:全部写成 <code>id=0</code>,而 <code>MarkRead(userID, 0)</code> 会把<strong>这个人的所有消息</strong>
+一起标成已读。<code>newRow</code> 是 <code>Notify</code> / <code>NotifyBatch</code> 唯一共用的地方,别在别处再抄一份 map。</li>
+<li>⚠️ <strong><code>List</code> 扫 <code>[]model.InboxMessage</code> 而不是 map</strong>。GORM 的软删除作用域、
+<code>model.Time</code> 的时间归一化、<code>uint64</code> 的 string tag 三件事都只在 typed 扫描下才生效 ——
+早先返回 <code>[]map[string]any</code> 时,wire 上是裸数字 ID(JS 的 2^53 会静默截断),
+时间格式还出现了"本地时间带纳秒"和"UTC 秒级"两种。</li>
+<li>⚠️ <strong>两个方向的失败处理是相反的,刻意的</strong>:DB 写失败 ⇒ <strong>返 error</strong>(业务层决定是否回滚主事务);
+Redis 不可用 ⇒ <strong>推送静默丢弃</strong>(只是少了实时性,前端轮询兜底)。</li>
+<li>⚠️ <strong>列表过滤掉已过期,但保留已读</strong>;未读判定是 <code>read_at IS NULL</code>,
+<strong>不是"比时间戳"</strong> —— 未读没有时间戳可比。</li>
+<li>⚠️ <strong><code>RefID</code> / <code>SenderID</code> 为 0 时输出空串</strong>,不是 <code>"0"</code> —— 0 的含义是"无关联 / 系统发的"。</li>
+</ul>
+<h2 id="相关">相关</h2>
+<ul>
+<li>源码:<code>internal/pkg/inbox/</code></li>
+<li>可运行示例:<code>examples/inbox/main.go</code> —— <code>go run ./examples/inbox</code></li>
+<li>传输层(未读信号走它)→ <a href="push.html">push</a></li>
+<li>多通道分发(站内信 + 邮件的组合投递)→ <a href="notifyx.html">notifyx</a></li>
+<li>ID 用字符串上 wire → <a href="../infrastructure/jsonid.html">jsonid</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../audit/smsaudit.html" class="navigation navigation-prev " aria-label="Previous page: smsaudit(短信审计)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="notifyx.html" class="navigation navigation-next " aria-label="Next page: notifyx(通知分发)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"inbox(站内信)","level":"7.1","depth":1,"next":{"title":"notifyx(通知分发)","level":"7.2","depth":1,"path":"messaging/notifyx.md","ref":"messaging/notifyx.md","articles":[]},"previous":{"title":"smsaudit(短信审计)","level":"6.3","depth":1,"path":"audit/smsaudit.md","ref":"audit/smsaudit.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"messaging/inbox.md","mtime":"2026-11-04T13:21:28.882Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

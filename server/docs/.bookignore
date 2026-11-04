@@ -1,0 +1,16 @@
+# 构建产物与依赖目录不进手册
+#
+# honkit 会把源目录里"不是页面"的文件原样拷到产物里。
+# 这几样东西拷过去只会添乱:
+#   - site/         构建产物自己(上一次构建的残骸)
+#   - node_modules/ 构建依赖(几十万文件)
+#   - package*.json 构建清单(不是手册内容,还暴露依赖版本)
+#   - .bookignore   这个文件自己
+site/
+node_modules/
+package.json
+package-lock.json
+.bookignore
+
+# Go 源码(本目录同时是一个 Go 包:docs.go / build.go / docs_test.go)
+*.go

@@ -1,0 +1,1498 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>cronx(定时任务) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="jobs.html" />
+    
+    
+    <link rel="prev" href="../messaging/emailx.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../messaging/inbox.html">
+            
+                <a href="../messaging/inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../messaging/notifyx.html">
+            
+                <a href="../messaging/notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../messaging/push.html">
+            
+                <a href="../messaging/push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../messaging/pushx.html">
+            
+                <a href="../messaging/pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../messaging/permnotify.html">
+            
+                <a href="../messaging/permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../messaging/msn.html">
+            
+                <a href="../messaging/msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../messaging/smslimit.html">
+            
+                <a href="../messaging/smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../messaging/smstpl.html">
+            
+                <a href="../messaging/smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="../messaging/emailx.html">
+            
+                <a href="../messaging/emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter active" data-level="8.1" data-path="cronx.html">
+            
+                <a href="cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="jobs.html">
+            
+                <a href="jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="slowquery.html">
+            
+                <a href="slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+            
+                <a href="../business/dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+            
+                <a href="../business/approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >cronx(定时任务)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="cronx-——-定时任务调度代码注册--db-覆盖--两层去重">cronx —— 定时任务调度(代码注册 + DB 覆盖 + 两层去重)</h1>
+<blockquote>
+<p>定时任务要处理两件事:任务本体在代码里(后台只能改频率和启停),
+运行侧保证多副本下<strong>同一个任务只有一个实例在跑</strong>。
+cronx 提供<strong>代码注册表</strong>、<strong>DB 覆盖</strong>、<strong>两层去重</strong>、<strong>执行记录</strong>与<strong>优雅停机</strong>。</p>
+<p>⚠️ <strong>Windows 上没有官方 Redis</strong> —— <code>job.lock_mode=redis</code>(生产多副本必须)之前
+先装一个:<a href="https://www.memurai.com/get-memurai" target="_blank">Memurai</a>(Redis 协议兼容,
+装成 Windows 服务,默认 <code>127.0.0.1:6379</code>、无密码)。
+<strong>Developer 版仅供开发/测试,不许上生产。</strong> 详见 <a href="../getting-started/">快速开始</a>。</p>
+</blockquote>
+<h2 id="功能">功能</h2>
+<p>cronx 解决五件事:</p>
+<ol>
+<li><strong>代码注册表</strong>:任务本体只写在代码里(<code>cronx.Register</code>)。
+DB(<code>sys_job</code>表)<strong>只能覆盖 cron 表达式和启停</strong>,凭空长不出任务 ——
+那样长出来的任务没有代码,重启即消失,而且没人知道它曾经存在过。</li>
+<li><strong>DB 覆盖</strong>:后台改频率 / 改启停 / 改备注,写 <code>sys_job</code> 行;
+运行期热更新(<code>Reload</code>)会<strong>立刻重注册 cron entry</strong>,不用重启进程。</li>
+<li><strong>两层去重</strong>,各挡各的,只上一层都不够:<ul>
+<li><strong>Layer 0 查库</strong>:<code>SELECT ... FROM sys_job_run WHERE job_key=? AND status='running'</code>
+挡住"上一次还没跑完就又跑"。不依赖 Redis —— DB 是所有副本都有的东西,
+比任何外部锁服务都少一个失效点,执行记录表本来就要建,去重是白送的。</li>
+<li><strong>Layer 1 加锁</strong>:Redis <code>SETNX</code> + Lua CAS 释放 + 看门狗续期。
+挡住"两个副本在同一毫秒同时开跑" —— robfig 按<strong>绝对墙钟</strong>触发,
+所有副本在同一瞬间醒来,Layer 0 是 check-then-act,关不掉这个窗口。</li>
+</ul>
+</li>
+<li><strong>降级 fail-open,但降级后仍剩 Layer 0</strong>:锁不可用时<strong>继续跑</strong> + 大声告警 +
+执行记录写 <code>degraded</code> 标记。定时任务停摆比偶尔重复执行更难发现
+(同步不更新、过期授权不下榜,都是静默的),但重复执行会写坏数据。
+折中是把安全性建立在"<strong>handler 必须幂等</strong>"这条硬契约上,
+显式声明 <code>NonIdempotent</code> 的任务在降级模式下被<strong>主动跳过</strong>。</li>
+<li><strong>执行记录 + 崩溃回收 + 优雅停机</strong>:每次执行落一条 <code>sys_job_run</code>;
+启动时回收进程崩溃遗留的 <code>running</code> 行;停机时先停止触发、等在跑的任务、
+预算耗尽再强杀。</li>
+</ol>
+<p>它<strong>不解决</strong>:</p>
+<ul>
+<li>不提供"业务定时任务"。业务任务由各业务模块在自己的包里
+<code>cronx.Register</code>(约定前缀 <code>biz.*</code>),框架层只管调度机制。</li>
+<li>不做分布式事务、不做任务编排(DAG / 依赖 / 重试补偿)。</li>
+<li>不管"执行记录保留多久" —— 那是 <a href="jobs.html">jobs</a> 里
+<code>framework.job_history_purge</code> 任务的职责。</li>
+</ul>
+<h2 id="配置">配置</h2>
+<h3 id="yaml-侧job-块">yaml 侧(<code>job:</code> 块)</h3>
+<pre><code class="lang-yaml"><span class="hljs-attr">job:</span>
+<span class="hljs-attr">  enabled:</span> <span class="hljs-literal">true</span>          <span class="hljs-comment"># 总开关。false ⇒ 一个 cron entry 都不注册</span>
+<span class="hljs-attr">  timezone:</span> Asia/Shanghai  <span class="hljs-comment"># 调度时区。配错的名字会**启动直接失败**</span>
+
+  <span class="hljs-comment"># 去重层 1(分布式锁)的存储:</span>
+  <span class="hljs-comment">#   auto   — 有 Redis 用 Redis,没有退进程内锁 + 降级告警(单副本安全)</span>
+  <span class="hljs-comment">#   redis  — 强制 Redis,没配直接**拒绝启动**(生产多副本必须用这个)</span>
+  <span class="hljs-comment">#   memory — 强制进程内锁,即使配了 Redis 也不连(仅单副本)</span>
+  <span class="hljs-comment">#   off    — 完全不锁,仅本地开发</span>
+<span class="hljs-attr">  lock_mode:</span> auto
+<span class="hljs-attr">  lock_ttl:</span> <span class="hljs-number">30</span>s          <span class="hljs-comment"># 锁租约。长任务靠看门狗每 lock_ttl/3 续期</span>
+<span class="hljs-attr">  lock_renew:</span> <span class="hljs-literal">true</span>       <span class="hljs-comment"># 关掉看门狗 = 长任务跑到一半锁过期,别的副本抢进来并发写</span>
+<span class="hljs-attr">  default_timeout:</span> <span class="hljs-number">30</span>m   <span class="hljs-comment"># 单次执行超时,任务未单独指定时的兜底</span>
+<span class="hljs-attr">  shutdown_timeout:</span> <span class="hljs-number">30</span>s  <span class="hljs-comment"># 优雅停机预算,用完强杀在跑任务(记 failed)</span>
+
+  <span class="hljs-comment"># 执行记录(sys_job_run)清理 —— 由内置任务 framework.job_history_purge 执行</span>
+<span class="hljs-attr">  history_retention_days:</span> <span class="hljs-number">30</span>
+<span class="hljs-attr">  history_retention_max:</span> <span class="hljs-number">50000</span>
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job.enabled</code></td>
+<td>bool</td>
+<td><code>true</code></td>
+<td>调度总开关。关掉后<strong>既不注册也不触发</strong></td>
+</tr>
+<tr>
+<td><code>job.timezone</code></td>
+<td>string</td>
+<td><code>Asia/Shanghai</code></td>
+<td>调度时区。<strong>必须显式配</strong>,见下方注意事项</td>
+</tr>
+<tr>
+<td><code>job.lock_mode</code></td>
+<td>string</td>
+<td><code>auto</code></td>
+<td><code>auto</code> / <code>redis</code> / <code>memory</code> / <code>off</code></td>
+</tr>
+<tr>
+<td><code>job.lock_ttl</code></td>
+<td>duration</td>
+<td><code>30s</code></td>
+<td>锁的<strong>故障恢复时间</strong>(持锁副本崩溃后别人最多等这么久),不是任务时长上限</td>
+</tr>
+<tr>
+<td><code>job.lock_renew</code></td>
+<td>bool</td>
+<td><code>true</code></td>
+<td>看门狗续期开关</td>
+</tr>
+<tr>
+<td><code>job.default_timeout</code></td>
+<td>duration</td>
+<td><code>30m</code></td>
+<td><code>Job.Timeout</code> 为 0 时用它</td>
+</tr>
+<tr>
+<td><code>job.shutdown_timeout</code></td>
+<td>duration</td>
+<td><code>30s</code></td>
+<td>停机预算,用完强杀</td>
+</tr>
+<tr>
+<td><code>job.history_retention_days</code></td>
+<td>int</td>
+<td><code>30</code></td>
+<td>执行记录保留天数(归 <a href="jobs.html">jobs</a> 用)</td>
+</tr>
+<tr>
+<td><code>job.history_retention_max</code></td>
+<td>int</td>
+<td><code>50000</code></td>
+<td>执行记录条数上限(同上)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="代码侧构造选项">代码侧(构造选项)</h3>
+<pre><code class="lang-go">cronx.Register(job Job)                      <span class="hljs-comment">// 注册任务(包 init 或 main 装配期调)</span>
+cronx.New(cfg Config, store Store, locker Locker) (*Scheduler, error)
+cronx.ResolveLocker(mode <span class="hljs-keyword">string</span>, rdb *redis.Client, prefix <span class="hljs-keyword">string</span>) (Locker, error)
+cronx.NewStore(db *gorm.DB) Store            <span class="hljs-comment">// gorm 实现;db 为 nil ⇒ 无记录、无 Layer 0</span>
+cronx.SetDefault(s *Scheduler)               <span class="hljs-comment">// 登记全局单例</span>
+cronx.Default() *Scheduler                   <span class="hljs-comment">// 取全局单例;未装配返 nil(不 panic)</span>
+cronx.InitMetrics(reg prometheus.Registerer) <span class="hljs-comment">// 注册指标(重复调用 panic)</span>
+</code></pre>
+<p><code>Config</code> 字段:<code>Enabled</code> / <code>TimeZone</code> / <code>LockMode</code> / <code>LockTTL</code> / <code>LockRenew</code> /
+<code>DefaultTimeout</code> / <code>ShutdownTimeout</code> / <code>OnFinish</code>。</p>
+<p>⚠️ <code>Config</code> <strong>刻意没有</strong>历史保留期字段 —— 清理执行记录不是调度器的内建行为,
+曾经声明过 <code>HistoryKeepDays</code> / <code>HistoryKeepMax</code> 两个字段,一行都没读过。</p>
+<p><code>OnFinish func(ctx context.Context, rec *model.SysJobRun)</code> 是<strong>回调</strong>,
+不是直接 import <code>pkg/push</code>:依赖方向是 <code>cmd/server → cronx</code>,
+cronx 自己不知道"事件要推给谁、推成什么形状、哪个 topic 需要哪个权限"。
+传 <code>nil</code> = 不通知(零开销)。</p>
+<h2 id="使用方法">使用方法</h2>
+<p>完整示例:<code>examples/cronx/main.go</code>。</p>
+<h3 id="一、注册任务必须早于-cronxnew--start">一、注册任务(必须早于 <code>cronx.New</code> / <code>Start</code>)</h3>
+<pre><code class="lang-go">cronx.Register(cronx.Job{
+    Key:         <span class="hljs-string">"framework.demo_purge"</span>,
+    Name:        <span class="hljs-string">"示例:清理过期数据"</span>,
+    Description: <span class="hljs-string">"演示用的框架任务"</span>,
+    Cron:        <span class="hljs-string">"0 3 * * *"</span>,
+    Enabled:     <span class="hljs-literal">true</span>,
+    Handler: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context)</span> <span class="hljs-title">error</span></span> {
+        <span class="hljs-comment">// 真实任务在这里做清理</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+    },
+})
+</code></pre>
+<p><code>Job</code> 的字段:<code>Key</code> / <code>Name</code> / <code>Description</code> / <code>Cron</code> / <code>Timeout</code> / <code>Enabled</code> /
+<code>NonIdempotent</code> / <code>Handler</code>。</p>
+<p>⚠️ <strong><code>Handler</code> 必须尊重 <code>ctx</code></strong> —— ctx 到 deadline 会取消;不检查 ctx 的任务会一直跑,
+而它的锁到期后会被第二个副本抢走,两个副本并发写同一批数据。</p>
+<h3 id="二、装配--启动--停机">二、装配 + 启动 + 停机</h3>
+<pre><code class="lang-go"><span class="hljs-comment">// 生产装配:</span>
+locker, err := cronx.ResolveLocker(cfg.Job.LockMode, repository.GetRedis(), cronx.DefaultLockKeyPrefix)
+<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    log.Fatal(<span class="hljs-string">"cronx: 锁模式装配失败,拒绝启动"</span>, zap.Error(err))
+}
+sched, err := cronx.New(cronx.Config{
+    Enabled:         <span class="hljs-literal">true</span>,
+    TimeZone:        <span class="hljs-string">"Asia/Shanghai"</span>,
+    LockMode:        <span class="hljs-string">"redis"</span>,
+    LockTTL:         <span class="hljs-number">5</span> * time.Minute,
+    LockRenew:       <span class="hljs-literal">true</span>,
+    DefaultTimeout:  <span class="hljs-number">10</span> * time.Minute,
+    ShutdownTimeout: <span class="hljs-number">30</span> * time.Second,
+}, cronx.NewStore(db), locker)
+<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    log.Fatal(<span class="hljs-string">"cronx: 调度器装配失败,拒绝启动"</span>, zap.Error(err))
+}
+cronx.SetDefault(sched)
+<span class="hljs-keyword">if</span> err := sched.Start(context.Background()); err != <span class="hljs-literal">nil</span> {
+    log.Error(<span class="hljs-string">"cronx: 启动失败,定时任务未运行"</span>, zap.Error(err))
+}
+<span class="hljs-keyword">defer</span> sched.Shutdown(ctx)
+</code></pre>
+<p><code>Start</code> 做三件事:读 DB 覆盖值 + reconcile 残留行 → 回收崩溃遗留的 <code>running</code> 行 →
+逐个注册 cron entry。</p>
+<h3 id="三、表达式校验与预览">三、表达式校验与预览</h3>
+<pre><code class="lang-go">schedule, err := cronx.ParseCron(<span class="hljs-string">"0 3 * * *"</span>)             <span class="hljs-comment">// 用与调度器完全相同的 parser</span>
+runs, err := cronx.NextRuns(<span class="hljs-string">"0 3 * * *"</span>, <span class="hljs-number">3</span>, time.Local)   <span class="hljs-comment">// 未来 3 次触发时间</span>
+</code></pre>
+<p><code>NextRuns</code> 是纯计算,成本极低,用来在后台"改频率"时实时预览"下一次是几点"。</p>
+<h3 id="四、触发">四、触发</h3>
+<pre><code class="lang-go"><span class="hljs-comment">// 同步(手动触发,HTTP handler 直接调):</span>
+run, err := sched.Trigger(ctx, <span class="hljs-string">"framework.demo_purge"</span>, cronx.TriggerManual)
+
+<span class="hljs-comment">// 异步(cron 回调用):</span>
+sched.TriggerNow(ctx, <span class="hljs-string">"framework.demo_purge"</span>, cronx.TriggerSchedule)
+</code></pre>
+<p><code>Trigger</code> 返回 <code>*model.SysJobRun</code>(本次执行记录),错误有四种语义<strong>不同</strong>的状态:</p>
+<table>
+<thead>
+<tr>
+<th>错误</th>
+<th>含义</th>
+<th>运维处置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ErrJobNotFound</code></td>
+<td>代码注册表里没这个 key</td>
+<td>查注册</td>
+</tr>
+<tr>
+<td><code>ErrJobDisabled</code></td>
+<td><code>code.Enabled &amp;&amp; DB.Enabled</code> 为 false</td>
+<td>查启停</td>
+</tr>
+<tr>
+<td><code>ErrJobRunning</code></td>
+<td>上一次还在跑 / 锁被别人持有</td>
+<td>正常</td>
+</tr>
+<tr>
+<td><code>ErrDegraded</code></td>
+<td>去重能力降级,本次主动放弃(仅 <code>NonIdempotent</code> 任务)</td>
+<td><strong>要去查 Redis</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="五、查状态--热更新">五、查状态 / 热更新</h3>
+<pre><code class="lang-go">list := sched.List()                        <span class="hljs-comment">// 全部任务的生效配置</span>
+eff, err := sched.Get(<span class="hljs-string">"framework.demo_purge"</span>)
+sched.NextRunAt(<span class="hljs-string">"framework.demo_purge"</span>)     <span class="hljs-comment">// 下次触发时间(未注册则返零值)</span>
+sched.Runtime()                             <span class="hljs-comment">// RuntimeInfo:锁是否可用、实例 ID、已注册数</span>
+sched.Override(<span class="hljs-string">"framework.demo_purge"</span>)      <span class="hljs-comment">// 当前 DB 覆盖行(后台"恢复默认"用)</span>
+sched.Reload(<span class="hljs-string">"framework.demo_purge"</span>, ov)    <span class="hljs-comment">// 应用 DB 覆盖 + 立刻重注册 cron entry</span>
+</code></pre>
+<p><code>Effective</code> 同时带<strong>生效值</strong>与<strong>代码默认值</strong>(<code>CronExpr</code> / <code>CronOverridden</code> / <code>DBEnabled</code>),
+后台要同时显示两者 —— 否则排查时不知道跑的是哪个。</p>
+<h3 id="六、给执行记录带上操作人">六、给执行记录带上操作人</h3>
+<pre><code class="lang-go">ctx = cronx.WithOperator(ctx, <span class="hljs-string">"zhangwei"</span>)   <span class="hljs-comment">// API 层拿到 Caller 后塞进来</span>
+</code></pre>
+<p>cronx 是 pkg 层,不能 import <code>internal/service</code>(会形成反向依赖环),
+操作人只能靠 ctx 传。</p>
+<h2 id="注意事项">注意事项</h2>
+<ul>
+<li><p>⚠️ <strong><code>cronx.Register</code> 撞 key 会 panic</strong>,而且注册<strong>必须早于</strong> <code>cronx.New</code> / <code>Start</code>。
+注册表在 <code>Start</code> 里被<strong>一次性快照</strong>(<code>registeredKeys()</code>):快照之后才注册的任务
+永远没有 cron entry,<code>NextRunAt</code> 是零值,而且<strong>没有任何报错、没有日志</strong>。
+全局只能注册一次 —— 所以 <code>RegisterAll</code> 这类"注册多个任务"的入口只能由
+main 装配期调一次。</p>
+</li>
+<li><p>⚠️ <strong>cron 表达式全部避开整点整分</strong>。所有副本按<strong>绝对墙钟</strong>触发,
+<code>0 4 * * *</code> 意味着每个副本在 04:00:00.000 同时醒来:即使有去重锁,
+同时发起 N 个加锁请求本身也是无谓压力,而去重窗口(Layer 0 的 SELECT +
+Layer 1 的 SETNX)会在那一刻最拥挤。本仓两个框架任务错开在
+<code>17 4 * * *</code> 和 <code>23 9 * * *</code>。</p>
+</li>
+<li><p>⚠️ <strong><code>job.timezone</code> 必须显式配</strong>。容器里 TZ 没设时 <code>time.Local == UTC</code>,
+<code>0 3 * * *</code> 会在<strong>北京时间 11:00</strong> 跑,而配置文件里明明写着 <code>Asia/Shanghai</code> ——
+<strong>看起来配置生效了,实际没生效</strong>,因为任务确实跑了,只是跑在了错误的时间。
+配错的名字(时区名写错)会<strong>启动直接失败</strong>,不会带着错时区继续跑。</p>
+</li>
+<li><p>⚠️ <strong><code>job.enabled: false</code> ⇒ 一个 entry 都不注册</strong>,<code>Start</code> 打一行 Info 就返回 nil。
+没有错误、没有告警级别,症状是"所有任务永远不跑"。
+(yaml 里<strong>漏配</strong>不会触发这个 —— viper 有 <code>job.enabled</code> 默认 <code>true</code>。)</p>
+</li>
+<li><p>⚠️ <strong>启动日志里的 <code>registered</code> 数字会把"已停用的任务"也算进去</strong>。
+<code>Start</code> 里 <code>failed</code> 只统计<strong>注册出错</strong>的任务,<code>EnabledEffective()</code> 为 false 的任务
+<code>register()</code> 直接返 nil、不进 <code>entries</code>,但它仍算在 <code>len(keys)-failed</code> 里。
+真实注册数看 <code>sched.Runtime().Registered</code>(= <code>len(s.entries)</code>)。</p>
+</li>
+<li><p>⚠️ <strong>最终生效 = <code>code.Enabled &amp;&amp; DB.Enabled</code></strong>(AND,不是只看 DB)。
+这样做是刻意的:<strong>从代码里删掉任务一定等于停用</strong>,不会因为 DB 残留行而"复活"。
+反过来说,DB 里存在但代码里没有的 <code>job_key</code> 会在启动时被 <code>reconcile</code> 置
+<code>is_active=false</code> 并 WARN —— <strong>不是直接删</strong>:删掉会丢掉运维当初设的 cron 覆盖值和备注。</p>
+</li>
+<li><p>⚠️ <strong><code>lock_mode=redis</code> 而没配 Redis ⇒ 启动失败</strong>(<code>ResolveLocker</code> 返 error,
+<code>cmd/server</code> 直接 Fatal)。<code>auto</code> 没配 Redis 则退进程内锁 + 降级告警 ——
+多副本部署下这意味着<strong>同一个任务会被多个副本同时跑</strong>。
+未知 <code>lock_mode</code> 也直接报错,不静默当 <code>auto</code> 处理("我配了 X,系统跑的是 Y"
+是最难查的一类配置问题)。</p>
+</li>
+<li><p>⚠️ <strong>锁的释放与续期必须是 CAS(Lua)</strong>。裸 <code>DEL</code> 的路径是:
+A 跑超时 → 锁 TTL 到期 → B 抢到锁开始跑 → A 结束时裸 <code>DEL</code>
+→ <strong>把 B 的锁删了</strong> → C 立刻抢到并发跑。CAS 是这条路径上唯一的防线。</p>
+</li>
+<li><p>⚠️ <strong>owner token 必须每次运行都不同</strong>。用固定的 instanceID 的话,
+同一副本重试两次会拿到同一个 owner,第一次的 CAS 释放会误删第二次的锁。</p>
+</li>
+<li><p>⚠️ <strong>看门狗发现锁丢了必须真的 <code>cancel()</code> 掉 run ctx</strong>,只 <code>return</code> 不够 ——
+handler 拿不到任何信号,会照跑到底,于是两个副本真的并发写同一批数据。</p>
+</li>
+<li><p>⚠️ <strong>两层各自独立降级,不能合成一个 degraded 开关</strong>。早先把它们合成一个,
+结果"DB 查不到"会连带把加锁整段跳过 —— 而 Redis 明明好着,
+跨副本互斥恰恰是最该保住的那一层。现在 <code>lockUsable</code> 只看锁层,
+<code>layer0OK</code> 只看查库层,<code>degraded</code> 只是给执行记录 / 指标用的<strong>汇总标记</strong>。</p>
+</li>
+<li><p>⚠️ <strong><code>Reload</code> 漏掉重注册是最容易犯的错</strong>:只写 DB 的话,robfig 里注册的还是旧表达式,
+改频率要等进程重启才生效 —— 而且<strong>没有报错、没有日志</strong>,测试也可能绿
+(如果测试只断言 DB 变化、不断言 entry 生效)。<code>Reload</code> 失败时会<strong>真回滚</strong>:
+撤销 entry、用旧值重新 <code>register</code>,不允许留下"DB 说启用、实际没注册"的状态。</p>
+</li>
+<li><p>⚠️ <strong>DB 覆盖行的 <code>Description</code> 必须在 <code>LoadOverrides</code> 里读出来</strong>。漏掉的话:
+运营在后台写备注,当次生效(<code>Reload</code> 拿到的是完整 ov),重启后读回来的
+<code>Description</code> 是空 → <code>merge</code> 判 <code>ov.Description != ""</code> 不成立 →
+悄悄回退到代码默认值。症状是"<strong>备注自己消失了</strong>",没有任何报错。</p>
+</li>
+<li><p>⚠️ <strong><code>cronx.InitMetrics</code> 重复调用会 panic</strong>(prometheus 不允许重名注册)。
+这是刻意的:让"初始化两次"在启动时炸,而不是让第二个 registry 拿到空指标。</p>
+</li>
+<li><p>⚠️ <strong><code>Default()</code> 未装配时返 <code>nil</code> 而不是 panic</strong>。API 层要能在
+<code>job.enabled=false</code> 时也把页面正常渲染出来(告诉运维"调度器没开"),
+而不是整个后台 500。</p>
+</li>
+<li><p>⚠️ <strong><code>cronx.Config</code> 里没有历史保留期字段</strong>。清理执行记录是
+<a href="jobs.html">jobs</a> 的 <code>framework.job_history_purge</code> 任务的事,
+别在 <code>cronx.Config</code> 里找它。</p>
+</li>
+<li><p>⚠️ <strong><code>Shutdown</code> 的预算用 <code>cfg.ShutdownTimeout</code></strong>,调用方传的 ctx <strong>没有 deadline 时也一样生效</strong>
+—— 不是只在 main.go 恰好传对时才有预算。预算耗尽后强杀在跑任务(记 failed)。</p>
+</li>
+<li><p>⚠️ <strong><code>Handler</code> 返回的 error 会被截断到 2KB</strong>(<code>truncate</code>),panic 的 stack 也是
+(走 <code>safeInvoke</code> 兜住,记成 failed)。手动触发走的是自己的 <code>Trigger</code> 路径,
+<code>cron.Recover</code> 只兜 robfig 那条路,所以 <code>safeInvoke</code> 是独立的第二道防线。</p>
+</li>
+</ul>
+<h2 id="相关">相关</h2>
+<ul>
+<li>源码:<code>internal/pkg/cronx/</code></li>
+<li>可运行示例:<code>examples/cronx/main.go</code> —— <code>go run ./examples/cronx</code></li>
+<li>平台内置任务(执行记录清理 / 密钥轮转检查)→ <a href="jobs.html">jobs</a></li>
+<li>指标:<code>app_job_runs_total{job,trigger,status}</code> / <code>app_job_duration_seconds{job}</code> /
+<code>app_job_lock_skipped_total{job}</code> / <code>app_job_degraded_total{job}</code>
+(见 <a href="../infrastructure/metricsx.html">metricsx</a>)</li>
+<li>配置体系与"漏配必须等于照常跑"→ <a href="../getting-started/configuration.html">配置体系</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../messaging/emailx.html" class="navigation navigation-prev " aria-label="Previous page: emailx(邮件)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="jobs.html" class="navigation navigation-next " aria-label="Next page: jobs(内置任务)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"cronx(定时任务)","level":"8.1","depth":1,"next":{"title":"jobs(内置任务)","level":"8.2","depth":1,"path":"scheduling/jobs.md","ref":"scheduling/jobs.md","articles":[]},"previous":{"title":"emailx(邮件)","level":"7.9","depth":1,"path":"messaging/emailx.md","ref":"messaging/emailx.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"scheduling/cronx.md","mtime":"2026-11-01T13:42:29.120Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

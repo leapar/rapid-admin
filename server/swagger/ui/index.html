@@ -1,0 +1,27 @@
+<!-- swagger-ui 静态页 —— 由 server/swagger/embed.go 内嵌,从 /swagger/index.html 提供 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>API 文档</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <!--
+      ⚠️ **这里没有任何外链** —— 内网/离线部署时,外链请求会挂住,页面渲染被拖到超时。
+      改样式请改本目录下的 swagger-ui.css,别引外网。
+
+      注:上游 swagger-ui 5.10.5 的 index.html 本身也没有外链(旧版 swagger-ui 3.x
+      的 swagger-ui.css 里有过 Google Fonts 的 @import,本仓库这份 5.10.5 没有)。
+      这条约束是**留给以后**的:谁哪天往 index.html 里加一行 CDN 字体,这条就兜住了。
+    -->
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
+    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+    <script src="./swagger-initializer.js" charset="UTF-8"> </script>
+  </body>
+</html>

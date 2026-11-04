@@ -1,0 +1,1347 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>slowquery(慢 SQL 报警) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../business/dyn.html" />
+    
+    
+    <link rel="prev" href="jobs.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../messaging/inbox.html">
+            
+                <a href="../messaging/inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../messaging/notifyx.html">
+            
+                <a href="../messaging/notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../messaging/push.html">
+            
+                <a href="../messaging/push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../messaging/pushx.html">
+            
+                <a href="../messaging/pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../messaging/permnotify.html">
+            
+                <a href="../messaging/permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../messaging/msn.html">
+            
+                <a href="../messaging/msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../messaging/smslimit.html">
+            
+                <a href="../messaging/smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../messaging/smstpl.html">
+            
+                <a href="../messaging/smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="../messaging/emailx.html">
+            
+                <a href="../messaging/emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="cronx.html">
+            
+                <a href="cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="jobs.html">
+            
+                <a href="jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="8.3" data-path="slowquery.html">
+            
+                <a href="slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+            
+                <a href="../business/dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+            
+                <a href="../business/approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >slowquery(慢 SQL 报警)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="slowquery-——-慢-sql-报警包装-gorm-logger--prometheus-指标">slowquery —— 慢 SQL 报警(包装 GORM logger + Prometheus 指标)</h1>
+<blockquote>
+<p>"这个接口最近慢了 3 秒,SQL 到底慢在哪一条"—— 慢查询报警。
+不用自己写 GORM callback(要克隆 Statement、还要挑注册位置,坑很多),
+包一层 logger 就完事。</p>
+</blockquote>
+<h2 id="功能">功能</h2>
+<p>slowquery 做三件事:</p>
+<ol>
+<li><strong>包装 GORM 的 <code>logger.Interface</code></strong>,复用内建的 <code>Trace(ctx, begin, fc, err)</code> 钩子
+—— 每条 SQL 必走这个钩子。比对 <code>time.Since(begin) &gt; Threshold</code>,超了就触发回调。
+比 callback chain 简单可靠(避开 Statement 克隆 + 注册位置坑)。</li>
+<li><strong>两个入口</strong>:<ul>
+<li><code>Install(db, cfg)</code> —— 给<strong>已有</strong> db 包一层(替换 <code>db.Logger</code>)</li>
+<li><code>NewLogger(orig, cfg)</code> —— 直接造一个 <code>logger.Interface</code>,塞进
+<code>gorm.Config{Logger: ...}</code></li>
+</ul>
+</li>
+<li><strong>Prometheus 指标</strong> <code>app_slow_sql_total{table,op,is_error}</code> ——
+Grafana 上"哪张表最慢"的面板数据源。</li>
+</ol>
+<p><strong>原 logger 不会被顶掉</strong>:<code>Info</code> / <code>Warn</code> / <code>Error</code> / <code>LogMode</code> 全是<strong>透传</strong>,
+只有 <code>Trace</code> 多走一步(比对耗时)。<code>LogMode</code> 还会顺手把阈值同步给原 logger
+(如果它实现了 <code>SetSlowThreshold</code>)。</p>
+<p>它<strong>不解决</strong>:</p>
+<ul>
+<li>不做 SQL 优化、不做慢查询归因分析(没有 EXPLAIN、没有索引建议)。</li>
+<li><strong>不采集响应体 schema</strong>(那是 <a href="../api-docs/swaggerx.html">swaggerx</a> 的事)。</li>
+<li>不记录"哪些接口慢" —— 它只知道 SQL 本身。</li>
+</ul>
+<h2 id="配置">配置</h2>
+<h3 id="yaml-侧">yaml 侧</h3>
+<p><strong>该包无 yaml 配置块。</strong></p>
+<p><code>configs/config.example.yaml</code> 里没有 <code>slowquery:</code> 段 —— 阈值、采样率、日志开关
+全部是<strong>代码侧</strong>的构造选项。本仓的装配点在 <code>cmd/server/main.go</code>:
+阈值写死 <code>500 * time.Millisecond</code>、<code>LogRawSQL: false</code>、<code>SampleRate: 1.0</code>。
+想改阈值就改那一行(或改成从配置中心读),没有 yaml 键可填。</p>
+<h3 id="代码侧构造选项">代码侧(构造选项)</h3>
+<pre><code class="lang-go">slowquery.Install(db *gorm.DB, cfg Config) error
+slowquery.NewLogger(orig logger.Interface, cfg Config) logger.Interface
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>Config</code> 字段</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Threshold</code></td>
+<td><code>time.Duration</code></td>
+<td><code>500ms</code></td>
+<td>单条 SQL 超过这个时间算"慢"</td>
+</tr>
+<tr>
+<td><code>OnSlow</code></td>
+<td><code>func(Entry)</code></td>
+<td>nil ⇒ 默认回调</td>
+<td>自定义慢查询回调(接 Sentry / 告警 / 推送)</td>
+</tr>
+<tr>
+<td><code>LogRawSQL</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>默认回调要不要把完整 SQL 打出来</td>
+</tr>
+<tr>
+<td><code>SampleRate</code></td>
+<td>float64</td>
+<td><code>1.0</code></td>
+<td>采样率 0.0~1.0</td>
+</tr>
+<tr>
+<td><code>Logger</code></td>
+<td><code>*zap.Logger</code></td>
+<td>nil</td>
+<td>默认回调用的 zap logger;nil ⇒ <strong>只走 metrics,一条日志都不打</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>Entry</code> 字段:<code>SQL</code> / <code>Table</code> / <code>Op</code> / <code>Duration</code> / <code>Rows</code> / <code>Error</code>。</p>
+<h2 id="使用方法">使用方法</h2>
+<p>完整示例:<code>examples/slowquery/main.go</code>。</p>
+<h3 id="一、给已有-db-包一层">一、给已有 db 包一层</h3>
+<pre><code class="lang-go"><span class="hljs-keyword">var</span> hits []slowquery.Entry
+<span class="hljs-keyword">if</span> err := slowquery.Install(db, slowquery.Config{
+    Threshold: <span class="hljs-number">10</span> * time.Millisecond,
+    OnSlow: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(e slowquery.Entry)</span></span> {
+        hits = <span class="hljs-built_in">append</span>(hits, e)
+    },
+}); err != <span class="hljs-literal">nil</span> {
+    fmt.Println(<span class="hljs-string">"装 slowquery 失败:"</span>, err)
+    <span class="hljs-keyword">return</span>
+}
+</code></pre>
+<p><code>Install</code> 是<strong>幂等</strong>的:同一个 db 装第二次直接返 <code>nil</code>
+(靠 <code>db.InstanceSet("slowquery:installed", true)</code> 判定)。</p>
+<h3 id="二、直接造一个-logger">二、直接造一个 logger</h3>
+<pre><code class="lang-go">gl := slowquery.NewLogger(gormlogger.Default.LogMode(gormlogger.Silent), slowquery.Config{
+    Threshold: demoThreshold,
+    OnSlow: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(e slowquery.Entry)</span></span> {
+        fmt.Printf(<span class="hljs-string">"命中:表=%s 操作=%s 耗时=%v\n"</span>, e.Table, e.Op, e.Duration.Round(time.Millisecond))
+    },
+})
+db2 := openDB(<span class="hljs-string">"file:demo?mode=memory&amp;cache=shared"</span>, gl)
+</code></pre>
+<h3 id="三、用默认回调打一条-zap-warn">三、用默认回调(打一条 zap warn)</h3>
+<pre><code class="lang-go">core, logs := observer.New(zapcore.WarnLevel)
+slowquery.Install(db, slowquery.Config{
+    Threshold: demoThreshold,
+    Logger:    zap.New(core),
+    <span class="hljs-comment">// 不传 OnSlow ⇒ 用默认的:一条 zap warn 日志</span>
+})
+</code></pre>
+<p>默认回调的字段:<code>table</code> / <code>op</code> / <code>duration</code> / <code>rows</code>,失败时多一个 <code>error</code>;
+<code>LogRawSQL</code> 为 true 时再加 <code>sql</code>(截断到 2000 字符)。</p>
+<h3 id="四、读指标">四、读指标</h3>
+<pre><code class="lang-go">families, err := prometheus.DefaultGatherer.Gather()
+<span class="hljs-comment">// app_slow_sql_total{table="widgets", op="query", is_error="false"}</span>
+</code></pre>
+<p>label 三个:<code>table</code>(哪张表)/ <code>op</code>(<code>query|create|update|delete</code>,其它算 <code>other</code>)/
+<code>is_error</code>(<code>"true"</code> / <code>"false"</code>)。</p>
+<h2 id="注意事项">注意事项</h2>
+<ul>
+<li><p>⚠️ <strong><code>Threshold &lt;= 0</code> 会退回 500ms,不是"不限"</strong>。这与 <code>smslimit</code> 的
+<code>Config&lt;=0 用默认值</code> 是同一条口径。想"什么 SQL 都报"<strong>不能靠把阈值调到 0</strong> ——
+0 会被当成"没配"。</p>
+</li>
+<li><p>⚠️ <strong>阈值必须大于时钟粒度</strong>。一条跑得极快的 SQL,实测耗时可能<strong>正好是 0</strong>
+(Windows 上尤其明显),那它当然不算慢查询(<code>0 &lt; 阈值</code>)。
+阈值调到 1ms 可能一条都报不出来。</p>
+</li>
+<li><p>⚠️ <strong><code>LogRawSQL</code> 默认 false ⇒ 默认回调不打 SQL</strong>。但 <code>Entry.SQL</code> <strong>永远有值</strong> ——
+它只是没进日志字段。生产期 SQL 长,默认不打是对的。</p>
+</li>
+<li><p>⚠️ <strong>但 <code>LogRawSQL=false</code> 管不到原 logger</strong>。<code>Trace</code> 里第一件事就是
+<code>w.orig.Trace(ctx, begin, fc, err)</code> —— 原 logger 会不会把 SQL 打进日志,
+取决于它自己的 LogLevel。GORM 默认 logger 在 Info 级别会把<strong>每条</strong> SQL 都打出来。
+想彻底不打,得把原 logger 设成 <code>Silent</code>(<code>gormlogger.Default.LogMode(gormlogger.Silent)</code>)。</p>
+</li>
+<li><p>⚠️ <strong>GORM 自带的 logger 也会报慢 SQL,阈值是 200ms</strong>(<code>logger.Default</code> 的
+<code>SlowThreshold: 200ms</code> / <code>LogLevel: Warn</code>,慢的会打一行 <code>SLOW SQL &gt;= 200ms</code>)。
+也就是说日志里可能同时存在<strong>两条独立的慢 SQL 口径</strong>:GORM 的 200ms 和
+slowquery 的 500ms。要只看自己这一套,得先把原 logger 设成 <code>Silent</code>。</p>
+</li>
+<li><p>⚠️ <strong><code>LogMode</code> 里那段"把阈值同步给原 logger"对 GORM 自带 logger 是死代码</strong>。
+它靠 type assertion 找 <code>SetSlowThreshold(time.Duration)</code> 接口,
+而 gorm v1.31.1 的 logger <strong>根本没这个方法</strong>(全模块搜不到),
+所以断言永远失败、阈值永远同步不过去 —— GORM 那条 200ms 的口径不会被改。
+只有你自己实现的、实现了 <code>SetSlowThreshold</code> 的 logger 才会被同步。</p>
+</li>
+<li><p>⚠️ <strong>不传 <code>Logger</code> 也不传 <code>OnSlow</code> ⇒ 一条日志都没有,只剩指标</strong>。
+默认回调在 <code>log == nil</code> 时直接 <code>return</code>(注释写的是"nil 用 noop(只走 metrics,不打 log)")。
+排查时别以为是回调没触发。</p>
+</li>
+<li><p>⚠️ <strong><code>OnSlow</code> 里的 panic 会被吞掉</strong>。慢查询报警是<strong>旁路</strong>,不该把业务请求带崩 ——
+但反过来说,<strong>回调里出的错你收不到</strong>,它只会被 <code>recover</code> 静默吃掉。
+回调里要发告警的话,自己处理错误。</p>
+</li>
+<li><p>⚠️ <strong>表名是从 SQL 里正则抠出来的</strong>,拿不到时是 <code>"unknown"</code>;
+操作类型看 SQL 开头(<code>select</code> / <code>insert</code> / <code>update</code> / <code>delete</code>,其它算 <code>other</code>)。
+所以带子查询的 SQL 抠出来的表名可能是<strong>子表</strong>而不是主表 ——
+指标上的 <code>table</code> label 是启发式的,不是权威的。</p>
+</li>
+<li><p>⚠️ <strong>采样粒度只有千分之一</strong>。<code>SampleRate</code> 的判定是
+<code>float64(time.Now().UnixNano() % 1000) / 1000.0 &lt; rate</code>,所以小于 0.001 的
+采样率无法按比例兑现。<code>SampleRate &lt;= 0</code> 会被当成"没配" ⇒ 退回 <code>1.0</code>(全量)。</p>
+</li>
+<li><p>⚠️ <strong><code>Install</code> 会替换 <code>db.Logger</code></strong>。装完之后 <code>db.Config.Logger</code> 变成 wrapper,
+之后你自己再 <code>db.Logger = 别的</code> 会把慢查询监控整个顶掉,而且没有任何提示。</p>
+</li>
+<li><p>⚠️ <strong>指标注册走 <code>sync.Once</code></strong>:<code>metricsx.Registry()</code> 非空时注册到它,
+否则注册到 prometheus 默认 registry。所以"在别处读不到指标"通常是
+<code>metricsx</code> 没初始化,而不是这个包坏了。</p>
+</li>
+<li><p>⚠️ <strong><code>NewLogger</code> 不接 <code>*gorm.DB</code></strong>,它拿不到 <code>db.InstanceSet</code> 的幂等标记 ——
+同一条链路上 <code>Install</code> 和 <code>NewLogger</code> 混用,可能出现两层 wrapper
+(慢查询会被回调两次)。</p>
+</li>
+<li><p>⚠️ <strong>失败的 SQL 同样会进回调</strong>,<code>Entry.Error</code> 有值 ——
+"慢"和"错"是两个维度,指标上分别落在 <code>is_error=true</code> / <code>false</code>。
+一条又慢又错的 SQL 会同时打两条记录(错误计数 + 慢查询计数)。</p>
+</li>
+</ul>
+<h2 id="相关">相关</h2>
+<ul>
+<li>源码:<code>internal/pkg/slowquery/</code></li>
+<li>可运行示例:<code>examples/slowquery/main.go</code> —— <code>go run ./examples/slowquery</code></li>
+<li>指标注册与 <code>/metrics</code> handler → <a href="../infrastructure/metricsx.html">metricsx</a></li>
+<li>缓存预热前后 SQL 量的对比(慢查询下降往往说明缓存生效)→ <a href="../storage/cachex.html">cachex</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="jobs.html" class="navigation navigation-prev " aria-label="Previous page: jobs(内置任务)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../business/dyn.html" class="navigation navigation-next " aria-label="Next page: dynx(动态业务集合)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"slowquery(慢 SQL 报警)","level":"8.3","depth":1,"next":{"title":"dynx(动态业务集合)","level":"9.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"jobs(内置任务)","level":"8.2","depth":1,"path":"scheduling/jobs.md","ref":"scheduling/jobs.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"scheduling/slowquery.md","mtime":"2026-11-01T08:27:16.130Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

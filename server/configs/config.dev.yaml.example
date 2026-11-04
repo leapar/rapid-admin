@@ -1,0 +1,309 @@
+# 本地开发(SQLite)配置模板
+# 复制为 configs/config.dev.yaml 后即可使用,无需安装 MySQL
+# 启动: make dev-sqlite
+# 或:   go run ./cmd/server -c configs/config.dev.yaml
+
+# ========== 基础 ==========
+system:
+  addr: 8888
+  mode: debug
+  app_name: rapid-admin
+  app_version: 1.0.0
+  timezone: Asia/Shanghai
+  read_timeout: 30s
+  write_timeout: 30s
+  max_body_size: 209715200
+
+# ========== 日志 ==========
+logger:
+  level: debug
+  format: console
+  dir: logs
+  max_size_mb: 50
+  max_backups: 7
+  max_age_days: 30
+  compress: false
+  env: dev
+
+# ========== 数据库(SQLite) ==========
+database:
+  driver: sqlite
+  sqlite:
+    path: ./data/dev.db       # Makefile dev-sqlite 目标会自动 mkdir data
+    busy_timeout: 5s
+    journal_mode: wal
+    foreign_keys: true
+    max_open_conns: 1
+    log_level: warn
+
+# ========== Redis(可选;本地 dev 留空即可跳过 Redis) ==========
+# 注:留空时 server 启动会跳过 Redis 初始化,但任何依赖 Redis 的功能(限流/短信验证码/分布式锁)不可用
+redis:
+  addr: ""                # 127.0.0.1:6379
+  password: ""
+  db: 0
+  pool_size: 10
+  min_idle_conns: 2
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+
+# ========== JWT ==========
+# token 吊销存储:auto | redis | memory
+#   auto   有 Redis 用 Redis,没有退内存(默认)。单副本够用。
+#   redis  强制 Redis,没配 redis.addr 直接启动失败。**生产多副本必须用这个**:
+#          内存吊销只在单进程内有效,换个负载均衡节点被吊销的 token 又活了。
+#   memory 强制内存,即使配了 Redis 也不连。仅调试用。
+auth:
+  revocation_mode: auto
+
+  # ---- 异常登录检测(M128)----
+  #
+  # ⚠️ dev 保持**开着**:本地调试登录时正好能看见检测跑起来了
+  #   (命中会在日志里打一行 WARN,并给该用户发一条站内信)。
+  #   真嫌吵就把它关掉 —— 它只记日志 + 发站内信,不影响登录。
+  anomaly:
+    enabled: true
+    max_concurrent: 3
+    active_window: 30m
+    impossible_travel_window: 0s
+
+# 限流 / 登录锁定的存储:auto | redis | memory(取值同上)
+# 与 auth.revocation_mode 分开是因为后果等级不同:吊销降级是安全事故,
+# 限流降级只是阈值不准。生产多副本同样必须用 redis。
+kv:
+  mode: auto
+
+jwt:
+  admin_secret: dev-admin-secret-change-me-32bytes!
+  owner_secret: dev-owner-secret-change-me-32bytes!!
+  supplier_secret: dev-supplier-secret-change-me-32bytes!!!
+  issuer: rapid-admin-dev
+  access_ttl: 8h
+  refresh_ttl: 720h
+  short_ttl: 5m
+
+# ========== Casbin ==========
+casbin:
+  model_path: configs/casbin_rbac.conf
+  auto_load: true
+
+# ========== CORS ==========
+# ⚠️ **localhost 和 127.0.0.1 是两个不同的 origin,必须都列**。
+#   浏览器的 Origin 头按地址栏里的 host 原样发 —— 敲 127.0.0.1:5173 就发
+#   http://127.0.0.1:5173,敲 localhost:5173 就发 http://localhost:5173。
+#
+#   漏掉的表现很隐蔽:**GET 全 200,只有 POST 被 403**
+#   (浏览器对同源 GET 不发 Origin 头,对 POST 一定发 —— Fetch 规范),
+#   而且 403 的响应体是**空的**(hertz-contrib/cors 直接 AbortWithStatus,
+#   不写 body),前端只看到一个没有错误码的
+#   "Failed to load resource: 403",连业务错误都读不到。
+#
+#   走 vite 代理时后端看到的 Host 是代理目标(localhost:8888),跟浏览器的
+#   Origin 对不上,所以 cors 中间件里那个"同主机就放行"的快捷路径
+#   **在开发期永远走不到** —— 白名单必须列全。
+#
+#   要用局域网 IP 访问(比如 http://192.168.1.5:5173)就把那一行也加进来。
+cors:
+  allow_origins:
+    - http://localhost:5173
+    - http://localhost:5174
+    - http://127.0.0.1:5173
+    - http://127.0.0.1:5174
+  allow_methods: [GET, POST, PUT, DELETE, PATCH, OPTIONS]
+  allow_headers:
+    - Origin
+    - Content-Type
+    - Authorization
+    - X-Request-Id
+    - X-Trace-Id
+    - Idempotency-Key
+    - X-Current-House-Id
+    - X-Current-Project-Id
+  expose_headers:
+    - X-Request-Id
+    - X-Trace-Id
+  allow_credentials: true
+  max_age: 12h
+
+# ========== 图形验证码 ==========
+# 本地联调嫌登录要 OCR 验证码麻烦,就把 login_enabled 改成 false:
+#   密码登录 / 短信登录 / 短信重置密码 跳过校验,登录页密码 tab 不再显示验证码框。
+# 这个直接改本文件没问题 —— 它不在版本控制里(server/.gitignore),而且
+# 关掉登录验证码不损失任何安全边界。
+#
+# sms_send_enabled(发短信闸门)保持 true。**不要改这里,要用环境变量覆盖** ——
+# 本地 mock 短信不真发,关掉没有收益;但这份模板是会被别人拷贝的,一旦
+# "false" 被带进生产,一个按条计费的接口就没了防刷量闸门,只剩 1 次/60 秒/IP
+# 的限流。保持本地与生产一致,顺带把"生产要验证码"这件事在开发阶段就适应掉,
+# 避免上线才发现短信流程断了。
+#
+# 本地确实嫌短信流程烦的话,用环境变量覆盖,值不会跟着配置文件走:
+#   CAPTCHA_SMS_SEND_ENABLED=false
+#   - VSCode F5: .vscode/launch.json 的 env 里加一项
+#   - 命令行:   CAPTCHA_SMS_SEND_ENABLED=false go run ./cmd/server -c configs/config.dev.yaml
+#
+# 改完热生效,不用重启(viper WatchConfig)。
+captcha:
+  login_enabled: true
+  sms_send_enabled: true
+
+# ========== 短信(console 模式,只打日志,不发真短信) ==========
+# ⚠️ **provider 只有 aliyun / console 两个合法值** ——
+#    写 mock / test 之类的值会被 buildSmsSender 判成"未知 provider",
+#    **静默降级到 console**(验证码只打到日志),而且只在启动时 Warn 一次。
+#    真机联调怎么改成真发,见 configs/config.dev.yaml(带真实 AK/SK 的那一份)。
+sms:
+  provider: console
+  access_key: ""
+  access_secret: ""
+  sign_name: RapidAdmin
+  region: cn-hangzhou
+  templates:
+    login: SMS_100000000
+    view_full_phone: SMS_100000000
+    reset_password: SMS_100000000
+    change_phone: SMS_100000000
+  rate_limit:
+    per_minute: 1
+    per_day: 10
+    window_seconds: 60
+    code_ttl: 600
+  # 模板审核守卫(M115)。dev 用 console 通道 ⇒ 没有模板审核状态可查,
+  # 守卫查不到状态一律**放行**(不确定 ≠ 确定不可用),所以这里配什么都一样。
+  template_guard: block
+
+# ========== 邮件(console) ==========
+# ⚠️ **console 只把邮件打到日志里,收件人收不到** —— dev 用它验证
+#    "投递链路走通了"(日志里能看到 [email/console]),生产必须换 smtp / aliyun。
+email:
+  provider: console
+  from: noreply@rapid-admin.local
+  from_name: RapidAdmin
+  base_url: http://localhost:5173
+  timeout: 30
+  smtp:
+    host: ""
+    port: 465
+    username: ""
+    password: ""
+    use_tls: true
+    use_starttls: false
+  aliyun:
+    access_key: ""
+    access_secret: ""
+    account_name: ""
+    from_alias: ""
+    region: cn-hangzhou
+
+# ========== App 推送 ==========
+# ⚠️ **不装配** —— 推送要设备令牌,平台侧还没有那张登记册(见 §1.9 #10)。
+#    装配出来也还没有调用方,配成 console 只会让人以为"推送通了"。
+push:
+  provider: ""
+  timeout: 30
+  target_max: 100
+  aliyun_emns:
+    access_key: ""
+    access_secret: ""
+    app_key: ""
+    region: cn-hangzhou
+    default_apns_env: DEV
+
+# ========== 阿里云 OSS ==========
+oss:
+  # endpoint = **外网** endpoint,只用来拼直链(给浏览器看)。
+  # 带不带 https:// 都认。
+  endpoint: ""
+  # endpoint_private = **内网** endpoint,只给后端 SDK 客户端用(同地域更快,
+  # 流量不走公网)。**可选** —— 连不上会自动回落外网(开发机就是这样)。
+  # ⚠️ 直链**永远用外网**:直链是给公网上的浏览器看的,给它内网地址访问不到。
+  endpoint_private: ""
+  access_key: ""
+  access_secret: ""
+  # 单桶 —— **所有文件都在这一个桶里**。
+  # ⚠️ 以前是 bucket_admin + bucket_public 双桶(按 key 前缀分流),
+  #   单桶单树模型下那两个键已经不存在了(留着也不生效,只会误导读配置的人)。
+  # ⚠️ 真接阿里云时这个桶必须是**公共读(public-read)**:直链是不带签名的
+  #   稳定 URL,私有桶上它会 403。
+  bucket: dev-bucket
+  cdn_domain: ""
+  upload_token_ttl: 3600
+
+# ========== 文件系统(M80) ==========
+#   ⚠️ 这一块和上面的 `oss` **是两回事,别合并**:
+#     oss  说的是"怎么连阿里云"(endpoint / ak / sk / bucket)
+#     file 说的是"文件放在哪、怎么放"(路径形态 / 配额闸 / 何时切分片)
+#   两者正交:local 模式下整块 oss 不生效;aliyun 模式下 file 照样生效。
+file:
+  provider: local              # local | aliyun。**空 = local**
+  root: data/files             # local 时的磁盘根(相对 server/,加载时转绝对)
+  # path_root 同时是 **URL / key 的第一段**和**静态挂载点**(/rapid-admin)。
+  # ⚠️ 本地磁盘只有一棵树,所有文件都能按 URL 直接取到 ——
+  #   "私密"只意味着外部用户猜不到这个 key(uid 是雪花 id、对象名带随机后缀),
+  #   而不是"存在另一个别人访问不到的目录"。
+  path_root: rapid-admin
+
+  allowed_biz: []              # 业务段白名单。**留空 = 不限**
+
+  max_file_size_mb: 100        # 单文件上限,0 = 不限
+  multipart_threshold_mb: 100  # 超过这个大小建议走分片
+  multipart_part_size_mb: 8    # 分片大小
+  session_ttl: 24h             # 上传会话有效期
+  download_url_ttl: 15m        # 下载临时 URL 默认有效期
+  max_download_ttl: 24h        # 下载 URL 有效期上限
+
+  # ---- 媒体探测(视频时长 / 封面帧)----
+  # ⚠️ **ffmpeg 不随仓库分发** —— 环境变量 FFMPEG_PATH / FFPROBE_PATH
+  #   **优先于**下面这两个键。⚠️ 没装 ffmpeg 也能正常上传,只是列表里
+  #   少一个时长和一张封面。
+  ffmpeg_path: ffmpeg
+  ffprobe_path: ffprobe
+  media_max_size_mb: 2048      # 探测的文件大小上限(= 临时盘要留多少空间)
+
+  # 转码(M145):给"浏览器播不了"的音视频转一份 H.264+AAC 的可播副本。
+  # ⚠️ 布尔零值是 false = 关 —— 这一行必须显式写 true。
+  transcode_enabled: true
+  transcode_workers: 2        # 每个转码是一个 ffmpeg 进程,吃满一个核
+
+# ========== 字段级加密(开发占位) ==========
+#   - field_key:  必须正好 32 字节(base64 或原文都认)。⚠️ 下面这个默认值
+#     **必须恰好 32 字节** —— 少一个字符就配废了(启动打 Error,字段加密不启用)。
+#   - blind_key:  >=16 字节,原样使用(不 base64 解码)。
+crypto:
+  field_key: ${FIELD_AES_KEY:-dev-field-key-32bytes-change!xxx}
+  blind_key: ${FIELD_BLIND_KEY:-dev-blind-key-32bytes-change!xxx}
+
+# ========== 限流 ==========
+ratelimit:
+  global_qps: 1000
+  per_ip_qps: 50
+  login_fail_per_hour: 10
+
+# ========== 客户端 IP 解析(限流 / 审计的共同底座) ==========
+#   trusted_cidrs = "哪些对端可以代表别人说话"(反向代理网段)。
+#     - 对端不在列表里 → **完全忽略** X-Forwarded-For,用对端地址;
+#     - 对端在列表里   → 采信 XFF,取最右侧的不可信项(标准口径)。
+#   留空 = 内置默认(回环 + RFC1918 私有段)。开发期不用改,下面写出来只是
+#   让人知道这个键存在 —— 生产环境 nginx 挂在**公网 IP** 上时,
+#   必须把它的网段加进来,否则所有请求看起来都来自那台 nginx,
+#   按 IP 的限流会退化成全局限流。
+#
+#   ⚠️ 开发期走 vite 代理(/rapid-admin/v1 → :8888),而 vite 默认**不带** XFF
+#     (proxy 里没开 xfwd),所以后端看到的对端永远是 127.0.0.1 ——
+#     **开发期按 IP 的限流实际上就是全局限流**,这是预期行为,不是 bug。
+#     要在开发期验证真实 IP 行为,在 web/vite.config.ts 的 proxy 里加 xfwd: true。
+client_ip:
+  trusted_cidrs:
+    - 127.0.0.0/8      # 回环(vite / nginx 与应用同机)
+    - ::1/128
+    - 10.0.0.0/8       # RFC1918 私有段
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+
+# ========== 审计 ==========
+# 注:AuditConfig.FlushInterval 当前定义为 int(ms),不能用 "5s" 字符串(预存在小问题,不影响本次)
+audit:
+  batch_size: 100
+  flush_interval: 5000
+  queue_size: 1000

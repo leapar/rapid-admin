@@ -1,0 +1,1498 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>emailx(邮件) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../scheduling/cronx.html" />
+    
+    
+    <link rel="prev" href="smstpl.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="inbox.html">
+            
+                <a href="inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="notifyx.html">
+            
+                <a href="notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="push.html">
+            
+                <a href="push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="pushx.html">
+            
+                <a href="pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="permnotify.html">
+            
+                <a href="permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="msn.html">
+            
+                <a href="msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="smslimit.html">
+            
+                <a href="smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="smstpl.html">
+            
+                <a href="smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="7.9" data-path="emailx.html">
+            
+                <a href="emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../scheduling/cronx.html">
+            
+                <a href="../scheduling/cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../scheduling/jobs.html">
+            
+                <a href="../scheduling/jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../scheduling/slowquery.html">
+            
+                <a href="../scheduling/slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+            
+                <a href="../business/dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+            
+                <a href="../business/approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >emailx(邮件)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="emailx-——-邮件下发smtp--阿里云-directmail--console--mock">emailx —— 邮件下发:SMTP / 阿里云 DirectMail / Console / Mock</h1>
+<blockquote>
+<p>邮件是站内信之外的<strong>额外交付通道</strong>。emailx 把四种下发方式统一成一个
+<code>Sender</code> 接口,业务代码不关心用的是哪一种。</p>
+</blockquote>
+<h2 id="功能">功能</h2>
+<p>emailx 提供一个 <code>Sender</code> 接口和四个实现:</p>
+<table>
+<thead>
+<tr>
+<th>实现</th>
+<th>构造</th>
+<th><code>Provider()</code></th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SMTPSender</code></td>
+<td><code>NewSMTP(SMTPConfig)</code></td>
+<td><code>smtp</code></td>
+<td>通用 SMTP(自建 postfix / 腾讯企业邮 / Gmail / Outlook)</td>
+</tr>
+<tr>
+<td><code>AliyunSender</code></td>
+<td><code>NewAliyun(AliyunConfig)</code></td>
+<td><code>aliyun</code></td>
+<td>阿里云 DirectMail(HTTP REST,免 SDK)</td>
+</tr>
+<tr>
+<td><code>ConsoleSender</code></td>
+<td><code>NewConsole()</code></td>
+<td><code>console</code></td>
+<td>只打到 stdout,dev 用</td>
+</tr>
+<tr>
+<td><code>MockSender</code></td>
+<td><code>NewMock()</code></td>
+<td><code>mock</code></td>
+<td>测试用:记录所有发送、可选失败</td>
+</tr>
+</tbody>
+</table>
+<p>统一接口:</p>
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> Sender <span class="hljs-keyword">interface</span> {
+    Send(ctx context.Context, msg Message) error
+    Provider() <span class="hljs-keyword">string</span>
+}
+</code></pre>
+<p><code>Message</code> 是自由内容(不是短信那种"模板号 + 参数"):<code>From</code> / <code>FromName</code> / <code>To</code> /
+<code>CC</code> / <code>BCC</code> / <code>ReplyTo</code> / <code>Subject</code> / <code>HTML</code> / <code>Text</code> / <code>Headers</code> / <code>Attachments</code>。</p>
+<p><strong>不解决</strong>:邮件模板与渲染(正文由业务给)、退信 / 打开跟踪(阿里云侧的能力)、
+验证码 TTL(短信才有那个概念)。</p>
+<h2 id="配置">配置</h2>
+<h3 id="yaml-侧email-块">yaml 侧(<code>email:</code> 块)</h3>
+<pre><code class="lang-yaml"><span class="hljs-attr">email:</span>
+<span class="hljs-attr">  provider:</span> <span class="hljs-string">""</span>            <span class="hljs-comment"># "" / console / smtp / aliyun</span>
+<span class="hljs-attr">  from:</span> <span class="hljs-string">""</span>                <span class="hljs-comment"># 发件邮箱(缺省取 smtp.username / aliyun.account_name)</span>
+<span class="hljs-attr">  from_name:</span> Admin Console
+<span class="hljs-attr">  base_url:</span> <span class="hljs-string">""</span>            <span class="hljs-comment"># 站点外链前缀 —— 邮件里的链接要拼成绝对地址</span>
+<span class="hljs-attr">  timeout:</span> <span class="hljs-number">30</span>             <span class="hljs-comment"># 单次发送超时(秒)</span>
+<span class="hljs-attr">  smtp:</span>
+<span class="hljs-attr">    host:</span> <span class="hljs-string">""</span>              <span class="hljs-comment"># smtp.example.com</span>
+<span class="hljs-attr">    port:</span> <span class="hljs-number">465</span>             <span class="hljs-comment"># 465 = use_tls / 587 = use_starttls</span>
+<span class="hljs-attr">    username:</span> <span class="hljs-string">""</span>
+<span class="hljs-attr">    password:</span> ${EMAIL_SMTP_PASSWORD}
+<span class="hljs-attr">    use_tls:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">    use_starttls:</span> <span class="hljs-literal">false</span>
+<span class="hljs-attr">  aliyun:</span>
+<span class="hljs-attr">    access_key:</span> ${EMAIL_ALIYUN_ACCESS_KEY}
+<span class="hljs-attr">    access_secret:</span> ${EMAIL_ALIYUN_ACCESS_SECRET}
+<span class="hljs-attr">    account_name:</span> <span class="hljs-string">""</span>      <span class="hljs-comment"># 发信地址(需在阿里云控制台验证过)</span>
+<span class="hljs-attr">    from_alias:</span> <span class="hljs-string">""</span>
+<span class="hljs-attr">    region:</span> cn-hangzhou
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email.provider</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td><code>""</code> / <code>console</code> / <code>smtp</code> / <code>aliyun</code>。<strong>空串 = 不装配通道</strong></td>
+</tr>
+<tr>
+<td><code>email.from</code></td>
+<td>string</td>
+<td>—</td>
+<td>发件邮箱。优先级高于 provider 自带的值</td>
+</tr>
+<tr>
+<td><code>email.from_name</code></td>
+<td>string</td>
+<td>—</td>
+<td>发信人显示名</td>
+</tr>
+<tr>
+<td><code>email.base_url</code></td>
+<td>string</td>
+<td>—</td>
+<td>站点外链前缀;邮件里的相对链接必须拼成绝对地址</td>
+</tr>
+<tr>
+<td><code>email.timeout</code></td>
+<td>int</td>
+<td><code>30</code></td>
+<td>单次发送超时(秒);<code>0</code> = 用 provider 默认 30s</td>
+</tr>
+<tr>
+<td><code>email.smtp.host</code></td>
+<td>string</td>
+<td>—</td>
+<td>SMTP 服务器</td>
+</tr>
+<tr>
+<td><code>email.smtp.port</code></td>
+<td>int</td>
+<td><code>465</code></td>
+<td><code>465</code> / <code>587</code> / <code>25</code>。代码侧 <code>0</code> ⇒ <code>25</code>(明文,只在自建内网用)</td>
+</tr>
+<tr>
+<td><code>email.smtp.username</code> / <code>password</code></td>
+<td>string</td>
+<td>—</td>
+<td>认证凭据</td>
+</tr>
+<tr>
+<td><code>email.smtp.use_tls</code></td>
+<td>bool</td>
+<td>—</td>
+<td>声明为"直接 TLS(465)"</td>
+</tr>
+<tr>
+<td><code>email.smtp.use_starttls</code></td>
+<td>bool</td>
+<td>—</td>
+<td><code>STARTTLS(587)</code></td>
+</tr>
+<tr>
+<td><code>email.aliyun.access_key</code> / <code>access_secret</code></td>
+<td>string</td>
+<td>—</td>
+<td>DirectMail 凭据</td>
+</tr>
+<tr>
+<td><code>email.aliyun.account_name</code></td>
+<td>string</td>
+<td>—</td>
+<td>发信地址(需在阿里云控制台验证过)</td>
+</tr>
+<tr>
+<td><code>email.aliyun.from_alias</code></td>
+<td>string</td>
+<td>—</td>
+<td>发信人显示名</td>
+</tr>
+<tr>
+<td><code>email.aliyun.region</code></td>
+<td>string</td>
+<td><code>cn-hangzhou</code></td>
+<td>端点 <code>https://dm.&lt;region&gt;.aliyuncs.com/</code></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>配置加载器不做 <code>${VAR}</code> 展开</strong>(viper 没这功能)。yaml 里写的
+<code>${EMAIL_SMTP_PASSWORD}</code> 只有在<strong>对应的环境变量真的被设置</strong>时才有意义 ——
+viper 的 <code>AutomaticEnv</code> + <code>.</code>→<code>_</code> 替换会让环境变量<strong>优先于</strong> yaml;
+环境变量没设时,这个占位符会<strong>原样</strong>成为密码(连接失败,而不是"没配密码")。
+环境变量名:<code>EMAIL_SMTP_HOST</code> / <code>EMAIL_SMTP_PORT</code> / <code>EMAIL_SMTP_USERNAME</code> /
+<code>EMAIL_SMTP_PASSWORD</code> / <code>EMAIL_ALIYUN_ACCESS_KEY</code> / <code>EMAIL_ALIYUN_ACCESS_SECRET</code> /
+<code>EMAIL_ALIYUN_ACCOUNT_NAME</code>。</p>
+<h3 id="代码侧构造选项">代码侧(构造选项)</h3>
+<pre><code class="lang-go">smtpSender, err := emailx.NewSMTP(emailx.SMTPConfig{
+    Host:     <span class="hljs-string">"smtp.exmail.qq.com"</span>,
+    Port:     <span class="hljs-number">465</span>,
+    Username: <span class="hljs-string">"noreply@example.com"</span>,
+    Password: <span class="hljs-string">"***"</span>,
+    From:     <span class="hljs-string">"noreply@example.com"</span>,
+    Timeout:  <span class="hljs-number">30</span> * time.Second,
+})
+
+aliyun, err := emailx.NewAliyun(emailx.AliyunConfig{
+    AccessKey:    <span class="hljs-string">"..."</span>,
+    AccessSecret: <span class="hljs-string">"..."</span>,
+    AccountName:  <span class="hljs-string">"noreply@example.com"</span>,
+    FromAlias:    <span class="hljs-string">"平台"</span>,
+    Region:       <span class="hljs-string">"cn-hangzhou"</span>,
+    Timeout:      <span class="hljs-number">30</span> * time.Second,
+})
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>配置字段</th>
+<th>校验</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SMTPConfig.Host</code></td>
+<td>空 ⇒ 构造报错</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>SMTPConfig.Port</code></td>
+<td>—</td>
+<td><code>25</code></td>
+</tr>
+<tr>
+<td><code>SMTPConfig.From</code></td>
+<td>—</td>
+<td>空 ⇒ 取 <code>Username</code></td>
+</tr>
+<tr>
+<td><code>SMTPConfig.Timeout</code></td>
+<td>—</td>
+<td><code>30s</code></td>
+</tr>
+<tr>
+<td><code>AliyunConfig.AccessKey</code> / <code>AccessSecret</code></td>
+<td>空 ⇒ 构造报错</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>AliyunConfig.AccountName</code></td>
+<td>空 ⇒ 构造报错</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>AliyunConfig.Region</code></td>
+<td>—</td>
+<td><code>cn-hangzhou</code></td>
+</tr>
+<tr>
+<td><code>AliyunConfig.AddressType</code></td>
+<td>—</td>
+<td><code>0</code> 会被改成 <code>1</code>(发信地址)</td>
+</tr>
+<tr>
+<td><code>AliyunConfig.Timeout</code></td>
+<td>—</td>
+<td><code>30s</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方法">使用方法</h2>
+<h3 id="发送">发送</h3>
+<pre><code class="lang-go">msg := emailx.Message{
+    From:     <span class="hljs-string">"noreply@example.com"</span>,
+    FromName: <span class="hljs-string">"Rapid Admin 后台快速开发平台"</span>,
+    To:       []<span class="hljs-keyword">string</span>{<span class="hljs-string">"zhangwei@example.com"</span>},
+    Subject:  <span class="hljs-string">"您的验证码"</span>,
+    Text:     <span class="hljs-string">"您的验证码是 123456,10 分钟内有效。"</span>,
+    HTML:     <span class="hljs-string">"&lt;h1&gt;您的验证码是 123456&lt;/h1&gt;"</span>,
+}
+err := sender.Send(ctx, msg)
+</code></pre>
+<p><code>msg.IsValid()</code> 是所有真 sender 的前置校验:
+<code>From</code> 必填、至少 1 个收件人、<code>Subject</code> 必填、<code>HTML</code> / <code>Text</code> 至少 1 个。</p>
+<h3 id="测试用-mock">测试用 Mock</h3>
+<pre><code class="lang-go">mock := emailx.NewMock()
+_ = mock.Send(ctx, msg)
+mock.Count()      <span class="hljs-comment">// 已发送数</span>
+last, has := mock.Last()
+mock.Reset()      <span class="hljs-comment">// 清空记录 + 清掉 FailOn</span>
+</code></pre>
+<h3 id="dev-用-console">dev 用 Console</h3>
+<pre><code class="lang-go">console := emailx.NewConsole()
+_ = console.Send(ctx, msg)   <span class="hljs-comment">// 只打 stdout</span>
+</code></pre>
+<h3 id="通道分发通知中心那条路">通道分发(通知中心那条路)</h3>
+<p>邮件不是独立调用的,而是站内信的<strong>额外交付</strong>通道:</p>
+<pre><code class="lang-go">d := notifyx.NewDispatcher()
+d.Register(notifyx.NewEmailChannel(emailSender, from, fromName, baseURL))
+res := d.Dispatch(ctx, recipient, msg)
+</code></pre>
+<h2 id="注意事项">注意事项</h2>
+<ul>
+<li>⚠️ <strong>邮件发送失败</strong>不<strong>阻断主流程</strong>。邮件是站内信落库之后的<strong>异步额外交付</strong>:
+站内信已经写进 <code>inbox</code> 表了,邮件失败只记一条 Warn
+(<code>notifyx: 额外交付部分失败</code>),<strong>不会</strong>让整个通知失败。
+分发器把每条通道的失败收进 <code>Result.Failed</code>,<strong>其它通道照发</strong>
+(<code>Result.OK()</code> = 至少一条通道投递成功)。但如果只挂了邮件一个通道,
+<code>Result.OK()</code> 就是 false —— 调用方能看出来。
+⚠️ 与 <a href="notifyx.html">notifyx</a> 的口径要对齐:通道 <code>Send</code> 返回 <code>ErrSkip</code>
+表示"这个收件人不适用这条通道"(没填邮箱),<strong>不算失败</strong>。</li>
+<li>⚠️ <strong><code>Send</code> 返回 nil 只代表"服务商收下了"</strong>,不代表邮件进了收件箱。
+业务侧的"发送成功"文案要按这个口径写。</li>
+<li>⚠️ <strong>失败方向与短信刻意相反</strong>:<ul>
+<li>短信 <code>provider</code> 为空 ⇒ <strong>fallback 到 console</strong>(验证码必须有去处);</li>
+<li>邮件 <code>provider</code> 为空 ⇒ <strong>不装配通道</strong>(返回 nil),未知值也<strong>只 Warn 不装配</strong>,
+<strong>绝不落 console</strong>。理由:邮件是额外交付,"配错了但看起来在工作"才是最坏的
+失败方向 —— 运维看着日志里一封封 <code>[email/console]</code> 会以为邮件通了,
+实际上收件人一封都没收到,而"没发出去"根本不会报错。</li>
+<li>邮件通道<strong>配错 ⇒ 启动失败</strong>(<code>Fatal</code>),而不是静默降级成"不发邮件"。</li>
+</ul>
+</li>
+<li>⚠️ <strong>⚠️ <code>SMTPConfig.UseTLS</code> 声明了但没有实现</strong>。<code>SMTPSender.Send</code> 里
+<code>UseTLS</code> 只出现在 <code>UseSTARTTLS &amp;&amp; !UseTLS</code> 这个判断里 ——
+<strong>代码里从来没有 <code>tls.Dial</code></strong>,连接是 <code>net.DialTimeout</code> 起的明文 TCP。
+所以 yaml 里 <code>port: 465</code> + <code>use_tls: true</code> <strong>并不会</strong>建立隐式 TLS。
+目前只有 STARTTLS 那条路是真加密的(<code>use_starttls: true</code> + 587)。</li>
+<li>⚠️ <strong><code>Message.From</code> 会被校验,但两个真 sender 都不用它</strong>:
+SMTP 用的是 <code>SMTPConfig.From</code>(发 <code>MAIL FROM</code> 头),阿里云用的是
+<code>AliyunConfig.AccountName</code>(发 <code>AccountName</code> 参数)。业务层看到的 <code>From</code>
+只是"必填字段",真正发出去的发信地址由配置决定。</li>
+<li>⚠️ <strong><code>Message.ReplyTo</code> 只有 SMTP 用</strong>(写成 <code>Reply-To:</code> 头);
+阿里云 sender 完全不读它 —— <code>AliyunConfig.ReplyToAddress</code> 非空时只往请求里塞了
+一个字符串 <code>"1"</code>(标记位),<strong>真实地址没被送出</strong>。要回信地址得走阿里云控制台那侧。</li>
+<li>⚠️ <strong><code>Message.Attachments</code> 是"留接口",没有任何实现</strong>。SMTP 的 MIME 构造
+(<code>buildMIME</code>)只拼 <code>multipart/alternative</code>(text/plain + text/html),
+阿里云 sender 也不带附件。传了附件<strong>会被静默丢掉</strong>,不报错。</li>
+<li>⚠️ <strong><code>emailx.Option</code> 是个死类型</strong>(里面只有 <code>Timeout</code>),全仓零调用方 ——
+超时由各 sender 自己的配置字段决定。</li>
+<li>⚠️ <strong><code>MockSender</code> 不做 <code>IsValid()</code> 校验</strong>(其余三个都做)。测试里用 mock
+断言"参数不合法应该报错"会得到 nil —— 换成真 sender 才会报错。</li>
+<li>⚠️ <strong><code>EmailError.Retry</code> 决定值不值得重试</strong>:网络错误 <code>Retry: true</code>,
+业务错误 <code>Retry: false</code>(阿里云业务码不重试),HTTP 5xx <code>Retry: true</code>,
+参数校验错误 <code>Retry: false</code>。</li>
+<li>⚠️ <strong>阿里云 DirectMail 的硬限制</strong>:单邮件 1~50 个收件人(To/Cc/Bcc 合计)、
+单账号默认 500 封/天(可申请提额)、<strong>主题与内容需审核</strong>
+(发信前要在控制台创建发信模板)。</li>
+<li>⚠️ <strong>阿里云 <code>FromAlias</code> 的优先级</strong>:<code>AliyunConfig.FromAlias</code> 优先,
+<code>Message.FromName</code> 只在 <code>cfg.FromAlias == ""</code> 时才被采用。</li>
+<li>⚠️ <strong>邮件正文里的链接必须是绝对地址</strong>。收件人的邮件客户端没有"当前站点"的
+概念,相对路径点开是坏的。<code>notifyx</code> 那层用 <code>email.base_url</code> 拼;
+<code>base_url</code> 没配时<strong>相对链接直接丢掉</strong>(好过给一个点不开的链接)。</li>
+</ul>
+<h2 id="相关">相关</h2>
+<ul>
+<li>源码:<code>internal/pkg/emailx/</code>(<code>smtp.go</code> <code>aliyun.go</code> <code>console.go</code>)</li>
+<li>可运行示例:<code>examples/emailx/main.go</code> —— <code>go run ./examples/emailx</code></li>
+<li>通道分发(邮件作为额外交付通道)→ <a href="notifyx.html">notifyx</a></li>
+<li>站内信 → <a href="inbox.html">inbox</a></li>
+<li>短信通道(与邮件平行的另一条交付路径)→ <a href="msn.html">msn</a></li>
+<li>配置体系(环境变量覆盖规则)→ <a href="../getting-started/configuration.html">配置体系</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="smstpl.html" class="navigation navigation-prev " aria-label="Previous page: smstpl(短信模板)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../scheduling/cronx.html" class="navigation navigation-next " aria-label="Next page: cronx(定时任务)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"emailx(邮件)","level":"7.9","depth":1,"next":{"title":"cronx(定时任务)","level":"8.1","depth":1,"path":"scheduling/cronx.md","ref":"scheduling/cronx.md","articles":[]},"previous":{"title":"smstpl(短信模板)","level":"7.8","depth":1,"path":"messaging/smstpl.md","ref":"messaging/smstpl.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"messaging/emailx.md","mtime":"2026-11-04T12:19:53.925Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

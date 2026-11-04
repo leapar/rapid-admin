@@ -1,0 +1,1947 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>dynx(动态业务集合) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="approval.html" />
+    
+    
+    <link rel="prev" href="../scheduling/slowquery.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../messaging/inbox.html">
+            
+                <a href="../messaging/inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../messaging/notifyx.html">
+            
+                <a href="../messaging/notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../messaging/push.html">
+            
+                <a href="../messaging/push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../messaging/pushx.html">
+            
+                <a href="../messaging/pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../messaging/permnotify.html">
+            
+                <a href="../messaging/permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../messaging/msn.html">
+            
+                <a href="../messaging/msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../messaging/smslimit.html">
+            
+                <a href="../messaging/smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../messaging/smstpl.html">
+            
+                <a href="../messaging/smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="../messaging/emailx.html">
+            
+                <a href="../messaging/emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../scheduling/cronx.html">
+            
+                <a href="../scheduling/cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../scheduling/jobs.html">
+            
+                <a href="../scheduling/jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../scheduling/slowquery.html">
+            
+                <a href="../scheduling/slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter active" data-level="9.1" data-path="dyn.html">
+            
+                <a href="dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="approval.html">
+            
+                <a href="approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >dynx(动态业务集合)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="dynx-——-动态业务集合用户自己设计业务表">dynx —— 动态业务集合(用户自己设计业务表)</h1>
+<blockquote>
+<p>让<strong>不懂代码的人</strong>在后台里设计一张业务表(比如"门店巡检记录"),
+设计完就自动有:物理表、增删改查接口、菜单、权限码、列表管理页。
+以后再要一张表,还是点几下 —— 不用开发改代码 + 建表 + 写接口 + 加菜单 + 加权限。</p>
+<p>⚠️ <strong>这是本仓唯一一处"业务代码不写也能上线新业务"的机制</strong> ——
+其余模块都是框架原语,这一条是<strong>业务能力本身</strong>。</p>
+</blockquote>
+<h2 id="功能">功能</h2>
+<h3 id="两个面">两个面</h3>
+<table>
+<thead>
+<tr>
+<th>面</th>
+<th>谁在用</th>
+<th>路径前缀</th>
+<th>资源码形状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>设计面</strong></td>
+<td>管理员(设计业务表)</td>
+<td><code>/rapid-admin/v1/system/dyn/**</code></td>
+<td><code>dyn:design:collection:*</code> / <code>dyn:design:field:*</code> / <code>dyn:design:type:list</code>(四段)</td>
+</tr>
+<tr>
+<td><strong>数据面</strong></td>
+<td>业务人员(录数据)</td>
+<td><code>/rapid-admin/v1/biz/dyn/:collection/**</code></td>
+<td><code>dyn:&lt;集合编码&gt;:&lt;动作&gt;</code>(三段)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>两套码形状不同,撞不了</strong> —— 集合编码里不可能出现 <code>:</code>(规则见 <code>dynx.ValidateCode</code>),
+所以数据面永远三段。
+(若设计面也用三段,用户建一个叫 <code>collection</code> 的集合,
+它的 <code>dyn:collection:list</code> 与设计面的"列出所有集合"就是同一个字符串 ⇒ 越权。)</p>
+<h3 id="设计完之后自动有什么">设计完之后自动有什么</h3>
+<p>建一个集合(比如编码 <code>inspection</code>)会自动产生:</p>
+<table>
+<thead>
+<tr>
+<th>产物</th>
+<th>形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理表</td>
+<td><code>dyn_inspection</code>(列名统一带 <code>f_</code> 前缀,如 <code>f_device_name</code>)</td>
+</tr>
+<tr>
+<td>5 条 api 资源码</td>
+<td><code>dyn:inspection:list</code> / <code>:read</code> / <code>:create</code> / <code>:update</code> / <code>:delete</code></td>
+</tr>
+<tr>
+<td>1 个菜单</td>
+<td><code>menu.dyn.inspection</code>,路径 <code>/dyn/inspection</code>,父节点 <code>menu.dyn</code>("自定义业务")</td>
+</tr>
+<tr>
+<td>1 个前端页面</td>
+<td><code>/dyn/:code</code> —— 列表、搜索、新增、编辑、详情、删除<strong>全自动</strong></td>
+</tr>
+</tbody>
+</table>
+<p>加一个字段会自动产生:一个物理列 + 一列表格 + 一个表单控件 + 一条校验规则。</p>
+<h3 id="记录页上的两样东西">记录页上的两样东西</h3>
+<table>
+<thead>
+<tr>
+<th>东西</th>
+<th>在哪</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「创建人」列</td>
+<td>列表页最后一组固定列</td>
+<td>显示名由后端读的时候从 <code>sys_user</code> 补(<code>owner_name</code>),取不到时前端回落到 <code>owner_id</code></td>
+</tr>
+<tr>
+<td>「API 接入」按钮</td>
+<td>列表页搜索区右侧</td>
+<td>弹窗里写清这个集合的 6 条接口:路径 / 权限码 / 请求体的键 / 一条能跑的 curl</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong><code>owner_name</code> 不是物理列</strong> —— 物理表上只有 <code>owner_id</code>(创建人,建记录时写入,之后不覆盖)。
+显示名是读的时候补的,所以<strong>加这一列不需要改任何物理表</strong>,
+已经在跑的集合不需要迁移。</p>
+<p>⚠️ <strong>查名字失败不报错</strong> —— 装饰性的东西取不到就让列表少一个名字,
+不让整页失败(降级成空串,前端显示 <code>owner_id</code>)。</p>
+<h3 id="字段类型注册表internalpkgdynx">字段类型注册表(<code>internal/pkg/dynx</code>)</h3>
+<p>一个字段的<strong>三种行为挂在同一张表上</strong>:落成什么列类型(DDL)、前端提交的值怎么变成能存的值
+(归一化)、存进去的值怎么变回前端能显示的值(反归一化)。</p>
+<p>⚠️ <strong>这三个问题必须由同一张表回答</strong> —— 各写各的就会出现
+"DDL 说它是 VARCHAR、归一化却塞了个 int64"这种分叉,
+表现是"存进去看着对、查出来类型变了",而且<strong>不报错</strong>。
+所以新增类型只加一行(<code>specs</code> 切片)。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存进去的样子</th>
+<th>读出来</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code> / <code>longtext</code></td>
+<td>文本</td>
+<td>文本</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>整数</td>
+<td>整数</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>小数</td>
+<td>小数</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td><code>0</code> / <code>1</code></td>
+<td>布尔</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>"2026-11-01"</code></td>
+<td><code>"2026-11-01"</code></td>
+</tr>
+<tr>
+<td><code>datetime</code></td>
+<td><code>"2026-11-01T00:30:00Z"</code>(统一 UTC)</td>
+<td>同左</td>
+</tr>
+<tr>
+<td><code>select</code></td>
+<td>选项值文本</td>
+<td>选项值文本</td>
+</tr>
+<tr>
+<td><code>multiselect</code></td>
+<td>JSON 数组文本</td>
+<td><code>string[]</code></td>
+</tr>
+<tr>
+<td><code>json</code></td>
+<td>JSON 文本</td>
+<td><strong>已解析的 JSON 值</strong></td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td><strong>文件的 key</strong>(不带域名的路径)</td>
+<td>同左(展示信息另放在 <code>_files</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong><code>select</code> / <code>multiselect</code> 的选项有两种来源</strong> ——
+手工逐条填,或<strong>关联一张系统表</strong>(见下面的「选项来源:关联系统表」)。</p>
+<h3 id="附件字段file">附件字段(<code>file</code>)</h3>
+<p>字段里存的是<strong>文件在存储树里的 key</strong>:</p>
+<pre><code>rapid-admin/1844/dyn/0/1712345678-a1b2c3d4-户型图.pdf
+└ 路径根     └ uid  └ biz └ fid └ 对象名
+</code></pre><p>⚠️ <strong>存 key,不存 URL</strong> —— URL 里带域名(本地部署 <code>/rapid-admin/...</code>,
+CDN 部署 <code>https://cdn.../rapid-admin/...</code>),域名会变 ⇒
+存 URL 等于把"换 CDN"变成一次数据迁移。
+key 是<strong>两种 provider 下形状一致</strong>的那一个(local 直链 = <code>/</code> + key,
+OSS 直链 = <code>&lt;CDN 前缀&gt;</code> + <code>/</code> + key)。</p>
+<p>⚠️ <strong>key 的第一段是路径根词</strong>(<code>file.path_root</code>,默认 <code>rapid-admin</code>)——
+改它等于换了一棵树,已存的文件字段值会全部失效。</p>
+<p><strong>写的时候</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>""</code> / <code>null</code></td>
+<td>空(没填)</td>
+</tr>
+<tr>
+<td>带域名的 URL / 含 <code>..</code> / 含反斜杠 / 前导斜杠 / 超 512 字节</td>
+<td><strong>400</strong></td>
+</tr>
+<tr>
+<td>合法的 key</td>
+<td>原样(去首尾空白)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>存在性也查</strong> —— key 查不到 ⇒ 400「文件不存在(请重新上传)」。
+⚠️ <strong>但文件服务查不动时降级放行</strong> —— 只做形状校验
+(旁路纪律:"附件服务暂时查不动"不该让整个表单存不进去)。</p>
+<p>⚠️ <strong>上传走文件服务(<code>POST /biz/files</code>,权限码 <code>file:upload</code>)</strong> ——
+不新造一条上传通道,也不让用户手填路径(手填 = 让用户自己声明"这个文件存在")。
+前端按这个权限码控「上传」按钮的可见性(没有它点了就是 403);
+⚠️ <strong>但读是另一件事</strong> —— 没有上传权的人照样看得见已有的文件名。</p>
+<p><strong>读的时候</strong>:列里只有 key,原文件名与直链不在列里 ⇒
+后端另外解析成一个 <code>_files</code> 映射(<strong>键是字段标识</strong>,不是文件 key):</p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">"attachment"</span>: <span class="hljs-string">"rapid-admin/1844/dyn/0/1712345678-户型图.pdf"</span>,
+  <span class="hljs-string">"_files"</span>: { <span class="hljs-string">"attachment"</span>: { <span class="hljs-string">"name"</span>: <span class="hljs-string">"户型图.pdf"</span>, <span class="hljs-string">"url"</span>: <span class="hljs-string">"/rapid-admin/1844/dyn/0/…"</span> } }
+}
+</code></pre>
+<p>⚠️ <strong><code>_files</code> 不是字段</strong> —— 字段标识必须以小写字母开头 ⇒ 不可能与用户字段撞名。
+⚠️ <strong>写入时忽略 <code>_</code> 开头的键</strong> —— 「读出来 → 改两个字段 → 原样提交」是最常见的用法,
+回传 <code>_files</code> 不该被当成"未知字段"拒掉。
+⚠️ <strong>解析失败要降级</strong> —— 文件被删了那一项<strong>不出现</strong>在 <code>_files</code> 里,
+前端显示原始 key 并标成「文件已失效」,<strong>不让整页记录失败</strong>。</p>
+<p>🔴 <strong>隐私口径(必读)</strong> —— 字段的值就是文件的直链 ⇒
+<strong>能读这条记录的人就能拿到这个文件</strong>。M80 的隐私模型是「私密靠 key 不可猜」,
+把 key 写进一条业务记录,等于把这份不可猜性转发给这条记录的每一个读者。
+⇒ 需要强私密性的场景(身份证、工资单等)不要用 <code>file</code> 字段。</p>
+<h3 id="选项来源关联系统表">选项来源:关联系统表</h3>
+<p>单选 / 多选的选项可以<strong>关联一张系统表</strong>,而不是一条一条手工填:</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>表</th>
+<th>取值列</th>
+<th>显示名列</th>
+<th>需要的资源码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td><code>sys_user</code></td>
+<td><code>id</code></td>
+<td><code>real_name → nickname → username</code></td>
+<td><code>user:list</code></td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td><code>sys_role</code></td>
+<td><code>id</code></td>
+<td><code>name</code></td>
+<td><code>role:list</code></td>
+</tr>
+<tr>
+<td><code>dept</code></td>
+<td><code>sys_department</code></td>
+<td><code>id</code></td>
+<td><code>name</code></td>
+<td><code>dept:list</code></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>注册表是白名单,不是"任意表"</strong> —— 让用户填表名等于把 SQL 的表名交给用户拼。
+要加表 = 在 <code>internal/pkg/dynx/relation.go</code> 的 <code>relationSources</code> 里加一行。</p>
+<p>⚠️ <strong>选项不落库</strong> —— 落库的只是"从哪张表取"这一条配置
+(<code>{"choices":[],"source":{"kind":"table","key":"user"}}</code>),
+选项是<strong>读表单结构的时候现查</strong>的 ⇒ 系统表里新增一行,表单里立刻多一个选项。</p>
+<p>⚠️ <strong>三层闸门,顺序不能换</strong>:</p>
+<ol>
+<li><strong>资源码闸门</strong> —— 读那张表要哪个权限(<code>user:list</code> …)。
+判定走 <code>middleware.CanAccess</code>(执行层的唯一一份实现),
+⚠️ <strong>判定在 handler 层做</strong>:<code>internal/api/middleware</code> 依赖 <code>internal/service</code>,
+反过来 import 就是循环依赖 ⇒ handler 判完把结果传下去。
+⚠️ <strong>判定的对象是"当前调用方",不是"设计者"</strong> ——
+设计师配了 <code>user</code> 来源,不代表录数据的业务员有 <code>user:list</code>。</li>
+<li><strong>数据范围闸门</strong> —— <code>user</code> 来源按 <code>user</code> 业务域套行级范围
+(与「用户管理」页同一套口径);<code>role</code> / <code>dept</code> 是平台级配置表,不套。</li>
+<li><strong>降级闸门</strong> —— 读不到就返回<strong>空选项 + 一个"来源不可读"的标记</strong>,
+<strong>绝不让整个表单结构失败</strong>(一个字段的选项读不到,不该让整页列表白屏)。</li>
+</ol>
+<p>⇒ 反过来(先查表再判权限)等于"先偷看再问能不能看"。</p>
+<p>⚠️ <strong>关联表来源不校验成员资格</strong> —— 手工选项集在写入时校验成员资格
+(值必须在那份选项集里);关联表是"活的"(行会被删),
+若也校验,<strong>一条历史记录只要它引用的那一行被删了,这条记录就再也存不进去任何修改</strong>。
+⇒ 关联表来源只校验值的形状。代价:可以存进表里不存在的 id,
+那一格会显示空白标签(要真的挡住得做外键 + 级联,本模块明确不做)。</p>
+<h2 id="配置">配置</h2>
+<h3 id="没有-yaml-配置块">没有 yaml 配置块</h3>
+<p>这一套<strong>不需要任何配置</strong> —— 建表、登记资源、登记菜单都在运行期完成。
+唯一的"配置"是设计器菜单本身(种子里的一条):</p>
+<pre><code class="lang-go"><span class="hljs-comment">// server/internal/seed/seed.go</span>
+{Code: <span class="hljs-string">"menu.system.dyn"</span>, Name: <span class="hljs-string">"业务表单设计器"</span>, Path: <span class="hljs-string">"/system/dyn"</span>, Icon: <span class="hljs-string">"table"</span>, Sort: <span class="hljs-number">19</span>, ParentCode: <span class="hljs-string">"menu.system"</span>},
+</code></pre>
+<h3 id="命名规则硬约束前后端都必须遵守">命名规则(硬约束,前后端都必须遵守)</h3>
+<table>
+<thead>
+<tr>
+<th>东西</th>
+<th>规则</th>
+<th>来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>集合编码 <code>code</code></td>
+<td><code>^[a-z][a-z0-9_]{0,63}$</code></td>
+<td><code>dynx.ValidateCode</code></td>
+</tr>
+<tr>
+<td>字段标识 <code>field_key</code></td>
+<td>同上,且<strong>不能是</strong> <code>id</code> / <code>owner_id</code> / <code>created_at</code> / <code>updated_at</code> / <code>deleted_at</code></td>
+<td><code>dynx.ValidateFieldKey</code></td>
+</tr>
+<tr>
+<td>物理表名</td>
+<td><code>dyn_&lt;集合编码&gt;</code></td>
+<td><code>dynx.PhysTableName</code></td>
+</tr>
+<tr>
+<td>物理列名</td>
+<td><code>f_&lt;字段标识&gt;</code></td>
+<td><code>dynx.ColumnName</code></td>
+</tr>
+<tr>
+<td>数据面资源码</td>
+<td><code>dyn:&lt;集合编码&gt;:&lt;动作&gt;</code></td>
+<td><code>dynx.RecordCode</code></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>字段标识不能叫 <code>id</code></strong> —— 记录的 JSON 形状是
+<code>{"id":…, "owner_id":…, "owner_name":…, "created_at":…, "updated_at":…, "&lt;字段标识&gt;": …}</code>,
+服务层"先写系统列、再遍历字段覆盖",后写的赢 ⇒
+用户字段叫 <code>id</code> 会把系统 id 盖掉,之后所有按 id 的操作全错位。</p>
+<h3 id="动作清单是唯一真相">动作清单是唯一真相</h3>
+<p><code>internal/pkg/dynx/actions.go</code> 里的 <code>Actions()</code> 同时被两处消费:</p>
+<ul>
+<li>service 侧建集合时按它登记资源码(<code>internal/service/dyn_resource.go</code>)</li>
+<li>handler 侧守卫时按它拼资源码(<code>internal/api/handler/v1/dyn.go</code>)</li>
+</ul>
+<p>⚠️ <strong>两边必须同源,否则会静默失权</strong> —— 2026-11-01 M151 真踩过:
+handler 多写了一个 <code>schema</code> 动作(想给表单结构单开一个码),service 只登记 5 个 ⇒
+<code>dyn:&lt;集合码&gt;:schema</code> 这条资源码<strong>永远不存在</strong> ⇒ 角色配置页里压根没有这一行可勾 ⇒
+谁也绑不上 ⇒ 表单结构接口对所有非超管一律 403 —— <strong>而日志里一条错误都没有</strong>。</p>
+<p>⇒ 清单 + 拼码函数都放在原语层,两边引用同一份。</p>
+<h2 id="使用方法">使用方法</h2>
+<h3 id="业务人员设计一张表">业务人员:设计一张表</h3>
+<ol>
+<li>后台 →「系统管理 → 业务表单设计器」(<code>/system/dyn</code>)</li>
+<li>左栏「新建集合」:填<strong>集合编码</strong>(小写英文,创建后不可改)、名称、图标、排序</li>
+<li>右栏「新建字段」:填<strong>字段标识</strong>(小写英文,创建后不可改)、显示名、类型、是否必填</li>
+<li>单选 / 多选再配<strong>选项集</strong>:
+<strong>手工添加</strong>(值 = 存进数据库的,显示名 = 给人看的)或
+<strong>关联系统表</strong>(选一张表当来源,选项在读的时候现查)</li>
+<li>存完 → 左侧菜单出现「自定义业务 → &lt;集合名&gt;」,点进去就是列表管理页</li>
+</ol>
+<h3 id="业务人员录数据">业务人员:录数据</h3>
+<p>「自定义业务 → &lt;集合名&gt;」:搜索 / 新增 / 编辑 / 详情 / 删除,列与表单全部按字段定义生成。</p>
+<p>要把它接进自己的系统?点搜索区右侧的<strong>「API 接入」</strong> ——
+弹窗里是这个集合的 6 条接口(路径 / 各要哪个权限码 / 请求体的键 / 一条能直接跑的 curl),
+照着接就行,不用回来问开发。</p>
+<h3 id="开发新增一种字段类型">开发:新增一种字段类型</h3>
+<p>只改一处 —— <code>internal/pkg/dynx/dynx.go</code> 的 <code>specs</code> 切片加一行:</p>
+<pre><code class="lang-go">{Type: <span class="hljs-string">"decimal"</span>, Label: <span class="hljs-string">"定点小数"</span>, MySQLType: <span class="hljs-string">"DECIMAL(10,2)"</span>, SQLiteType: <span class="hljs-string">"TEXT"</span>, HasOptions: <span class="hljs-literal">false</span>},
+</code></pre>
+<p>⚠️ <strong>MySQL 的 <code>number</code> 用 DOUBLE 而不是 DECIMAL</strong> ——
+DECIMAL 列经 go-sql-driver 读出来是 <code>[]byte("123.450000")</code>,
+前端拿到的是字符串而不是数字;DOUBLE 直接给 float64。
+⚠️ <strong>json 列在两个方言里都是 TEXT</strong> —— MySQL 的 JSON 类型要求插入的是
+<strong>合法 JSON 文档</strong>,用户随手输入的半截 JSON 会直接报错;
+TEXT 只存字符串,校验挪到归一化那一层(统一口径)。</p>
+<p>⚠️ <strong>新增类型还要顺手改前端的类型映射</strong> ——
+<code>web/src/pages/dyn/recordForm.ts</code> 的 <code>editTypeOf()</code>:
+<strong>未知类型一律当单行文本</strong>(不是当"不支持"而是当文本)——
+后端加了新类型而前端还不知道时,这一列至少还能显示、还能编辑字符串,
+而不是整个页面炸掉(<code>TypeError: unknown type</code>)。</p>
+<h3 id="开发接一条业务线到动态集合">开发:接一条业务线到动态集合</h3>
+<p>不需要写代码 —— 直接在设计器里建表即可。
+真要写代码(比如给某个集合加特殊校验),走的是普通 service 层,
+集合数据在 <code>sys_dyn_collection</code> / <code>sys_dyn_field</code> 里,
+物理表名由 <code>dynx.PhysTableName(code)</code> 算。</p>
+<h3 id="开发用-rapid-admindyn-sdk-集成自定义业务集合">开发:用 @rapid-admin/dyn-sdk 集成自定义业务集合</h3>
+<p>设计器把表建好之后,<strong>后端接口、权限码、菜单、列表页</strong>都是现成的 ——
+把数据接到自己的系统(小程序 / Node 脚本 / 另一个前端)不需要手写 HTTP,
+用官方 SDK:<code>js-sdk/</code> 目录,发布名 <strong><code>@rapid-admin/dyn-sdk</code></strong>,零运行时依赖,
+浏览器 / Node 18+ / 微信小程序(带 fetch 适配)都能跑。</p>
+<h4 id="安装与构造">安装与构造</h4>
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> { DynClient } from <span class="hljs-string">'@rapid-admin/dyn-sdk'</span>
+
+<span class="hljs-comment">// ⚠️ baseURL 是 API 根路径(含 /rapid-admin/v1),不是站点根 ——</span>
+<span class="hljs-comment">//    拼错一步,所有 404 都会指向"路由不存在",跟真正原因(baseURL)对不上。</span>
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> DynClient(<span class="hljs-string">'https://your-host/rapid-admin/v1'</span>)
+</code></pre>
+<p>可选构造项:<code>{ fetch }</code>(自定义 fetch 实现,老环境必备)、
+<code>{ beforeSend }</code>(每个请求发出前的钩子 —— 加签名头、改路径都在这里做,
+返回 <code>RequestInit</code> 表示替换,返回 <code>void</code> 表示不改)。</p>
+<h4 id="登录写操作之前调一次就够">登录:写操作之前调一次就够</h4>
+<pre><code class="lang-ts"><span class="hljs-comment">// 验证码开关开启时:先拿图给用户看,输码后一起传</span>
+<span class="hljs-keyword">const</span> cap = await client.getCaptcha()          <span class="hljs-comment">// { id, image(base64), length, expires_in }</span>
+<span class="hljs-comment">// ...用户看完图输入 code...</span>
+
+<span class="hljs-keyword">const</span> tokens = await client.authWithPassword(<span class="hljs-string">'&lt;账号&gt;'</span>, <span class="hljs-string">'&lt;明文密码&gt;'</span>, {
+  captchaId: cap.id,
+  captchaCode: <span class="hljs-string">'&lt;用户输入&gt;'</span>,
+})
+<span class="hljs-comment">// access token 已自动挂到后续所有请求(client.authStore)</span>
+</code></pre>
+<p>⚠️ <strong>密码传明文</strong> —— SDK 内部做前置摘要(sha256 后再发),自己先 hash 过
+再传 = 双重摘要 = 永远"账号或密码错误"。</p>
+<p>⚠️ <strong>refresh_token 要集成方自己持久化</strong>(<code>tokens.refresh_token</code>)——
+它是<strong>单次使用</strong>的,access token 过期(40101)时换新:</p>
+<pre><code class="lang-ts"><span class="hljs-keyword">const</span> fresh = await client.refreshAuth(savedRefreshToken)
+<span class="hljs-comment">// fresh.refresh_token 是新的一张,**必须覆盖保存**,重放旧值直接被拒</span>
+</code></pre>
+<p>登出 <code>client.logout()</code> —— 服务端吊销 + 清本地 token,<strong>永不抛错</strong>
+(服务端拒绝对调用方没有可处理的动作,本地清掉就是登出的全部意义)。</p>
+<p>token 存放默认<strong>只在内存</strong>(<code>client.authStore</code>)—— 集成环境五花八门,
+SDK 不替你选 localStorage。浏览器端要跨刷新保持就监听 <code>authStore.onChange</code>
+把 token 存起来、启动时 <code>authStore.save(saved)</code> 回填。</p>
+<h4 id="集合数据面一个实例对应一个集合">集合数据面:一个实例对应一个集合</h4>
+<pre><code class="lang-ts"><span class="hljs-keyword">const</span> posts = client.collection(<span class="hljs-string">'notice'</span>)   <span class="hljs-comment">// 集合编码 = 设计器里起的那个</span>
+<span class="hljs-comment">// 同参数重复调用返回同一个实例</span>
+</code></pre>
+<p><code>RecordService</code> 的方法与后端路由一一对应:</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>后端</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getSchema()</code></td>
+<td>GET <code>…/schema</code></td>
+<td>集合结构(字段标识/类型/选项)。<strong>表单要动态渲染就先调这个</strong></td>
+</tr>
+<tr>
+<td><code>getList(opts)</code></td>
+<td>GET <code>…/records</code></td>
+<td>分页列表,查询参数见下</td>
+</tr>
+<tr>
+<td><code>getFullList(opts)</code></td>
+<td>同上循环</td>
+<td>自动翻页拉全量(<strong>只用于导数据/对账</strong>,列表页请用 getList)</td>
+</tr>
+<tr>
+<td><code>getOne(id)</code></td>
+<td>GET <code>…/records/:id</code></td>
+<td>不存在 = 404</td>
+</tr>
+<tr>
+<td><code>create(body)</code></td>
+<td>POST <code>…/records</code></td>
+<td>返回 <code>{ id }</code></td>
+</tr>
+<tr>
+<td><code>update(id, body)</code></td>
+<td>PATCH <code>…/records/:id</code></td>
+<td>只改请求里出现的字段</td>
+</tr>
+<tr>
+<td><code>delete(id)</code></td>
+<td>DELETE</td>
+<td><strong>软删,进回收站</strong></td>
+</tr>
+<tr>
+<td><code>restore(id)</code></td>
+<td>PUT <code>…/restore</code></td>
+<td>从回收站恢复(没删过的记录恢复 = 404)</td>
+</tr>
+<tr>
+<td><code>submitApproval(id)</code></td>
+<td>POST <code>…/approval</code></td>
+<td>送审(集合绑了审批模板才有意义)</td>
+</tr>
+<tr>
+<td><code>batchDelete(ids)</code></td>
+<td>POST <code>…/batch-delete</code></td>
+<td>返回 <code>{ count }</code></td>
+</tr>
+<tr>
+<td><code>batchUpdate(ids, field, value)</code></td>
+<td>POST <code>…/batch-update</code></td>
+<td><strong>一次只改一个字段</strong>,改多个字段请逐条 update</td>
+</tr>
+</tbody>
+</table>
+<h4 id="查询getlist-的参数">查询:getList 的参数</h4>
+<pre><code class="lang-ts"><span class="hljs-keyword">const</span> page = await posts.getList({
+  page: <span class="hljs-number">1</span>,
+  size: <span class="hljs-number">20</span>,
+  keyword: <span class="hljs-string">'验收'</span>,                  <span class="hljs-comment">// 模糊匹配文本字段</span>
+  filter: <span class="hljs-string">"status = 'active' &amp;&amp; amount &gt; 1000"</span>,   <span class="hljs-comment">// 表达式筛选</span>
+  filters: { status: [<span class="hljs-string">'active'</span>, <span class="hljs-string">'pending'</span>] },     <span class="hljs-comment">// 简单等值:f_status=active,pending</span>
+  orderBy: <span class="hljs-string">'created_at'</span>,
+  orderDir: <span class="hljs-string">'desc'</span>,
+  fields: [<span class="hljs-string">'id'</span>, <span class="hljs-string">'title'</span>, <span class="hljs-string">'status'</span>],   <span class="hljs-comment">// 只取这些字段,减少传输</span>
+  skipTotal: <span class="hljs-literal">true</span>,                   <span class="hljs-comment">// 大表翻页加速(total 为 0)</span>
+  trash: <span class="hljs-literal">false</span>,                      <span class="hljs-comment">// true = 看回收站</span>
+})
+page.list    <span class="hljs-comment">// 记录数组,键是字段标识</span>
+page.total
+</code></pre>
+<p><code>filter</code> 表达式是与 PocketBase 同形状的子集:运算符
+<code>= != &gt; &gt;= &lt; &lt;= ~ !~ ?=</code>,逻辑 <code>&amp;&amp; || ( )</code>,<code>status ?= ('a','b')</code> 是 IN,
+<code>amount = null</code> 判空。<strong>字段不存在会报错</strong>(不是静默忽略)。
+<code>filter</code> 与 <code>filters</code> 可以同时用。</p>
+<h4 id="写记录键是字段标识值的形态有讲究">写记录:键是字段标识,值的形态有讲究</h4>
+<pre><code class="lang-ts"><span class="hljs-keyword">const</span> { id } = await posts.create({
+  title: <span class="hljs-string">'系统通知'</span>,        <span class="hljs-comment">// 字段标识(field_key),发显示名 = 400「字段不存在」</span>
+  amount: <span class="hljs-literal">null</span>,             <span class="hljs-comment">// ⚠️ 空数字是 null,不是 ""</span>
+  content: <span class="hljs-string">''</span>,              <span class="hljs-comment">// 空文本是 ""(语义是"清空")</span>
+})
+await posts.update(id, { status: <span class="hljs-string">'published'</span> })   <span class="hljs-comment">// 只发改了的字段</span>
+</code></pre>
+<p>数字 / 文本 / 开关 / JSON / 多选 / 单选 / 附件各发什么 ——
+<strong>必背对应关系见本章「注意事项」的《值的形态》表</strong>(附件存文件的 key,
+不是 URL)。存完要不要走审批,看集合绑没绑审批模板,绑了就 <code>submitApproval(id)</code>。</p>
+<h4 id="错误处理只认-clientresponseerror">错误处理:只认 ClientResponseError</h4>
+<p>所有失败(网络错 / 非 2xx / <strong>HTTP 200 但业务 code ≠ 0</strong>)统一抛
+<code>ClientResponseError</code>,四个字段:</p>
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> { ClientResponseError } from <span class="hljs-string">'@rapid-admin/dyn-sdk'</span>
+
+<span class="hljs-keyword">try</span> {
+  await posts.create({ title: <span class="hljs-string">''</span> })
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ClientResponseError) {
+    err.status   <span class="hljs-comment">// HTTP 状态码(网络层失败 = 0)</span>
+    err.code     <span class="hljs-comment">// 业务码(信封里的 code;非信封响应 = 0)</span>
+    err.message  <span class="hljs-comment">// 后端 message / 网络层描述</span>
+    err.response <span class="hljs-comment">// 原始 body(排查用)</span>
+    err.isAbort  <span class="hljs-comment">// 请求被 AbortSignal 取消</span>
+  }
+}
+</code></pre>
+<p>⚠️ <strong>HTTP 403 空 body 的经典长相</strong>是 CORS 未放行(响应体为空),
+SDK 的 message 里已内置这条提示;顺带把集成方的 Origin 加进后端白名单。</p>
+<h4 id="公开只读集合publicread">公开只读集合(public_read)</h4>
+<p>集合开了 <code>public_read</code> 时,<strong>未登录状态下读动作(list / getOne / getSchema)
+自动切到公开镜像路径</strong>,登录后自动切回正常数据面 —— 调用方无感。
+⚠️ 只切 GET,写动作永远走正常数据面;集合没开 public_read 时匿名读 = 401
+(不区分"不存在"和"没公开",是服务端口径)。</p>
+<h4 id="一个能跑通的完整例子">一个能跑通的完整例子</h4>
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> { DynClient } from <span class="hljs-string">'@rapid-admin/dyn-sdk'</span>
+
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> DynClient(<span class="hljs-string">'https://your-host/rapid-admin/v1'</span>)
+await client.authWithPassword(<span class="hljs-string">'dev'</span>, <span class="hljs-string">'your-password'</span>)
+
+<span class="hljs-keyword">const</span> schema = await client.collection(<span class="hljs-string">'notice'</span>).getSchema()
+<span class="hljs-built_in">console</span>.log(schema.fields.map(f =&gt; <span class="hljs-string">`<span class="hljs-subst">${f.field_key}</span>:<span class="hljs-subst">${f.type}</span>`</span>))
+
+<span class="hljs-keyword">const</span> { id } = await client.collection(<span class="hljs-string">'notice'</span>).create({
+  title: <span class="hljs-string">'停水通知'</span>,
+  content: <span class="hljs-string">'明早 9 点至 12 点'</span>,
+})
+await client.collection(<span class="hljs-string">'notice'</span>).submitApproval(id)
+
+<span class="hljs-keyword">const</span> { list } = await client.collection(<span class="hljs-string">'notice'</span>)
+  .getList({ filter: <span class="hljs-string">"status = 'published'"</span>, orderBy: <span class="hljs-string">'created_at'</span>, orderDir: <span class="hljs-string">'desc'</span> })
+
+await client.logout()
+</code></pre>
+<p>⚠️ <strong>权限码是服务端判的,SDK 不吞不猜</strong> —— 每个动作要哪个权限码
+(<code>dyn:&lt;集合码&gt;:list / create / update / delete / …</code>)见后台该集合的
+「API 接入」弹窗,403 会把业务信息原样抛出来,照着补绑定即可。</p>
+<h2 id="注意事项">注意事项</h2>
+<h3 id="三样东西不可改前端必须锁死输入框">三样东西<strong>不可改</strong>(前端必须锁死输入框)</h3>
+<table>
+<thead>
+<tr>
+<th>东西</th>
+<th>为什么不能改</th>
+<th>想改怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>集合编码 <code>code</code></td>
+<td>它同时是物理表名和资源码的来源,改了等于换了一张表 + 换了一套权限</td>
+<td>新建一个集合,把数据搬过去</td>
+</tr>
+<tr>
+<td>字段标识 <code>field_key</code></td>
+<td>它同时是物理列名和记录 JSON 的键</td>
+<td>新建一个字段,把数据搬过去,再停用旧字段</td>
+</tr>
+<tr>
+<td>字段类型 <code>type</code></td>
+<td>改类型意味着改列类型(重建表 = 全量数据搬迁 + 途中失败留半张表)</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>后端 DTO 里根本没有这三个字段</strong> —— 改了会被<strong>静默忽略</strong>。
+前端必须自己锁住输入框,否则用户填了个新编码、以为改成功了,
+下次进页面又变回旧值,数据还对不上。</p>
+<h3 id="删除是软删物理结构保留">删除是软删,物理结构保留</h3>
+<ul>
+<li>删集合:集合停用、菜单与权限码一并停用;<strong>物理表与已有数据保留</strong></li>
+<li>删字段:字段停用,列表页与表单里不再出现;<strong>物理列与已有数据保留</strong></li>
+</ul>
+<p>⇒ 停用之后可以重新启用,数据还在。</p>
+<h3 id="默认值必须在设计时就合法">默认值必须在<strong>设计时</strong>就合法</h3>
+<p>默认值是在"新建记录"时被填进去的,那时候用户已经填完一整张表了 ⇒
+一个填错的默认值要等到某个人新建记录时才暴露,那时候已经没人记得是谁填的。</p>
+<p>⇒ 建字段 / 改字段时,后端拿<strong>写记录同一套规则</strong>(<code>dynx.Normalize</code>)校验默认值,
+不合法直接 400(前端弹 toast)。空串 = 没有默认值,不校验。</p>
+<h3 id="时间口径不带时区的输入按东八区解释">时间口径:不带时区的输入按<strong>东八区</strong>解释</h3>
+<ul>
+<li><code>datetime</code> 存成 UTC 的 ISO-8601(<code>"2026-11-01T00:30:00Z"</code>)</li>
+<li>用户在表单里填 <code>"2026-11-01 08:30:00"</code> ⇒ 按<strong>东八区</strong>解释 ⇒ 存成 UTC</li>
+</ul>
+<p>⚠️ <strong>前端不能自己换算</strong> —— 一旦前端把本地时间转成 UTC 再发,
+遇上"浏览器时区 ≠ 东八区"就整整差 8 小时,而且<strong>当场不报错</strong>
+(存进去了,只是时间不对)。⇒ 前端的 <code>datetime</code> 字段用<strong>文本框</strong>,
+让用户按后端认得的格式直接填;<code>date</code> 没有时区问题,可以用日期选择器。</p>
+<h3 id="值的形态几个必背的对应关系">值的形态:几个必背的对应关系</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>前端发什么</th>
+<th>后端怎么接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>空数字</td>
+<td><code>null</code>(<strong>不是 <code>""</code></strong>)</td>
+<td><code>""</code> 会被 <code>toInt64</code> 拒:"需要整数,收到 \"\""</td>
+</tr>
+<tr>
+<td>空文本</td>
+<td><code>""</code></td>
+<td>存空串(这是"清空"而不是"不填")</td>
+</tr>
+<tr>
+<td>开关</td>
+<td>布尔</td>
+<td>认不出来的字符串<strong>报错</strong>(不静默当 false)</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td>文本</td>
+<td>文本必须<strong>是合法 JSON</strong>,否则 400</td>
+</tr>
+<tr>
+<td>多选</td>
+<td><code>string[]</code></td>
+<td>落库是 JSON 数组文本</td>
+</tr>
+<tr>
+<td>单选</td>
+<td>选项值</td>
+<td>手工来源:必须在选项集里,否则 400;关联表来源:只校验形状</td>
+</tr>
+<tr>
+<td>附件</td>
+<td><strong>文件的 key</strong></td>
+<td>带域名 / <code>..</code> / 反斜杠 ⇒ 400;查不到文件 ⇒ 400「文件不存在」</td>
+</tr>
+</tbody>
+</table>
+<h3 id="没填是-null不是零值">"没填"是 <strong>NULL</strong>,不是零值</h3>
+<p>⚠️ <strong>字段列必须是可空的</strong> —— 这是整个模块的一条硬约定,别改成 <code>NOT NULL</code>。</p>
+<p><code>dynx</code> 的读侧与写侧都按「NULL = 没填」设计:</p>
+<ul>
+<li>写:<code>Normalize(nil)</code> → <code>(nil, nil)</code> —— "没填"与"填了非法值"是两件事</li>
+<li>读:<code>Denormalize(nil)</code> → <code>nil</code> ⇒ 界面显示"未填"</li>
+</ul>
+<p>⇒ <strong>字段列必须可空</strong>,否则"没填"这一路直接撞数据库约束:</p>
+<pre><code>NOT NULL constraint failed: dyn_inspection.f_count
+</code></pre><p>症状是<strong>用户清空一个选填的整数框就存不进去</strong>(前端发的就是 <code>null</code>),
+而后端返回的是 500 "更新记录失败" —— 报错说的是"更新失败",
+跟"这个框不能清空"八竿子打不着。</p>
+<p>⇒ 业务上的理由:<strong>金额 0 元 ≠ 没填金额</strong>。
+零值顶替 NULL 的话,列表里那条"没填金额"的记录看起来就是"金额 0 元"。</p>
+<p>⚠️ <strong>NULL 文本列是会真实出现的</strong> —— 给一个<strong>已有数据</strong>的集合
+<strong>新加字段</strong>时,老行的这一列就是 NULL(新列可空 ⇒ 加列时老行填 NULL)。</p>
+<p>⇒ 关键字搜索那一组因此必须用 <code>COALESCE(col, '')</code>(见
+<code>server/internal/service/dyn_records.go</code> 的 <code>recordWhere</code>),
+否则 <code>col LIKE ?</code> 在 NULL 上求值是 NULL 而不是 false(SQL 三值逻辑)。</p>
+<p>⚠️ <strong>老表改不动</strong> —— 本模块上线<strong>之前</strong>建的物理表,列是 <code>NOT NULL</code>,
+而 SQLite <strong>不支持</strong> <code>ALTER COLUMN</code> 改可空性(MySQL 可以
+<code>ALTER TABLE dyn_xxx MODIFY COLUMN f_yyy &lt;type&gt; NULL</code>),
+SQLite 只能重建表。</p>
+<p>⇒ 而"删集合再重建"这条路也走不通:删集合是<strong>软删</strong>
+(<code>sys_dyn_collection</code> 的行还在,物理表也还在),
+同一个编码再建会撞唯一约束返 409 "集合编码已存在"。
+⇒ <strong>本模块还没上线 ⇒ 老的动态集合直接换编码重建一个</strong>(旧表是野表,
+没有别的手段能删 —— <code>dropTable</code> 只在"建表失败要补偿"时才会被调用)。</p>
+<h3 id="权限数据面的码是运行期拼出来的">权限:数据面的码是<strong>运行期</strong>拼出来的</h3>
+<p><code>dyn:&lt;集合编码&gt;:&lt;动作&gt;</code> 的集合编码是用户起名、运行期才有的 ⇒ <strong>编译期枚举不了</strong>。</p>
+<ul>
+<li>后端:守卫按集合判定(<code>dynx.RecordModule(code)</code> + <code>middleware.CanAccess</code>)</li>
+<li>前端:权限 store 里装的就是后端下发的 api 资源码,<strong>含运行期生成的那几条</strong>
+⇒ <code>has('dyn:' + code + ':create')</code> 在运行期是真的能判的
+(见 <code>web/src/api/dyn.ts</code> 的 <code>dynRecordPerm()</code>)</li>
+</ul>
+<p>⇒ 前端的 <code>/dyn/:code</code> 路由<strong>刻意不加</strong> <code>RoutePermissionGuard</code> ——
+写死的 <code>anyOf</code> 表达不了"这个集合能不能看"。闸门在后端,前端只控按钮可见性。</p>
+<h3 id="其它几条容易踩的">其它几条容易踩的</h3>
+<ul>
+<li><strong>关键字搜索只搜文本类字段</strong> —— 数字 / 日期 / 开关不参与 LIKE 匹配</li>
+<li><strong>排序字段必须在已知集合里</strong> —— 白名单校验,排序字段会拼进 SQL</li>
+<li><strong>owner_scoped 的集合</strong>:普通业务人员只看得见自己创建的记录(超管不受限)</li>
+<li><strong>同标识的软删字段会被"复活"而不是新建一行</strong> —— 唯一索引 <code>(collection_id, field_key)</code>
+覆盖软删行;复活的前提是<strong>类型一致</strong></li>
+</ul>
+<h2 id="相关">相关</h2>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server/internal/pkg/dynx/</code></td>
+<td>字段类型注册表 + 归一化 / 反归一化 + 命名规则 + 动作清单</td>
+</tr>
+<tr>
+<td><code>server/internal/pkg/dynx/relation.go</code></td>
+<td><strong>选项来源注册表</strong>(关联系统表白名单)</td>
+</tr>
+<tr>
+<td><code>server/internal/service/dyn.go</code></td>
+<td>DTO 与 service 接口</td>
+</tr>
+<tr>
+<td><code>server/internal/service/dyn_impl.go</code></td>
+<td>集合 / 字段的增删改查(含默认值与选项集校验)</td>
+</tr>
+<tr>
+<td><code>server/internal/service/dyn_records.go</code></td>
+<td>记录的数据面 CRUD(含 <code>_files</code> 附件解析)</td>
+</tr>
+<tr>
+<td><code>server/internal/service/dyn_relation.go</code></td>
+<td><strong>关联表来源的选项解析</strong>(权限 → 数据范围 → 查表)</td>
+</tr>
+<tr>
+<td><code>server/internal/service/dyn_resource.go</code></td>
+<td>运行期登记资源码与菜单</td>
+</tr>
+<tr>
+<td><code>server/internal/api/handler/v1/dyn.go</code></td>
+<td>HTTP handler + 守卫 + <code>RelationSources</code></td>
+</tr>
+<tr>
+<td><code>server/examples/dynx/main.go</code></td>
+<td>可运行示例</td>
+</tr>
+<tr>
+<td><code>web/src/pages/system/dyn/</code></td>
+<td>业务表单设计器(前端)</td>
+</tr>
+<tr>
+<td><code>web/src/pages/system/dyn/OptionsEditor.tsx</code></td>
+<td>选项集编辑器(手工 / 关联表二选一)</td>
+</tr>
+<tr>
+<td><code>web/src/pages/dyn/</code></td>
+<td>通用记录列表页(前端)</td>
+</tr>
+<tr>
+<td><code>web/src/pages/dyn/recordForm.ts</code></td>
+<td>值 ⇄ 表单 的纯规则(有单测)</td>
+</tr>
+<tr>
+<td><code>web/src/pages/dyn/FileFieldControl.tsx</code></td>
+<td>附件控件(上传 / 显示 / 清除)</td>
+</tr>
+<tr>
+<td><code>web/src/pages/dyn/apiGuide.ts</code></td>
+<td>「API 接入」说明的<strong>内容生成</strong>(纯函数,有单测)</td>
+</tr>
+<tr>
+<td><code>web/src/pages/dyn/ApiGuideModal.tsx</code></td>
+<td>「API 接入」弹窗(组件层)</td>
+</tr>
+<tr>
+<td><code>web/src/api/dyn.ts</code></td>
+<td>前端 API + 选项集翻译 + 运行期权限码</td>
+</tr>
+<tr>
+<td><code>js-sdk/</code>(<code>@rapid-admin/dyn-sdk</code>)</td>
+<td><strong>二次开发集成的官方 SDK</strong>(零依赖;用法见上文「用 @rapid-admin/dyn-sdk 集成自定义业务集合」)</td>
+</tr>
+<tr>
+<td><a href="../reference/packages.html">包速查表</a></td>
+<td>56 个 Go 包一句话索引</td>
+</tr>
+</tbody>
+</table>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../scheduling/slowquery.html" class="navigation navigation-prev " aria-label="Previous page: slowquery(慢 SQL 报警)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="approval.html" class="navigation navigation-next " aria-label="Next page: approvalx(通用审批)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"dynx(动态业务集合)","level":"9.1","depth":1,"next":{"title":"approvalx(通用审批)","level":"9.2","depth":1,"path":"business/approval.md","ref":"business/approval.md","articles":[]},"previous":{"title":"slowquery(慢 SQL 报警)","level":"8.3","depth":1,"path":"scheduling/slowquery.md","ref":"scheduling/slowquery.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"business/dyn.md","mtime":"2026-11-04T13:21:28.883Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

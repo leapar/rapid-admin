@@ -1,0 +1,574 @@
+# rapid-admin 配置示例
+# 复制为 config.yaml 后按需修改
+# 文档 §4.3
+
+# ========== 基础 ==========
+system:
+  addr: 8888
+  mode: release          # debug / release / test
+  app_name: rapid-admin
+  app_version: 1.0.0
+  timezone: Asia/Shanghai
+  read_timeout: 30s
+  write_timeout: 30s
+  max_body_size: 209715200  # 200MB
+
+# ========== 品牌信息(换平台名改这里)============
+# 登录页标题 / 顶栏品牌名 / 浏览器标签页标题都取自这里。
+# ⚠️ **留空 = 前端回退到本地语言包**(中文界面显示中文名,英文界面显示英文名),
+#    所以通用部署**不必**在这里写死 —— 写了才会覆盖语言包。
+# ⚠️ 这是**启动期常量**,不在"系统配置"页面里改 —— 品牌名要在登录之前拿到,
+#    而平台配置的读接口只对 super_admin 开放。
+branding:
+  app_name: ""            # 平台全名,例:"Acme Admin Console"
+  app_title: ""           # 浏览器标签页标题;留空 = 用 app_name
+
+# ========== Swagger 文档端点(OpenAPI 3.0 + Swagger UI) ==========
+# 访问 http://<host>:<port>/swagger/index.html
+# ⚠️ **doc.json 里是全量接口清单**(路径 / 方法 / 每个接口的 RBAC 权限码)
+#    —— 它必须默认带鉴权,否则等于把攻击面画好送出去。
+#
+#   enabled: false ⇒ 整条端点不挂载(完全不想要 API 文档的部署)
+#   auth.mode:
+#     auto(默认)—— 配了固定凭据就用固定凭据;没配就**本次启动随机生成**
+#                  一个密码并打到启动日志里(重启会变)
+#     basic     —— 必须配固定凭据,没配直接**拒绝启动**(fail-fast)
+#     none      —— 不鉴权。⚠️ 只有本地开发能用;生产部署请用 basic
+#
+# ⚠️ **凭据建议走环境变量**,别写进 yaml:
+#      SWAGGER_AUTH_USERNAME=xxx
+#      SWAGGER_AUTH_PASSWORD=xxx
+swagger:
+  enabled: true
+  auth:
+    mode: auto
+    username: ""           # 留空 ⇒ auto 模式下用 "swagger"
+    password: ""           # 留空 ⇒ auto 模式下本次启动随机生成(见启动日志)
+
+# ========== 日志(按天分目录 + info/error 分文件) ==========
+logger:
+  level: info             # debug / info / warn / error
+  format: json            # json / console
+  dir: logs
+  max_size_mb: 100
+  max_backups: 30
+  max_age_days: 90
+  compress: true
+  env: dev
+
+# ========== 数据库(driver 切换 MySQL / SQLite) ==========
+# driver=mysql  -> 使用 database.mysql 子块;若该子块全空则回退到顶层 mysql: 块
+# driver=sqlite -> 使用 database.sqlite 子块(本地开发首选,免装 MySQL)
+database:
+  driver: mysql               # mysql / sqlite
+  mysql:                      # 当 driver=mysql 时使用;留空则 fallback 到顶层 mysql:
+    host: 127.0.0.1
+    port: 3306
+    username: rapid-admin
+    password: ${MYSQL_PASSWORD}
+    dbname: rapid-admin
+    charset: utf8mb4
+    parse_time: true
+    loc: Asia/Shanghai
+    max_open_conns: 100
+    max_idle_conns: 20
+    conn_max_lifetime: 1h
+    log_level: warn
+  sqlite:                     # 当 driver=sqlite 时使用(纯 Go,无 cgo)
+    path: ./data/dev.db
+    busy_timeout: 5s          # 锁等待上限
+    journal_mode: wal         # wal / delete / truncate
+    foreign_keys: true        # 默认 on,确保 GORM 外键约束生效
+    max_open_conns: 1         # SQLite 单写者惯例,避免 database is locked
+    log_level: warn
+
+# ========== MySQL(顶层兼容块) ==========
+# 保留此块仅为兼容旧部署:若上面 database.mysql 已配置,则被忽略。
+# 新部署建议直接配置 database.mysql,删除此块。
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  username: rapid-admin
+  password: ${MYSQL_PASSWORD}        # 从环境变量注入
+  dbname: rapid-admin
+  charset: utf8mb4
+  parse_time: true
+  loc: Asia/Shanghai
+  max_open_conns: 100
+  max_idle_conns: 20
+  conn_max_lifetime: 1h
+  log_level: warn
+
+# ========== Redis ==========
+#
+# ⚠️ **可选** —— addr 留空 = 不连 Redis,框架全部退到进程内实现
+#    (cachex 的 L2 / kvstore 的限流计数 / idempotentx 的幂等键 / cronx 的跨副本锁)。
+#
+# ⚠️ **Windows 上没有官方 Redis** —— 用 Memurai(Redis 协议兼容,装成 Windows 服务):
+#    下载 <https://www.memurai.com/get-memurai>
+#    装完:服务名 `Memurai`,默认 `127.0.0.1:6379`、**默认无密码**,
+#          配置文件 `<安装目录>\memurai.conf`,自带 `memurai-cli.exe`。
+#    ⚠️ **Developer 版仅供开发/测试,不许上生产**(还有"闲置 10 天自动关机")。
+#    ⚠️ 配置里把 `save` 注释掉 **≠ 关闭持久化** —— 默认快照规则是编译进去的;
+#       真要调的是 `stop-writes-on-bgsave-error`(默认 yes ⇒ 快照失败就拒写一切)。
+#    ⚠️ 重启 Memurai 服务要**管理员身份**的 PowerShell。
+#
+# Linux / 生产环境直接用正经的 Redis,配置项完全一样。
+redis:
+  addr: 127.0.0.1:6379
+  password: ${REDIS_PASSWORD}   # Memurai 默认不带密码 ⇒ 留空
+  db: 0
+  pool_size: 50
+  min_idle_conns: 10
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+
+# ========== JWT(三受众独立 secret) ==========
+
+# token 吊销存储:auto | redis | memory
+#   auto   有 Redis 用 Redis,没有退内存(默认)。单副本够用。
+#   redis  强制 Redis,没配 redis.addr 直接启动失败。**生产多副本必须用这个**:
+#          内存吊销只在单进程内有效,换个负载均衡节点被吊销的 token 又活了。
+#   memory 强制内存,即使配了 Redis 也不连。仅调试用。
+auth:
+  revocation_mode: auto
+  # 权限主体缓存 TTL —— **权限撤销的延迟上界**
+  # grant/revoke 会主动删 key,所以正常路径 0 延迟;
+  # 但任何没走那两处 Invalidate 的改权限路径,会在这里挂满 TTL 才生效。
+  # 调小它换收敛速度,调大换 Redis 压力。
+  principal_cache_ttl: 5m
+
+  # ---- 异常登录检测(M128)----
+  #
+  # 同一账号在多个 IP / 多台设备同时活跃时报警,并给用户发站内信。
+  # 检测是**提醒**不是准入闸门 —— 命中异常照样能登录。
+  #
+  # ⚠️ max_concurrent 填 0 会被兜底成 1(等于"只允许单端在线"),
+  #   正常多端登录的用户会**每次登录都收到提醒**。别填 0。
+  # ⚠️ active_window 填 0 = 不判"同时在线",并发类异常永远不会触发。
+  # ⚠️ impossible_travel_window 默认关:本仓**没有 IP 地理库**,
+  #   这条规则只看 IP 不看距离,用户从 WiFi 切到手机流量(几秒换 IP)必然误报。
+  anomaly:
+    enabled: true
+    max_concurrent: 3
+    active_window: 30m
+    impossible_travel_window: 0s
+
+# 限流 / 登录锁定的存储:auto | redis | memory(取值同上)
+# 与 auth.revocation_mode 分开是因为后果等级不同:吊销降级是安全事故,
+# 限流降级只是阈值不准。生产多副本同样必须用 redis。
+kv:
+  mode: auto
+
+# ========== 缓存层(cachex:L1 本地 LRU + L2 Redis) ==========
+
+# 这里配的是**缓存层本身**,不是"哪些数据该缓存"。
+# 哪些 key 缓存、TTL 多长、改数据时怎么失效,都是调用点传参(cachex.GetOrLoad)。
+# 原因:配置中心改了要全网立刻生效,字典条目一个月不动,同一个 TTL 对两者都是错的。
+#
+# mode:auto | l1 | off
+#   auto  有 Redis 用 Redis(带 L1),没有退纯 L1(默认)
+#   l1    强制只用本地 LRU,即使配了 Redis 也不连(多副本各自一份副本)
+#   off   完全不启用,所有 GetOrLoad 直接透传 loader
+#
+# ⚠️ l1_ttl 是"多副本多久收敛"的**唯一上界**:改了数据,别的副本最迟这么久才看到。
+#   凡是"改了必须马上全网生效"的,要么显式失效,要么就别走 L1。
+#
+# 降级一律 fail-open:Redis 挂了退化成每次查库,**不会**退化成报错。
+# 缓存是加速器不是依赖,把它变硬依赖会让 Redis 一次抖动升级成全站故障。
+cache:
+  mode: auto
+  prefix: ""          # 多套系统共用一套 Redis 时填,顺带给 DeletePrefix 一个作用域边界
+  l1_cap: 5000        # 按 entry 数算;0 → 5000
+  l1_ttl: 10s         # 0 → 10s
+  null_ttl: 2m        # null 占位 TTL,穿透防御;设 0 禁用
+  jitter: 0.2         # TTL 随机抖动比例 0~0.5,防批量同刻过期
+
+# ========== 定时任务调度(M67)==========
+# 任务本体只在代码里 cronx.Register,这里配的是「运行时策略」。
+# 后台改频率/启停写的是 sys_job 表,不碰这个文件。
+job:
+  enabled: true
+  # ⚠️ 必须显式配。容器里 TZ 没设时 time.Local == UTC,
+  #    `0 3 * * *` 会在北京时间 11:00 跑,而这里明明写着 Asia/Shanghai。
+  #    配错的名字会**启动直接失败**,不会带着错时区继续跑。
+  timezone: Asia/Shanghai
+
+  # 去重层 1(分布式锁)的存储:
+  #   auto   — 有 Redis 用 Redis,没有退进程内锁 + 降级告警(单副本安全)
+  #   redis  — 强制 Redis,没配直接**拒绝启动**(生产多副本必须用这个)
+  #   memory — 强制进程内锁,即使有 Redis 也不连(仅单副本)
+  #   off    — 完全不锁,仅本地开发
+  lock_mode: auto
+  lock_ttl: 30s       # 锁租约。长任务靠看门狗每 lock_ttl/3 续期,不用改这里
+  lock_renew: true    # 关掉看门狗 = 长任务跑到一半锁过期,别的副本会抢进来并发写
+  default_timeout: 30m    # 单次执行超时,任务未单独指定时的兜底
+  shutdown_timeout: 30s   # 优雅停机预算,用完强杀在跑任务(记 failed)
+
+  # 执行记录(sys_job_run)清理 —— 由内置任务 framework.job_history_purge 执行
+  history_retention_days: 30
+  history_retention_max: 50000
+
+jwt:
+  admin_secret: ${JWT_ADMIN_SECRET}      # admin 后台
+  owner_secret: ${JWT_OWNER_SECRET}      # 业主小程序/业主端
+  supplier_secret: ${JWT_SUPPLIER_SECRET}# 供应商端
+  issuer: rapid-admin
+  access_ttl: 8h          # access token 有效期
+  # refresh_ttl = **后台口径**(30 天)。微信小程序技术方案里的 workToken 30d 是
+  # 另一套受众/另一份配置,两者不是一回事,别拿一个的数字去改另一个。
+  # ⚠️ refresh token 是**单次使用**的:续期时旧的那张会被立即吊销
+  # (吊销 TTL 取它自己的剩余寿命),所以这个值是"整条会话链的总预算",
+  # 不是"一张 token 能用多久"。
+  refresh_ttl: 720h
+  short_ttl: 5m           # 用于"查看完整手机号"等临时凭证
+
+# ========== Casbin ==========
+casbin:
+  model_path: configs/casbin_rbac.conf
+  auto_load: true
+
+# ========== CORS ==========
+# ⚠️ **localhost 和 127.0.0.1 是两个不同的 origin,必须都列**。
+#   浏览器的 Origin 头按地址栏里的 host 原样发 —— 敲 127.0.0.1:5173 就发
+#   http://127.0.0.1:5173。漏掉的表现很隐蔽:**GET 全 200,只有 POST 被 403**
+#   (浏览器对同源 GET 不发 Origin 头,对 POST 一定发),而且 403 的响应体是
+#   空的(hertz-contrib/cors 直接 AbortWithStatus),前端只看到一个没有错误码的
+#   "Failed to load resource: 403"。
+#   生产环境把这里换成真实域名,并按需加 https://xxx。
+cors:
+  allow_origins:
+    - http://localhost:5173
+    - http://localhost:5174
+    - http://127.0.0.1:5173
+    - http://127.0.0.1:5174
+  allow_methods: [GET, POST, PUT, DELETE, PATCH, OPTIONS]
+  allow_headers:
+    - Origin
+    - Content-Type
+    - Authorization
+    - X-Request-Id
+    - X-Trace-Id
+    - Idempotency-Key
+    - X-Current-House-Id
+    - X-Current-Project-Id
+  expose_headers:
+    - X-Request-Id
+    - X-Trace-Id
+  allow_credentials: true
+  max_age: 12h
+
+# ========== 图形验证码 ==========
+# 两个独立开关,平级、没有优先级规则。之所以拆开,是因为验证码在这两类接口上
+# 作用不同 —— 登录类是挡自动化撞库,发短信是防刷量闸门。
+#
+# login_enabled     → POST /public/auth/{login, login-sms, reset-password-sms}
+#   开发联调最常关的就是它:登录不再需要 OCR 验证码。
+#
+# sms_send_enabled  → POST /public/auth/sms/send
+#   这是防短信刷量的闸门(短信按条计费)。**生产环境不要关** ——
+#   关掉后只剩该接口自身 1 次/60 秒/IP 的限流。本地 sms.provider=mock
+#   嫌烦也建议只关 login_enabled,闸门留着不影响本地体验。
+#
+# 两个都保持 true = 4 个接口全部校验。任一为 false 时前端对应场景不再显示验证码框。
+#
+# 也可用环境变量 CAPTCHA_LOGIN_ENABLED / CAPTCHA_SMS_SEND_ENABLED 覆盖(容器部署)。
+captcha:
+  login_enabled: true
+  sms_send_enabled: true
+
+# ========== 短信(阿里云) ==========
+# provider 只有 aliyun / console 两个合法值(别的值会静默降级到 console)。
+#
+# ⚠️ **access_key / access_secret 不要写在本文件里** ——
+#    本项目的配置加载器**不做 ${VAR} 展开**(viper 没这功能),
+#    写成 ${SMS_ACCESS_KEY} 会把**字面量**当 AK 发给阿里云,报认证失败。
+#    正确做法是走环境变量(viper AutomaticEnv + "."→"_" 替换,**优先级高于本文件**):
+#      export SMS_ACCESS_KEY=xxxx
+#      export SMS_ACCESS_SECRET=xxxx
+#
+# ⚠️ sign_name / templates 必须是阿里云那边**已审核通过**的,
+#    且必须属于同一个阿里云账号(即上面这对 AK/SK),
+#    否则阿里云返回 isv.SMS_SIGNATURE_ILLEGAL / isv.SMS_TEMPLATE_ILLEGAL。
+sms:
+  provider: aliyun        # aliyun / console
+  access_key: ""
+  access_secret: ""
+  sign_name: RapidAdmin
+  region: cn-hangzhou
+  templates:
+    login: SMS_100000000
+    view_full_phone: SMS_100000000
+    reset_password: SMS_100000000
+    change_phone: SMS_100000000
+  rate_limit:
+    per_minute: 1         # 同手机号每分钟 1 条
+    per_day: 10           # 同手机号每天 10 条
+    window_seconds: 60    # 同手机号再次发送冷却秒数
+    code_ttl: 600         # 验证码有效期(秒)
+  # 模板审核守卫(M115)。模板在阿里云那边没过审时,发送**之前**就拦下来,
+  # 并明确报出"是哪张模板、为什么",而不是让用户看到一句含糊的"发送失败"。
+  #   off   —— 不检查
+  #   warn  —— 检查但只告警,不拦
+  #   block —— 拦下(默认;写错值也落到 block —— 失效比误拦危险)
+  #
+  # ⚠️ **刻意不进配置中心** —— 面板上的 aliyun.sms.* 是"凭证 / 模板号",
+  #    运营必须能改;守卫策略是**安全开关**,能从面板一键关掉就等于没有。
+  #    改它只能改部署配置(改完重启)。
+  template_guard: block
+
+# ========== 邮件(§1.9 #9) ==========
+# provider 为空串 = **不装配邮件通道**(站内信仍然正常投递)。
+#
+# ⚠️ **不要为了"看起来在跑"配成 console** —— console 只把邮件打到日志里,
+#    收件人一封都收不到,而且**不会报错**。宁可启动日志里明写"邮件通道未配置"。
+#    未知的 provider 值同样不装配(只 Warn),不静默落 console。
+#
+# 环境变量覆盖(viper AutomaticEnv,点号换下划线):
+#   EMAIL_SMTP_HOST / EMAIL_SMTP_PORT / EMAIL_SMTP_USERNAME / EMAIL_SMTP_PASSWORD
+#   EMAIL_ALIYUN_ACCESS_KEY / EMAIL_ALIYUN_ACCESS_SECRET / EMAIL_ALIYUN_ACCOUNT_NAME
+email:
+  provider: ""            # "" / console / smtp / aliyun
+  from: ""                # 发件邮箱(缺省取 smtp.username / aliyun.account_name)
+  from_name: Admin Console
+  base_url: ""            # 站点外链前缀 —— 邮件里的链接要拼成绝对地址
+  timeout: 30             # 单次发送超时(秒)
+  smtp:
+    host: ""              # smtp.example.com
+    port: 465             # 465 = use_tls / 587 = use_starttls
+    username: ""
+    password: ${EMAIL_SMTP_PASSWORD}
+    use_tls: true
+    use_starttls: false
+  aliyun:
+    access_key: ${EMAIL_ALIYUN_ACCESS_KEY}
+    access_secret: ${EMAIL_ALIYUN_ACCESS_SECRET}
+    account_name: ""      # 发信地址(需在阿里云控制台验证过)
+    from_alias: ""
+    region: cn-hangzhou
+
+# ========== App 推送(§1.9 #10) ==========
+# provider 为空串 = **不装配推送通道**。
+#
+# ⚠️ **推送通道目前没有调用方** —— 推送要的是**设备令牌**
+#    (APNs device token / 华为小米 OPPO vivo 的 registration id),
+#    平台侧**还没有那张设备登记册**。所以本段配好了也还是没人调它:
+#    装配出来的 sender 走 Registry.PushSender 交给业务侧,等登记册落地再接。
+#    别为了"看起来接上了"就把它注册进通知分发器 —— 那只会让每条通知都 skip。
+push:
+  provider: ""            # "" / console / aliyun-emns
+  timeout: 30             # 单次推送超时(秒)
+  target_max: 100         # 单次推送 target 上限(EMNS 硬限制 100)
+  aliyun_emns:
+    access_key: ${PUSH_ALIYUN_EMNS_ACCESS_KEY}
+    access_secret: ${PUSH_ALIYUN_EMNS_ACCESS_SECRET}
+    app_key: ""           # EMNS 控制台 AppKey
+    region: cn-hangzhou
+    default_apns_env: PROD   # DEV / PROD
+
+# ========== OSS(阿里云) ==========
+oss:
+  # endpoint = **外网** endpoint,只用来拼直链(给浏览器看)。带不带 https:// 都认。
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  # endpoint_private = **内网** endpoint,只给后端 SDK 客户端用(同地域更快,
+  # 流量不走公网)。**可选** —— 启动时探一次连通性,连不上就回落外网。
+  # ⚠️ 直链**永远用外网**:直链是给公网上的浏览器看的,给它内网地址访问不到。
+  endpoint_private: oss-cn-hangzhou-internal.aliyuncs.com
+  access_key: ${OSS_ACCESS_KEY}
+  access_secret: ${OSS_ACCESS_SECRET}
+  # 单桶 —— **所有文件都在这一个桶里**。
+  # ⚠️ 这个桶必须是**公共读(public-read)**:直链是拼出来的、不带签名的稳定
+  #   URL(前端把它塞进 <img src>,签名 URL 一过期页面上的图就裂),
+  #   私有桶上它会 403 —— 症状是"传上去了、列表里点得开、打开是裂图"。
+  #   "私密"只意味着外部用户猜不到 key(uid 是雪花 id、对象名带随机后缀)。
+  bucket: rapid-admin
+  cdn_domain: https://cdn.rapid-admin.local
+  upload_token_ttl: 3600
+
+# ========== 文件系统(M80) ==========
+#   ⚠️ 这一块和上面的 `oss` **是两回事,别合并**:
+#     oss  说的是"怎么连阿里云"(endpoint / ak / sk / bucket)
+#     file 说的是"文件放在哪、怎么放"(路径形态 / 公开段 / 配额闸 / 何时切分片)
+#   两者正交:local 模式下整块 oss 不生效;aliyun 模式下 file 照样生效
+#   (路径形态和配额闸跟后端是 local 还是 oss 无关)。
+file:
+  provider: local              # local | aliyun。**空 = local**
+                                # ⚠️ 默认 local 是刻意的:配错一个字符的代价是
+                                #   "文件传到别的地方去了",而 local 至少能捞回来。
+                                #   配了 aliyun 但连不上 → **启动直接 Fatal**
+                                #   (降级到 local 会让文件"看起来传上去了"却躺在
+                                #    本机磁盘上,那种故障比启动失败难查得多)。
+  root: data/files             # local 时的磁盘根(相对 server/,加载时转绝对)
+  # path_root 同时是 **URL / key 的第一段**和**静态挂载点**(/rapid-admin)。
+  # ⚠️ 本地磁盘只有一棵树,所有文件都能按 URL 直接取到 ——
+  #   "私密"只意味着外部用户猜不到这个 key(uid 是雪花 id、对象名带随机后缀),
+  #   而不是"存在另一个别人访问不到的目录"。
+  # ⚠️ 静态挂载点不再单独配(以前是 static_mount + public_prefixes 两个键,
+  #   对不齐时的症状是"文件链接 404"而且请求确实命中了路由,从 nginx 查到
+  #   hertz 再查到 yaml 要走很久)。
+  path_root: rapid-admin
+
+  allowed_biz: []              # 业务段白名单。**留空 = 不限**(框架不硬编码业务枚举)
+
+  max_file_size_mb: 100        # 单文件上限,0 = 不限
+  multipart_threshold_mb: 100  # 超过这个大小建议走分片(客户端用不用由它决定)
+  multipart_part_size_mb: 8    # 分片大小。⚠️ 改了它要同步抬 router.go 里
+                               #   /rapid-admin/v1/biz/files/* 的 BodyLimit(20MB),
+                               #   否则分片会被那个阈值而不是业务校验拒掉(413)。
+  session_ttl: 24h             # 上传会话有效期
+  download_url_ttl: 15m        # 下载临时 URL 默认有效期
+  max_download_ttl: 24h        # 下载 URL 有效期上限(< download_url_ttl 会被自动抬)
+
+  # ---- 媒体探测(视频时长 / 封面帧,M141)----
+  # ⚠️ **ffmpeg 不随仓库分发** —— 每台机器装的位置都不一样,环境变量
+  #   FFMPEG_PATH / FFPROBE_PATH **优先于**下面这两个键。
+  # ⚠️ **没装 ffmpeg 也能正常上传** —— 探测是锦上添花,失败只是列表里
+  #   少一个时长和一张封面。
+  ffmpeg_path: ffmpeg          # ffmpeg 可执行文件路径(默认走 PATH)
+  ffprobe_path: ffprobe        # ffprobe 可执行文件路径(默认走 PATH)
+  media_max_size_mb: 2048      # 媒体探测的文件大小上限。⚠️ 探测要把文件
+                               #   完整落到本地磁盘(ffmpeg 只能读本地文件),
+                               #   所以这个闸 = "临时盘要留多少空间"。0 = 不限
+
+  # ---- 转码(M145):把"浏览器播不了"的音视频转一份能播的 ----
+  # ⚠️ **ffmpeg 能解 ≠ 浏览器能播** —— WMV / FLV / MKV / MPEG-4 Part 2
+  #   这些 ffmpeg 全都能解,于是时长探得出来、封面抽得出来,
+  #   **看起来一切正常**,但用户点开直链,浏览器是把它下载下来而不是播。
+  #   这项就是给那些文件转一份 H.264 + AAC 的副本(原文件保留不动)。
+  # ⚠️ **关掉它只是不转码,别的照旧** —— 时长/封面照旧,
+  #   列表里会显示"浏览器不支持" + 原因。
+  transcode_enabled: true     # ⚠️ **布尔零值是 false = 关** ——
+                               #   所以这一行必须显式写 true,
+                               #   少了它就是"配了 ffmpeg 却不转码"且没有任何提示
+  transcode_workers: 2        # 转码并发数。⚠️ 每个转码是一个 ffmpeg 进程,
+                               #   吃满一个核 —— 这个数就是"最多同时烧几个核"
+
+# ========== 字段级加密 & 盲索引 ==========
+#   - field_key:  AES-256-GCM 密钥,必须 32 字节。**base64(标准 / 无 padding)
+#     或 32 字节原文两种都认**(生产由 K8s Secret / 信创密钥机注入 base64,
+#     本地调试可以直接写 32 字节原文)。两种都不满足 → 启动时打 Error,
+#     字段加密**不启用**(PII 字段明文存取)—— 别以为"配了"就等于"加密了"。
+#   - blind_key:  HMAC-SHA256 盲索引 key,>=16 字节。⚠️ **原样使用**,
+#     不做 base64 解码(与 field_key 的规则不一样,别搞混)。
+crypto:
+  field_key: ${FIELD_AES_KEY}        # 业主手机/身份证/银行卡等敏感字段加密
+  blind_key: ${FIELD_BLIND_KEY}      # 同上字段盲索引(用于等值查询)
+
+# ========== KMS(§1.5 #10 P1 密钥管理服务抽象) ==========
+#   - provider: local(env 默认)/ aliyun(待实现)/ tencent(待实现)/ vault(待实现)
+#   - local 模式无需凭证,直接读 KEY_<TIER>_V<N> / KEY_<TIER>_ACTIVE 环境变量
+#   - 切换 KMS 后端只改 provider,业务代码 0 改动
+kms:
+  provider: local
+  endpoint: ""
+  access_key: ""
+  secret_key: ""
+  region: ""
+  key_prefix: ""
+
+# ========== 限流 ==========
+ratelimit:
+  global_qps: 1000
+  per_ip_qps: 50
+  login_fail_per_hour: 10
+
+# ========== 审计(异步批量写库) ==========
+audit:
+  batch_size: 100
+  flush_interval: 5000   # ms(整数不带单位 —— 写成 "5s" 会让整份配置反序列化失败)
+  queue_size: 10000
+
+# ========== OpenTelemetry trace 导出(对接阿里云 ARMS) ==========
+#   阿里云 ARMS 支持 OTLP 协议接入(2023 起):
+#     - 控制台:ARMS → 应用监控 → OpenTelemetry 接入
+#     - gRPC 端点:arms-xxx.aliyuncs.com:4317(每 region 不同,控制台拿)
+#     - HTTP 端点:https://arms-xxx.aliyuncs.com:4318/v1/traces
+#   enabled=false → 不初始化,中间件仅透传 X-Trace-Id
+#   enabled=true  → 用 OTLP 推 trace 到 ARMS(无需 access key,认证靠 endpoint 域名 + K8s 网络策略)
+otel:
+  enabled: false               # dev 默认关,prod 切到对应 region 的 ARMS endpoint 后开
+  endpoint: arms-cn-hangzhou.aliyuncs.com:4317  # 只写 host:port(http:// 前缀会被剥掉);TODO: 填实际 ARMS endpoint
+  protocol: grpc               # grpc(默认,ARMS 主推)| http
+  insecure: false              # ARMS 走公网必须 TLS,内网自建 collector 才用 true
+  sample_ratio: 1.0            # 1.0 全采样,0.1 采 10%
+  service_name: rapid-admin
+  env: dev
+
+# ========== 熔断器(sony/gobreaker) ==========
+#   enabled=false → 所有 Breaker() 中间件透传,不熔断
+#   consecutive_failures:  连续失败次数阈值,达到则跳闸(open)
+#                          **配 0 = 不因连续失败次数跳闸**(不是"立刻跳闸",
+#                          也不是"没配就跳闸");要整个关掉熔断请用 enabled=false
+#   interval_seconds:      滚动窗口(秒),期间累积计数
+#   timeout_seconds:       open 状态持续时间(秒),之后转 half-open 探测
+#   half_open_max_requests: half-open 允许放行的探测请求数,成功则转 closed
+#   failure_rate_threshold: **当前未实现** —— 熔断只按 consecutive_failures 判定,
+#                             填了不生效(启动会打 WARN 提醒)
+breaker:
+  enabled: true
+  consecutive_failures: 5
+  interval_seconds: 60
+  timeout_seconds: 30
+  half_open_max_requests: 3
+  failure_rate_threshold: 0.5
+
+# ========== 客户端 IP 解析(限流 / 审计 / PII 关联链的共同底座) ==========
+#   Hertz 默认**信任所有对端**(TrustedCIDRs = 0.0.0.0/0),且在"全信任"前提下
+#   取 X-Forwarded-For 的**最左**项 —— 那一项是客户端自己填的。后果:
+#     - 按 IP 的限流(登录防爆破就建在这上面)可以被**一个请求头击穿**:
+#       每次换一个 X-Forwarded-For 就是一个新桶;
+#     - 审计表 sys_pii_access_log.ip(等保项)记的"谁看了手机号"由客户端自己填,
+#       事故复盘时拿到的 IP 没有证据价值。
+#   这里改成"只信任**显式列出的**反向代理网段":
+#     - 对端不在下面这些网段 → **完全忽略** X-Forwarded-For,用对端地址;
+#     - 对端在 → 采信 XFF,取**最右侧的不可信项**(标准口径:每层代理把自己的
+#       对端地址追加在右边,一路往左跳过可信代理,第一个不可信的就是真实客户端)。
+#   ⚠️ 反向代理挂在**公网 IP** 上时(云 LB 直连应用),对端不在默认网段 →
+#      XFF 被忽略 → 所有请求看起来都来自那台 LB → 按 IP 的限流退化成全局限流。
+#      此时把它的网段追加到 trusted_cidrs。
+#   ⚠️ 想**完全不信任** XFF,写一个匹配不到任何地址的网段(如 "0.0.0.0/32")。
+#   下面这组 = 内置默认值(回环 + RFC1918 私有段),显式写出来是为了让运维
+#   看得见"哪些网段算可信代理"。
+client_ip:
+  trusted_cidrs:
+    - 127.0.0.0/8      # 回环(nginx 与应用同机)
+    - ::1/128
+    - 10.0.0.0/8       # RFC1918 私有段(nginx 与应用同内网)
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+
+# ========== 请求超时(per-route 仍可 middleware.Timeout(d) 覆盖) ==========
+#   软超时:仅设 ctx deadline,handler 是否真中断取决于它自检 ctx.Done()
+#   GORM WithContext / redis.WithContext 已统一,DB/IO 操作会自动终止
+timeout:
+  default_request_ms: 5000     # 普通查询/修改
+  long_request_ms: 10000       # 长操作(批量导入/导出)
+  upload_request_ms: 15000     # 上传(OSS 凭证签发)
+
+# ========== Prometheus metrics(§1.8 #8 P0) ==========
+#   enabled=false → Init 内部空实现,/metrics 端点不挂载(Metrics 中间件也 no-op,无开销无报错)
+#   path:     指标暴露路径(默认 /metrics,Prometheus scrape 配 target 时直接用)
+#   namespace: 指标前缀(默认 app,最终指标 app_http_requests_total)
+metrics:
+  enabled: true
+  path: /metrics
+  namespace: app
+  subsystem: ""
+
+# ========== 密钥分级 + 轮转(§1.5 #6+#7 P1) ==========
+# 启动时 main 从 env 读,不在 yaml 里配(避免 secret 落 git)
+#   - 至少 1 个 tier 配 active key,新数据走 active 加密
+#   - 轮转:新 KEY_PII_V2 hex64 + 改 KEY_PII_ACTIVE=V2,V1 仍保留仅解旧数据
+#   - 后台 cron 扫老 ciphertext re-encrypt → 持久化 → 删 V1
+# 示例(env):
+#   KEY_PII_V1=1111111111111111111111111111111111111111111111111111111111111111
+#   KEY_PII_ACTIVE=V1
+#   KEY_SECRET_V1=7777777777777777777777777777777777777777777777777777777777777777
+#   KEY_SECRET_ACTIVE=V1
+#   KEY_NORMAL_V1=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#   KEY_NORMAL_ACTIVE=V1
+#   KEY_LEGACY=9999999999999999999999999999999999999999999999999999999999999999   # v1 envelope 兜底
+crypto_keys:
+  enabled: true                # false = 完全跳过分级注册(只走 legacy v1)
+  warn_no_active: true         # 启动时 tier 没 active key 是 warn 还是 fail

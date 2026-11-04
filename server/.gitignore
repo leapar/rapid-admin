@@ -1,0 +1,44 @@
+# 编译产物
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# 测试
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# 日志
+logs/
+app-logs/
+*.log
+
+# 手册构建产物
+#
+# ⚠️ **server/docs/site/ 是提交进仓库的** —— 它不是"可以随时重建的垃圾",
+#    是**发布物**:二进制用 go:embed 嵌的就是它(server/docs/docs.go)。
+#    改了源没重建 = 线上手册停在上一版;这条漂移由 server/docs 的单测盯着,
+#    重建用 `make docs`(honkit 需要 node;源没变时会跳过,不需要 node)。
+#
+# _book/ 是早期 honkit 的输出目录(已挪到 docs/site),留着只是防它再冒出来。
+_book/
+
+# 配置(本地覆盖)
+configs/config.yaml
+configs/config.local.yaml
+configs/config.prod.yaml
+configs/config.test.yaml
+configs/config.dev.yaml
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# 系统
+.DS_Store
+Thumbs.db

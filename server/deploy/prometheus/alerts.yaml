@@ -1,0 +1,194 @@
+# =============================================================================
+# Prometheus 告警规则 —— 业务告警
+# 文档 §11.7
+# 由 prometheus-operator 通过 PrometheusRule CRD 加载
+# =============================================================================
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: rapid-admin
+  namespace: rapid-admin
+  labels:
+    app: rapid-admin
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+    # ===== 1. 进程 / 基础健康 =====
+    - name: process
+      interval: 30s
+      rules:
+        - alert: RapidAdminApiDown
+          expr: up{job="rapid-admin"} == 0
+          for: 1m
+          labels:
+            severity: critical
+            team: backend
+          annotations:
+            summary: "API 进程不可用"
+            description: "{{ $labels.instance }} 已 down 超过 1 分钟,值守同学请立即处理"
+            runbook: "https://wiki.rapid-admin.local/runbook/api-down"
+
+        - alert: RapidAdminApiHighRestartCount
+          expr: increase(kube_pod_container_status_restarts_total{pod=~"rapid-admin-.*"}[1h]) > 3
+          for: 5m
+          labels:
+            severity: warning
+            team: backend
+          annotations:
+            summary: "API Pod 1 小时内重启超过 3 次"
+            description: "Pod {{ $labels.pod }} 频繁重启,需排查启动日志"
+
+        - alert: RapidAdminApiOomKilled
+          expr: increase(kube_pod_container_status_last_terminated_reason{reason="OOMKilled", pod=~"rapid-admin-.*"}[10m]) > 0
+          for: 1m
+          labels:
+            severity: critical
+            team: backend
+          annotations:
+            summary: "API Pod OOM Killed"
+            description: "Pod {{ $labels.pod }} 触发 OOM,需调高 limits 或排查内存泄漏"
+
+    # ===== 2. HTTP / QPS =====
+    - name: http
+      interval: 30s
+      rules:
+        - alert: RapidAdminApiHigh5xxRate
+          # 5xx 比例 > 5% 持续 5 分钟
+          expr: |
+            sum(rate(hertz_http_requests_total{job="rapid-admin", code=~"5..", audience="admin"}[5m]))
+            /
+            sum(rate(hertz_http_requests_total{job="rapid-admin", audience="admin"}[5m]))
+            > 0.05
+          for: 5m
+          labels:
+            severity: critical
+            team: backend
+          annotations:
+            summary: "API 5xx 错误率 > 5%"
+            description: "最近 5 分钟 5xx 比例 = {{ $value | humanizePercentage }}"
+
+        - alert: RapidAdminApiSlowRequest
+          # P99 > 1s 持续 10 分钟
+          expr: histogram_quantile(0.99, sum(rate(hertz_http_request_duration_seconds_bucket{job="rapid-admin"}[5m])) by (le)) > 1
+          for: 10m
+          labels:
+            severity: warning
+            team: backend
+          annotations:
+            summary: "API P99 延迟 > 1s"
+            description: "P99 延迟 = {{ $value }}s,持续 10 分钟"
+
+        - alert: RapidAdminApiLoginFailSpike
+          # 登录失败骤增(可能密码爆破)
+          expr: sum(rate(hertz_login_failed_total[5m])) > 5
+          for: 5m
+          labels:
+            severity: warning
+            team: security
+          annotations:
+            summary: "登录失败率 > 5 次/秒"
+            description: "近 5 分钟登录失败骤增,可能存在密码爆破"
+            runbook: "https://wiki.rapid-admin.local/runbook/brute-force"
+
+    # ===== 3. 数据库 =====
+    - name: database
+      interval: 60s
+      rules:
+        - alert: RapidAdminDbConnectionsHigh
+          expr: (mysql_global_status_threads_connected / mysql_global_variables_max_connections) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+            team: dba
+          annotations:
+            summary: "MySQL 连接数 > 80%"
+            description: "当前连接数 / max_connections = {{ $value | humanizePercentage }}"
+
+        - alert: RapidAdminDbSlowQueries
+          expr: increase(mysql_global_status_slow_queries[10m]) > 10
+          for: 5m
+          labels:
+            severity: warning
+            team: dba
+          annotations:
+            summary: "MySQL 慢查询 10 分钟内 > 10 次"
+            description: "需排查慢 SQL,建议开启 slow log 抓取"
+
+        - alert: RapidAdminDbReplicationLag
+          expr: mysql_slave_status_seconds_behind_master > 30
+          for: 5m
+          labels:
+            severity: warning
+            team: dba
+          annotations:
+            summary: "MySQL 主从延迟 > 30s"
+
+    # ===== 4. Redis =====
+    - name: redis
+      interval: 30s
+      rules:
+        - alert: RapidAdminRedisDown
+          expr: redis_up == 0
+          for: 1m
+          labels:
+            severity: critical
+            team: dba
+          annotations:
+            summary: "Redis 不可用"
+
+        - alert: RapidAdminRedisMemoryHigh
+          expr: (redis_memory_used_bytes / redis_memory_max_bytes) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+            team: dba
+          annotations:
+            summary: "Redis 内存使用 > 85%"
+
+        - alert: RapidAdminRedisBlacklistGrowth
+          # token blacklist 异常增长(可能攻击)
+          expr: redis_key_length{key="jwt:bl:*"} > 10000
+          for: 10m
+          labels:
+            severity: warning
+            team: security
+          annotations:
+            summary: "JWT 黑名单 key 数 > 10000"
+            description: "可能存在大批量 token 主动失效,需排查原因"
+
+    # ===== 5. 业务关键指标 =====
+    - name: business
+      interval: 60s
+      rules:
+        - alert: RapidAdminConfigHealthRed
+          # 配置中心健康检查异常
+          expr: rapid-admin_config_health_status == 2
+          for: 10m
+          labels:
+            severity: warning
+            team: backend
+          annotations:
+            summary: "配置中心健康检查异常(red)"
+
+        - alert: RapidAdminIssueBacklog
+          # 工单积压(超 7 天未关闭)
+          expr: rapid-admin_issue_open_count{age="7d+"} > 50
+          for: 30m
+          labels:
+            severity: warning
+            team: delivery
+          annotations:
+            summary: "超过 7 天的工单积压 > 50"
+            description: "请运营协调处理积压工单"
+
+        - alert: RapidAdminAuditWriteLag
+          # 审计批量写库积压
+          expr: rapid-admin_audit_queue_size > 5000
+          for: 5m
+          labels:
+            severity: warning
+            team: backend
+          annotations:
+            summary: "审计队列积压 > 5000 条"
+            description: "可能下游 DB 写入慢或 panic"

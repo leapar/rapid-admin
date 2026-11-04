@@ -1,0 +1,1686 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>fieldpolicy(字段可见性) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../audit/piiaudit.html" />
+    
+    
+    <link rel="prev" href="scope.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../storage/cachex.html">
+            
+                <a href="../storage/cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../storage/kvstore.html">
+            
+                <a href="../storage/kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../storage/searchidx.html">
+            
+                <a href="../storage/searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../storage/media.html">
+            
+                <a href="../storage/media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../storage/oss.html">
+            
+                <a href="../storage/oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="auth.html">
+            
+                <a href="auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="authz.html">
+            
+                <a href="authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="casbinx.html">
+            
+                <a href="casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="crypto.html">
+            
+                <a href="crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="kms.html">
+            
+                <a href="kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="desensitize.html">
+            
+                <a href="desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="signx.html">
+            
+                <a href="signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="idempotentx.html">
+            
+                <a href="idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="ratelimitx.html">
+            
+                <a href="ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="loginlock.html">
+            
+                <a href="loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="anomalylogin.html">
+            
+                <a href="anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="mfa.html">
+            
+                <a href="mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="scope.html">
+            
+                <a href="scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="5.14" data-path="fieldpolicy.html">
+            
+                <a href="fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../messaging/inbox.html">
+            
+                <a href="../messaging/inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../messaging/notifyx.html">
+            
+                <a href="../messaging/notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../messaging/push.html">
+            
+                <a href="../messaging/push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../messaging/pushx.html">
+            
+                <a href="../messaging/pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../messaging/permnotify.html">
+            
+                <a href="../messaging/permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../messaging/msn.html">
+            
+                <a href="../messaging/msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../messaging/smslimit.html">
+            
+                <a href="../messaging/smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../messaging/smstpl.html">
+            
+                <a href="../messaging/smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="../messaging/emailx.html">
+            
+                <a href="../messaging/emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../scheduling/cronx.html">
+            
+                <a href="../scheduling/cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../scheduling/jobs.html">
+            
+                <a href="../scheduling/jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../scheduling/slowquery.html">
+            
+                <a href="../scheduling/slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+            
+                <a href="../business/dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+            
+                <a href="../business/approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >fieldpolicy(字段可见性)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="fieldpolicy-——-字段级可见性列级权限三态模式-→-逐字段叠加-→-响应出口">fieldpolicy —— 字段级可见性(列级权限):三态模式 → 逐字段叠加 → 响应出口</h1>
+<blockquote>
+<p>RBAC 回答"这个角色<strong>能不能调这个接口</strong>"。
+<a href="scope.html">scope</a> 回答"放行之后<strong>能看哪些行</strong>"。
+fieldpolicy 回答第三个问题:<strong>看到的那一行里,哪些字段给他看</strong>。</p>
+</blockquote>
+<p>三根轴<strong>互相独立</strong>,谁也替代不了谁:</p>
+<table>
+<thead>
+<tr>
+<th>轴</th>
+<th>问的问题</th>
+<th>实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 功能权限</td>
+<td>能不能调这个接口 / 点这个按钮</td>
+<td>Casbin + RBAC 资源码</td>
+</tr>
+<tr>
+<td>② 行级数据范围</td>
+<td>能看<strong>哪些行</strong></td>
+<td><code>internal/pkg/scope</code></td>
+</tr>
+<tr>
+<td>③ 字段级可见性</td>
+<td>能看一行里的<strong>哪些字段</strong></td>
+<td><code>internal/pkg/fieldpolicy</code>(本篇)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>"能看这一行" ≠ "能看这一行里的每个字段"</strong> ——
+"客服部能看这个客户"同时意味着"客服部能看到客户的手机号",
+而后者要不要给,是另一条规则说了算。</p>
+<h2 id="功能">功能</h2>
+<p>fieldpolicy 做四件事:</p>
+<ol>
+<li><strong>定义字段的可见性模式</strong> —— 三态(明文 / 打码 / 隐藏)</li>
+<li><strong>定义打码方式</strong> —— 七种,外加"按字段名自动推断"</li>
+<li><strong>把默认规则组与业务域规则组叠加</strong> —— <strong>逐字段</strong>叠加</li>
+<li><strong>把策略作用到 JSON 上</strong> —— <code>ApplyJSON</code>(字节)/ <code>ApplyTree</code>(树)</li>
+</ol>
+<p>五样东西:</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>是什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mode</code></td>
+<td>可见性模式,三态</td>
+</tr>
+<tr>
+<td><code>MaskType</code></td>
+<td>打码方式,七种 + <code>MaskAuto</code>(空串)</td>
+</tr>
+<tr>
+<td><code>Rule</code></td>
+<td>某个角色在某个业务域上对<strong>一个字段</strong>的一条规则</td>
+</tr>
+<tr>
+<td><code>Policy</code></td>
+<td>一组已解析的规则(<strong>不可变</strong>,解析一次到处用)</td>
+</tr>
+<tr>
+<td><code>Policy.Overlay</code></td>
+<td>默认组与业务域组的逐字段叠加</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不解决什么</strong>:规则存在哪、谁去解析、候选字段有哪些、怎么落到响应上,
+都<strong>不在本包</strong> —— 本包是<strong>纯函数,不碰 DB</strong>。
+落库在 <code>internal/service/field_policy.go</code>,接线在 <code>internal/api/handler/field_policy.go</code>。</p>
+<h3 id="三种模式">三种模式</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>visible</code></td>
+<td>原样返回(不配规则时也是这个效果)</td>
+</tr>
+<tr>
+<td><code>masked</code></td>
+<td>值被打码(<code>138****1234</code>)</td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td><strong>从响应里删掉这个键</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong><code>hidden</code> 是删键,不是置空</strong> ——
+置空的话前端看到的是 <code>{"phone": null}</code> —— 它知道"这里有个手机号字段",
+而<strong>这个字段名本身可能就是信息</strong>(<code>emergency_contact_phone</code> 说明这个人有紧急联系人)。
+删键则连字段名都不出现。</p>
+<p>⚠️ <strong>空串模式按 <code>visible</code> 处理</strong> —— 与行级数据范围同一条约定:
+"没配" 与 "配成明文" 效果一样(都不处理)。</p>
+<p>⚠️ <strong>不认识的模式一律报错,不静默当成 <code>visible</code></strong> ——
+静默当成 <code>visible</code> = 规则失效 = <strong>该打码的字段原样吐出去</strong>。</p>
+<h3 id="七种打码方式">七种打码方式</h3>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phone</code></td>
+<td><code>138****1234</code></td>
+</tr>
+<tr>
+<td><code>id_card</code></td>
+<td><code>1101**********1234</code></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>张*</code></td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>z******@qq.com</code></td>
+</tr>
+<tr>
+<td><code>bank_card</code></td>
+<td><code>****1234</code></td>
+</tr>
+<tr>
+<td><code>contract_no</code></td>
+<td><code>ABC****0234</code></td>
+</tr>
+<tr>
+<td><code>full</code></td>
+<td>等长星号(猜不出类型时的兜底)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>空串不是一种打码方式,是"按字段名猜"</strong>(<code>MaskAuto</code>)——
+<code>AutoMaskType("real_name")</code> ⇒ <code>name</code>;猜不出来返回空串。
+⇒ <strong>猜不出来时必须在配置期就拒</strong>,运行期兜底是 <code>full</code>(整串打码,安全方向)。</p>
+<p>⚠️ <strong>推断表是精确匹配,不做前缀/后缀匹配</strong> ——
+后缀匹配会把 <code>project_name</code> / <code>dept_name</code> / <code>group_name</code> 全打成 <code>张*</code>,
+而那些是<strong>机构名不是人名</strong> —— 打完之后整个列表没法看了。</p>
+<h3 id="逐字段叠加与行级的整组就近覆盖故意不同">逐字段叠加(与行级的"整组就近覆盖"故意不同)</h3>
+<p>默认规则组(<code>module=""</code>)管所有业务域;业务域专属规则<strong>只覆盖它自己写了的那些字段</strong>。</p>
+<pre><code>默认组:phone → hidden
+user 域:real_name → masked
+
+⇒ user 域上:phone 仍然隐藏,real_name 打码
+</code></pre><p>⚠️ <strong>与行级数据范围故意不一样</strong> ——
+行级(scope)是"某业务域配了规则 ⇒ <strong>整组</strong>就近覆盖,默认组不参与";
+字段级是"业务域只覆盖<strong>它自己写了规则的那些字段</strong>"。</p>
+<p>⇒ 安全方向:多藏一点没关系,少藏一点是泄露。
+若按行级那套"整组覆盖"来实现,user 域上 <code>phone</code> 会因为一条无关的
+<code>real_name</code> 规则而<strong>重新露出来</strong>。</p>
+<h2 id="配置">配置</h2>
+<h3 id="没有-yaml-配置项">没有 yaml 配置项</h3>
+<p>本包是<strong>纯原语</strong>,不读配置、不连外部依赖。</p>
+<h3 id="规则存哪">规则存哪</h3>
+<p>落在 <code>sys_field_policy</code>,唯一键 <code>(role_id, module, field)</code> ——
+同一角色同一业务域上,<strong>一个字段只能有一条规则</strong>。</p>
+<pre><code class="lang-go"><span class="hljs-comment">// 列出某角色配的全部规则(所有业务域)</span>
+rules, err := fieldPolicySvc.ListRoleFieldPolicies(ctx, roleID)
+
+<span class="hljs-comment">// 全量替换某角色在某业务域上的规则</span>
+err = fieldPolicySvc.ReplaceRoleFieldPolicies(ctx, roleID, <span class="hljs-string">"user"</span>, []service.FieldPolicyInput{
+    {Field: <span class="hljs-string">"real_name"</span>, Mode: <span class="hljs-string">"masked"</span>, MaskType: <span class="hljs-string">"name"</span>},
+})
+
+<span class="hljs-comment">// 可配置的业务域候选(后台下拉框用)</span>
+mods, err := fieldPolicySvc.ListFieldPolicyModules(ctx)
+</code></pre>
+<p>⚠️ <strong>写接口是"全量替换",不是"增量"</strong> —— body 里给的那组就是该业务域上的<strong>全部</strong>规则,
+发空数组 = 清空该域的规则。</p>
+<p>⚠️ <strong><code>module</code> 为空串 = 默认规则组</strong> —— 某业务域没单独配规则时回落到它。
+它<strong>只作用于业务域</strong>,不撒到 <code>auth</code> / <code>config</code> / <code>dict</code> / <code>role</code> 上
+(那些域的响应不是"业务行的一个投影",一条"隐藏 name"的默认规则
+会把配置项的名字也一起藏掉)。</p>
+<p>⚠️ <strong>业务域必须存在,否则配置期就拒</strong> —— 错误消息里带上可配的业务域清单:</p>
+<blockquote>
+<p>业务域 userx 不存在或不支持字段级可见性(规则配了也不会生效)</p>
+</blockquote>
+<h3 id="候选字段从响应模型反射出来">候选字段从响应模型反射出来</h3>
+<p>⚠️ <strong>候选 = 模型的 <code>json</code> tag 名(排除 <code>-</code>),不是数据库列名</strong> ——
+字段级可见性配的是<strong>响应 JSON 里的键名</strong>,不是列名。</p>
+<pre><code>model.Owner.Phone  gorm:"size:512" json:"-"   ← 列存在,但**永远不在响应里**
+</code></pre><p>按列名列候选 ⇒ 管理员会看到"手机号"这个候选,勾上"隐藏" ⇒
+<strong>什么都不会发生</strong>(那个键压根不在响应里),而他以为自己已经防住了。</p>
+<p>⇒ 候选必须从<strong>真实的响应模型</strong>上反射(<code>internal/service/biz_field_domain.go</code>)。
+手写一份清单 ⇒ 模型改字段名而清单没改 ⇒ 管理员配了一个不存在的字段
+⇒ <strong>规则静默不生效</strong>,而且页面看起来一切正常。</p>
+<p>⚠️ <strong>动态集合(<code>dyn:&lt;集合编码&gt;</code>)不在静态登记表里</strong> ——
+它的字段是运行期建的,候选从 <code>sys_dyn_field</code> 现算。</p>
+<p>⚠️ <strong>登记的是"响应模型",不是"表"</strong> ——
+一个业务域可能返回不止一种结构(列表项 / 详情 / 子表),
+候选取那些模型<strong>字段的并集</strong>。例:<code>family</code> 域登记了组与成员两个模型,
+因为成员表上的 <code>real_name</code> / <code>phone</code> 才是要管的那个。</p>
+<h3 id="配置期就拒三件事">配置期就拒三件事</h3>
+<p><code>ReplaceRoleFieldPolicies</code> 在<strong>保存时</strong>就拒:</p>
+<table>
+<thead>
+<tr>
+<th>拒什么</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>业务域不存在</td>
+<td>配了也不会生效(域压根不受这层管)</td>
+</tr>
+<tr>
+<td>字段不在该域的候选里</td>
+<td>规则作用在一个不存在的键上 ⇒ <strong>静默不生效</strong></td>
+</tr>
+<tr>
+<td><code>masked</code> 但猜不出打码方式</td>
+<td>运行期兜底是整串打码,管理员会看到一堆意料之外的星号</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>后端拒的是整组</strong>(一个字段不合法 ⇒ 这个域的这次 PUT 全废),
+所以前端也先拒一遍,好让错误<strong>精确落在那一行</strong>上
+(<code>web/src/pages/system/role/fieldPolicyRules.ts</code> 的 <code>findPolicyIssues</code>)。</p>
+<h2 id="使用方法">使用方法</h2>
+<h3 id="纯原语用法不碰-db">纯原语用法(不碰 DB)</h3>
+<pre><code class="lang-go">rules := []fieldpolicy.Rule{
+    {Field: <span class="hljs-string">"phone"</span>, Mode: fieldpolicy.ModeHidden},
+    {Field: <span class="hljs-string">"real_name"</span>, Mode: fieldpolicy.ModeMasked, MaskType: fieldpolicy.MaskName},
+}
+p := fieldpolicy.NewPolicy(rules)
+
+out, changed, err := p.ApplyJSON(raw)
+<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+}
+<span class="hljs-keyword">if</span> !changed {
+    <span class="hljs-keyword">return</span> raw, <span class="hljs-literal">nil</span>   <span class="hljs-comment">// ⚠️ 没改过 ⇒ 原样返回,响应逐字节不变</span>
+}
+</code></pre>
+<h3 id="叠加默认组--业务域组">叠加:默认组 + 业务域组</h3>
+<pre><code class="lang-go">def := fieldpolicy.NewPolicy(defaultRules)
+mod := fieldpolicy.NewPolicy(moduleRules)
+effective := def.Overlay(mod)
+</code></pre>
+<p>⚠️ <strong><code>Overlay</code> 的方向不能反</strong> —— 后者优先(业务域组覆盖默认组),
+且<strong>只覆盖它自己写了规则的字段</strong>。</p>
+<h3 id="接到响应上m163">接到响应上(M163)</h3>
+<p>⚠️ <strong>为什么落在响应出口,而不是每个业务 service</strong> ——
+逐个业务 service 加一行 ⇒ ① 漏一个接口 = 那个接口的敏感字段裸奔
+(<strong>没有任何报错</strong>);② 每个 service 都要多一个参数,业务代码被框架污染。</p>
+<p>⇒ 收口在 <code>BaseHandler.OK</code> / <code>OKWithMessage</code> / <code>Page</code> / <code>PageWith</code> ——
+<strong>每个 handler 都经过这几个出口</strong>。</p>
+<pre><code class="lang-go"><span class="hljs-comment">// internal/api/handler/field_policy.go</span>
+raw, changed, err := h.maskData(c, data)
+<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    h.Fail(c, err)   <span class="hljs-comment">// ⚠️ 闭:宁可报错,不许悄悄放行</span>
+    <span class="hljs-keyword">return</span>
+}
+<span class="hljs-keyword">if</span> !changed {
+    <span class="hljs-comment">// 原样渲染</span>
+    <span class="hljs-keyword">return</span>
+}
+</code></pre>
+<p>⚠️ <strong>失败一律"闭"</strong> —— 脱敏失败时原样返回 = 一次数据库抖动就把敏感字段放出去,
+而且<strong>日志里一条痕迹都没有</strong>。⇒ 这一层出错直接 500。</p>
+<p>⚠️ <strong>"没配规则 ⇒ 响应逐字节不变"</strong> ——
+没配规则 / 规则没命中 / 这个域不受管 ⇒ 一律走原来的渲染路径,
+<strong>不重新序列化</strong>(重新序列化会打乱键序,让响应"每次都不一样"没法比对)。</p>
+<p>⚠️ <strong>业务域从 Hertz 的 KV 取</strong>(<code>scope.ModuleKey</code>)——
+ctx 里那份是派生 ctx,响应出口读不到。</p>
+<h3 id="✅-出口绕不过去机械守卫m167">✅ 出口绕不过去:机械守卫(M167)</h3>
+<p>⚠️ <strong>上面那句"每个 handler 都经过这几个出口"曾经是一句手工核对过的话</strong> ——</p>
+<pre><code class="lang-go"><span class="hljs-comment">// 某个新 handler</span>
+c.JSON(<span class="hljs-number">200</span>, rows)     <span class="hljs-comment">// 写得很自然,编译器不报错,评审也可能一眼滑过去</span>
+</code></pre>
+<p>⇒ 响应照常返回,<strong>该脱敏的字段原样上 wire,而且没有任何报错</strong>。</p>
+<p>⇒ M167 把它变成一条断言:<code>internal/api/handler/outlet_guard_test.go</code>
+<strong>扫源码</strong>(<code>go/ast</code>,不碰注释),把"实际写了响应的地方"和"账本上登记的豁免"对账。</p>
+<table>
+<thead>
+<tr>
+<th>判据</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扫哪些</td>
+<td><code>internal/api/</code> 整棵树(handler / router / middleware)—— 绕过出口不只发生在业务 handler 里</td>
+</tr>
+<tr>
+<td>算什么"写了响应"</td>
+<td><code>c.JSON</code> / <code>c.String</code> / <code>c.Data</code> / <code>c.Render</code> / <code>c.Redirect</code> / <code>c.Write</code> / <code>c.Response.SetBody*</code> / <code>fmt.Fprintf(c, …)</code> / <code>io.Copy(c, …)</code> / <code>response.OKWithData</code> 一类</td>
+</tr>
+<tr>
+<td>怎么认出 <code>c</code></td>
+<td><strong>靠类型</strong>(<code>*app.RequestContext</code>),不靠变量名 —— 变量叫 c / ctx / rc 都行</td>
+</tr>
+<tr>
+<td>什么算正当</td>
+<td><code>pkg/response</code> 的业务出口调用,<strong>只在这五个出口函数体内</strong>才算正当(挪出去就红)</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>豁免是账本,不是逃逸名单</strong> —— 每条都要写清"为什么它可以绕过",
+而且<strong>条数是精确值</strong>(同一个函数里再加一处 ⇒ 红)。</p>
+<p>今天账本上有 <strong>10 条</strong>,三类:</p>
+<ul>
+<li><strong>健康检查 / 就绪探针</strong>(<code>health.go</code>)—— body 里只有依赖状态,没有业务行</li>
+<li><strong>文件字节流</strong>(<code>file.go</code>)—— 二进制,不是 JSON 业务行</li>
+<li><strong>SSE 通道</strong>(<code>event.go</code>)—— 载荷<strong>只有信号</strong>(未读数增量 / 审批动作名 / 字典 group_code);
+⚠️ 若将来往 payload 里塞业务行,这一条就失效了,必须改走出口</li>
+<li><strong>路由层的 <code>/version</code></strong>(<code>router.go</code>)—— 构建信息快照</li>
+<li><strong>中间件的三个写入点</strong> —— 413 错误体 / 幂等 409 与缓存重放 / gzip 把<strong>已写好的</strong> body 换成压缩后的字节</li>
+</ul>
+<p>⚠️ <strong>两个方向都要查</strong> ——</p>
+<ul>
+<li>扫出来的每一处,账本上必须有(否则:新写的 handler 悄悄绕过了出口)</li>
+<li>账本上的每一处,必须真的还在、条数对得上(否则:过期条目会让人以为"有人管过")</li>
+</ul>
+<h3 id="大整数不丢精度">大整数不丢精度</h3>
+<p>⚠️ <strong><code>UseNumber</code> 是必须的,不是优化</strong> ——
+sonyflake 主键是 17 位数(当前 ≈9.7e16),超出 float64 的 2^53 精确整数范围。
+走 float64 中转 ⇒ 尾数被静默截断 ⇒ 前端拿到的是<strong>另一个 id</strong> ⇒
+按那个 id 查详情 404。</p>
+<p>⇒ <code>ApplyJSON</code> 用 <code>json.Decoder</code> + <code>UseNumber()</code>,<code>json.Number</code> 保留原始字面量。</p>
+<h3 id="配规则的界面m164">配规则的界面(M164)</h3>
+<p>角色管理页行内动作「字段可见性」⇒ 抽屉:</p>
+<ul>
+<li>左侧业务域菜单(默认规则组排第一,带规则条数)</li>
+<li>右侧字段表(可见性 / 打码方式 / 备注)</li>
+<li>三条语义提示直接写在页面上:逐字段叠加、隐藏 = 删键、打码要选方式</li>
+</ul>
+<p>⚠️ <strong>业务域与字段候选一律来自后端,前端不许手打</strong> ——
+域配错 ⇒ 规则落到默认组 ⇒ 静默失配;
+字段名配错 ⇒ 作用在不存在的键上 ⇒ 静默不生效。</p>
+<p>⚠️ <strong>「跟随默认组」与「明文可见」是两件事</strong> ——
+"没有规则" = 继承默认组的限制;"显式 <code>visible</code>" = 覆盖默认组的限制。
+改回「跟随默认组」= <strong>删掉这条规则</strong>(发空数组),不是发一条 <code>visible</code>。</p>
+<p>⚠️ <strong>表里渲染"候选 ∪ 已配规则的字段"</strong> ——
+已配但字段已不在候选里的旧规则(比如动态集合删了那个字段)看不见
+⇒ 管理员删不掉它 ⇒ 每次保存都被后端拒。</p>
+<h2 id="注意事项">注意事项</h2>
+<h3 id="⚠️-本包只做收窄不做放宽">⚠️ 本包只做"收窄",不做"放宽"</h3>
+<p>能把一个<strong>已经在响应里</strong>的字段打码或删掉;
+<strong>不能</strong>把一个本来就不在响应里的字段(如 <code>json:"-"</code> 的加密手机号)变出来。</p>
+<p>⇒ 要让某个角色看到某个字段,得业务侧先把值放进响应 —— 那是业务决定,不是框架决定。</p>
+<h3 id="⚠️-不配--全部可见是默认语义">⚠️ "不配 = 全部可见"是默认语义</h3>
+<p>与行级数据范围同一条约定:规则层上线不改变任何现有响应。
+没配规则 ⇒ 字段原样返回(与框架落地前逐字节相同)。</p>
+<p>⚠️ <strong>这不是"默认拒绝"</strong> —— 若改成默认拒绝,上线当天每个接口的响应都会变形。</p>
+<h3 id="✅-两个登记表之间的交叉守门网m166">✅ 两个登记表之间的<strong>交叉守门网</strong>(M166)</h3>
+<table>
+<thead>
+<tr>
+<th>登记表</th>
+<th>管什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bizScopeSpecs</code> / <code>bizScopeCtxWired</code></td>
+<td>行级:哪些业务域有行级范围</td>
+</tr>
+<tr>
+<td><code>bizFieldDomains</code></td>
+<td>字段级:哪些业务域的响应受字段规则管</td>
+</tr>
+</tbody>
+</table>
+<p>两张表说的是<strong>同一组业务域</strong>(今天 19 个,逐字相同)⇒ <strong>两个方向都得有网</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>守它的网</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字段层 ⊆ 行级层</td>
+<td><code>TestBizFieldDomain_每个域都在行级账本里</code></td>
+</tr>
+<tr>
+<td>行级层 ⊆ 字段层</td>
+<td><code>CheckFieldPolicyWiring()</code>(启动期 fail-fast)+ 同名单测</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>反方向曾经没有网</strong> —— 行级账本里新增一个业务域而没登记进字段层 ⇒</p>
+<ul>
+<li>该域<strong>不受字段级可见性管</strong>(<code>fieldPolicyDomainSupported</code> 早退)⇒ 响应完全不过脱敏</li>
+<li>管理员<strong>也配不出来</strong>(配置期会拒"业务域不存在")</li>
+<li>⇒ 配了不生效,<strong>没有任何报错</strong>,页面看起来一切正常</li>
+</ul>
+<p>⇒ M166 补上:<code>CheckFieldPolicyWiring()</code> 在<strong>启动期</strong>就 fail-fast(<code>cmd/server/main.go</code>),
+单测用<strong>假账本</strong>直接喂"漏登记"的场景 —— 不改包级变量(改了要恢复,
+漏一次就把后面的用例带歪)。</p>
+<p>⚠️ <strong>网本身有人守还不够,"网还在不在跑"也要有人守</strong> ——
+<code>cmd/server/main_startup_check_test.go</code> <strong>扫源码</strong>:启动检查被删掉、
+或 <code>log.Fatal</code> 被换成 <code>log.Warn</code> ⇒ 用例红。</p>
+<p>⚠️ <strong>判据是"有没有业务行",不是"有没有敏感字段"</strong> ——
+一个域今天没有手机号,不等于它永远没有;模型加一个字段,没人会记得回来登记。</p>
+<h3 id="✅-前端消费那一半m168">✅ 前端消费那一半(M168)</h3>
+<p>服务端这一半已经完整:规则层(M162)+ 执行层(M163)+ 配置界面(M164)。
+这一节是<strong>业务页消费这份规则</strong>的那一半 —— 它解决的症状:</p>
+<ul>
+<li>服务端"隐藏"= <strong>删键</strong> ⇒ 前端拿到的响应里<strong>根本没有那个键</strong>
+⇒ 表格的列定义还列着它 ⇒ <strong>列还在,格是空的</strong></li>
+<li>表单里那个字段也还显示 ⇒ 用户还能把<strong>打码后的值</strong>原样提交回去
+(<code>138****1234</code> 覆盖真实手机号)—— 这是<strong>数据损坏</strong>,不只是难看</li>
+</ul>
+<h1 id="⚠️-核心纪律报告由执行层算前端只读">⚠️ 核心纪律:报告由执行层算,前端只读</h1>
+<p>前端若自己拿"规则表"再算一遍,就多了一份实现 —— 与服务端那份漂移时,
+表现是"界面说有这列、后端说没有"或反过来(后者是<strong>泄露</strong>)。</p>
+<p>⇒ <strong>显示层不许自己算,必须读执行层给的权威字段</strong>(与 M149 同一条纪律)。</p>
+<h1 id="传输方式响应头--symbol-戳">传输方式:响应头 + Symbol 戳</h1>
+<p><strong>① 响应头</strong> —— 服务端在响应出口算好报告,随响应带回来:</p>
+<pre><code>X-Field-Policy: hidden=phone,id_card;masked=real_name
+</code></pre><ul>
+<li>只在<strong>配了规则</strong>时才有这个头(没配 = 逐字节不变,连头都不多)</li>
+<li><strong>规则配了但这次响应里没有那个字段,头照样有</strong> ——
+报的是"规则说了什么",不是"这次响应里改了什么";
+前端要的是"这一列该不该存在",不是"这一次有没有动过它"</li>
+<li>含分隔符(<code>,;=</code>)的字段名会被丢掉(兜底;字段名来自 json tag /
+动态集合的 <code>field_key</code>,本来就校验过不含这些字符)</li>
+<li>⚠️ <strong>必须列进 CORS 的 <code>ExposeHeaders</code></strong> —— 跨域时浏览器只把白名单里的
+响应头暴露给 JS,不列 ⇒ 前端读出来恒为 <code>undefined</code>,<strong>不报任何错</strong>。
+见 <code>router.go</code> 的 <code>corsConfig</code>(有 <code>cors_config_test.go</code> 守着)。</li>
+</ul>
+<p><strong>② Symbol 戳</strong> —— 前端在 axios 拦截器里把报告盖到 <code>resp.data.data</code> 上
+(web 的 <code>utils/fieldPolicy.ts</code>):</p>
+<ul>
+<li><code>Symbol.for('rapid-admin.fieldPolicy')</code>,<strong><code>enumerable: true</code></strong> ——
+对 <code>Object.keys</code> / <code>JSON.stringify</code> / <code>for...in</code> 全部隐身
+(报告不会漏进请求体、日志、DOM),
+但<strong>能被 <code>{...row}</code> 展开复制</strong>(页面经常把行对象展开成初始值,
+不可枚举的话展开一次报告就丢了)</li>
+<li>递归盖章(信封、列表、每一行、嵌套对象),带深度上限 + seen 集合防环</li>
+<li>响应头只在这一个地方能拿到(拦截器是唯一看见原始响应的层),
+所以业务页面<strong>一行都不用改</strong></li>
+</ul>
+<h1 id="界面怎么消费web-的-componentscommonfieldpolicyts纯函数">界面怎么消费(web 的 <code>components/common/fieldPolicy.ts</code>,纯函数)</h1>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>hidden</th>
+<th>masked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>表格列</td>
+<td><strong>整列不渲染</strong>(列头都不给)</td>
+<td>照常显示(值已是打码后的)</td>
+</tr>
+<tr>
+<td>表单项</td>
+<td>不渲染</td>
+<td>照常显示但<strong>变只读</strong></td>
+</tr>
+<tr>
+<td>详情项</td>
+<td>不渲染</td>
+<td>照常显示</td>
+</tr>
+<tr>
+<td>提交载荷</td>
+<td>剔掉</td>
+<td><strong>剔掉</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>打码字段"变只读"还不够,必须从载荷里剔掉</strong> ——
+antd 的 <code>validateFields()</code> 照样把禁用字段的值收进来;
+原样提交 = 用打码值覆盖数据库里的真实值。这是 M168 修掉的半个数据损坏洞。</p>
+<p>⚠️ <strong>"打码"在界面上不删字段</strong> —— 用户要能看到"这里有个手机号,只是看不全";
+删掉反而让人以为这个字段不存在。</p>
+<h1 id="兜底页面归档">兜底:页面归档</h1>
+<p>页面对象经常被<strong>重新拼</strong>(逐字段手抄 <code>initialValues</code>、重拼分页信封),
+Symbol 戳会丢。⇒ 拦截器把每份报告按<strong>请求发起时的页面路径</strong>归档一份,
+组件从行对象上读不到戳时读归档。</p>
+<ul>
+<li>路径对不上 ⇒ 返回 null —— <strong>宁可没有保护,不拿别的页面的规则禁自己的字段</strong></li>
+<li>归档套错的代价是"多限制"(字段被多禁用了),不是泄露</li>
+<li>归档只在<strong>有报告时</strong>才更新 —— 没配规则的响应不产生归档</li>
+</ul>
+<h1 id="守卫">守卫</h1>
+<ul>
+<li><strong>Go 侧</strong>:<code>TestOK_响应带字段可见性头</code> 一族(带头的时机 / 没配规则不带 /
+规则没命中照样带 / 分页同路 / 编码格式与分隔符兜底)+
+<code>TestCORSConfig_暴露字段可见性响应头</code>(白名单)</li>
+<li><strong>web 侧</strong>:<code>utils/__tests__/fieldPolicy.test.ts</code>(解析 / 戳的三条硬性质:
+对 <code>Object.keys</code> 隐身、能被展开复制、防环)+ <code>fieldPolicy.test.ts</code>
+(三个过滤函数 + 载荷剔除)+ <code>client.fieldPolicy.test.ts</code>(拦截器端到端)+
+组件级用例(列 / 表单 / 详情 / 提交载荷)</li>
+<li><strong>可逆探针已跑</strong>:拆掉拦截器盖章、拆掉载荷剔除,对应用例变红;复原后全绿</li>
+</ul>
+<h3 id="⚠️-隐藏-≠-加密">⚠️ 隐藏 ≠ 加密</h3>
+<p>字段级可见性是<strong>出口上的遮蔽</strong>,不是存储层的加密。
+<code>internal/pkg/crypto</code> 管的是"落库前就加密"。</p>
+<p>⇒ 两者互补,不能互相替代:加密管的是<strong>库里躺着的那份</strong>,
+字段级可见性管的是<strong>这次响应里露不露</strong>。</p>
+<h3 id="⚠️-脱敏是出口上的不是每个-service-自己记得遮">⚠️ 脱敏是<strong>出口</strong>上的,不是"每个 service 自己记得遮"</h3>
+<p><code>internal/pkg/desensitize</code> 只做<strong>日志脱敏</strong>(写日志时打码),
+<strong>不按角色遮字段</strong>。前端那个 <code>SensitiveField</code> 组件是"所有人一起打码",
+也不是"按角色决定能不能看"。</p>
+<p>⇒ 按角色决定可见性的<strong>唯一</strong>通道是本篇这一层。</p>
+<h3 id="⚠️-规则唯一键是-roleid-module-field">⚠️ 规则唯一键是 <code>(role_id, module, field)</code></h3>
+<p>同一角色同一业务域上,一个字段只能有一条规则
+⇒ <strong>写接口是全量替换</strong>,增量加进来会撞唯一索引。</p>
+<p>⇒ 落库时是<strong>硬删</strong>(软删的墓碑会挡住唯一索引,第二次保存同一个组合就撞 UNIQUE)。</p>
+<h2 id="相关">相关</h2>
+<ul>
+<li><a href="scope.html">scope</a> —— 数据范围(行级权限):同一套"三轴"里的第二根</li>
+<li><a href="desensitize.html">desensitize</a> —— 日志脱敏(与"按角色遮字段"是两件事)</li>
+<li><a href="crypto.html">crypto</a> —— 字段级加密(存储层,与出口遮蔽互补)</li>
+<li><a href="casbinx.html">casbinx</a> —— 接口级 RBAC 的实现(第一根轴)</li>
+<li>可运行示例:<code>examples/fieldpolicy/main.go</code> —— <code>go run ./examples/fieldpolicy</code></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="scope.html" class="navigation navigation-prev " aria-label="Previous page: scope(数据范围)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../audit/piiaudit.html" class="navigation navigation-next " aria-label="Next page: piiaudit(PII 审计)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"fieldpolicy(字段可见性)","level":"5.14","depth":1,"next":{"title":"piiaudit(PII 审计)","level":"6.1","depth":1,"path":"audit/piiaudit.md","ref":"audit/piiaudit.md","articles":[]},"previous":{"title":"scope(数据范围)","level":"5.13","depth":1,"path":"security/scope.md","ref":"security/scope.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"security/fieldpolicy.md","mtime":"2026-11-04T13:23:47.209Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+

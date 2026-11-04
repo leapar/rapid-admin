@@ -1,0 +1,40 @@
+/* 手册样式微调 —— 与其它教程文档保持一致的观感 */
+
+/* 代码块内的中文注释不要被当成关键词染色 */
+.markdown-section code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* 表格在窄屏下允许横向滚动,不要把整页撑破 */
+.markdown-section table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* 但表格里的单元格允许折行(长描述可读) */
+.markdown-section table td,
+.markdown-section table th {
+    white-space: normal;
+    vertical-align: top;
+}
+
+/* 段落之间的呼吸感 */
+.markdown-section p,
+.markdown-section li {
+    line-height: 1.75;
+}
+
+/* ⚠️ 开头的提示段落更醒目一点 */
+.markdown-section blockquote {
+    border-left: 4px solid #e8a33d;
+    background: #fdf7ec;
+    padding: 8px 16px;
+    margin: 16px 0;
+    color: #4a4a4a;
+}
+
+.markdown-section blockquote p {
+    margin: 4px 0;
+}

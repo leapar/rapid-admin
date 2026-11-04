@@ -1,0 +1,1400 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>media(音视频处理) · 通用后台管理框架手册</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.2.5">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-betterchinese/unicode.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="../styles/website.css" />
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="oss.html" />
+    
+    
+    <link rel="prev" href="searchidx.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    首页
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">开始</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../getting-started/">
+            
+                <a href="../getting-started/">
+            
+                    
+                    快速开始
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../getting-started/configuration.html">
+            
+                <a href="../getting-started/configuration.html">
+            
+                    
+                    配置体系
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../getting-started/conventions.html">
+            
+                <a href="../getting-started/conventions.html">
+            
+                    
+                    框架约定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">基础设施</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../infrastructure/logger.html">
+            
+                <a href="../infrastructure/logger.html">
+            
+                    
+                    logger(日志)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../infrastructure/errcode.html">
+            
+                <a href="../infrastructure/errcode.html">
+            
+                    
+                    errcode(业务错误码)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../infrastructure/response.html">
+            
+                <a href="../infrastructure/response.html">
+            
+                    
+                    response(统一响应体)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../infrastructure/validatorx.html">
+            
+                <a href="../infrastructure/validatorx.html">
+            
+                    
+                    validatorx(参数校验)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../infrastructure/pagination.html">
+            
+                <a href="../infrastructure/pagination.html">
+            
+                    
+                    pagination(分页)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../infrastructure/jsonid.html">
+            
+                <a href="../infrastructure/jsonid.html">
+            
+                    
+                    jsonid(字符串 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../infrastructure/sonyflake.html">
+            
+                <a href="../infrastructure/sonyflake.html">
+            
+                    
+                    sonyflake(分布式 ID)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../infrastructure/timeutil.html">
+            
+                <a href="../infrastructure/timeutil.html">
+            
+                    
+                    timeutil(时间工具)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.9" data-path="../infrastructure/buildinfo.html">
+            
+                <a href="../infrastructure/buildinfo.html">
+            
+                    
+                    buildinfo(构建信息)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.10" data-path="../infrastructure/syncx.html">
+            
+                <a href="../infrastructure/syncx.html">
+            
+                    
+                    syncx(并发原语)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.11" data-path="../infrastructure/randomx.html">
+            
+                <a href="../infrastructure/randomx.html">
+            
+                    
+                    randomx(安全随机)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.12" data-path="../infrastructure/retryx.html">
+            
+                <a href="../infrastructure/retryx.html">
+            
+                    
+                    retryx(重试)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.13" data-path="../infrastructure/uainfo.html">
+            
+                <a href="../infrastructure/uainfo.html">
+            
+                    
+                    uainfo(UA 解析)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.14" data-path="../infrastructure/metricsx.html">
+            
+                <a href="../infrastructure/metricsx.html">
+            
+                    
+                    metricsx(指标)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.15" data-path="../infrastructure/otelx.html">
+            
+                <a href="../infrastructure/otelx.html">
+            
+                    
+                    otelx(链路追踪)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.16" data-path="../infrastructure/apiverx.html">
+            
+                <a href="../infrastructure/apiverx.html">
+            
+                    
+                    apiverx(版本协商)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.17" data-path="../infrastructure/grayx.html">
+            
+                <a href="../infrastructure/grayx.html">
+            
+                    
+                    grayx(灰度发布)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">存储与缓存</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="cachex.html">
+            
+                <a href="cachex.html">
+            
+                    
+                    cachex(两级缓存)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="kvstore.html">
+            
+                <a href="kvstore.html">
+            
+                    
+                    kvstore(计数与窗口)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="searchidx.html">
+            
+                <a href="searchidx.html">
+            
+                    
+                    searchidx(盲索引搜索)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="4.4" data-path="media.html">
+            
+                <a href="media.html">
+            
+                    
+                    media(音视频处理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="oss.html">
+            
+                <a href="oss.html">
+            
+                    
+                    oss(对象存储)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">安全与合规</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../security/auth.html">
+            
+                <a href="../security/auth.html">
+            
+                    
+                    auth(登录鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../security/authz.html">
+            
+                <a href="../security/authz.html">
+            
+                    
+                    authz(资源鉴权)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../security/casbinx.html">
+            
+                <a href="../security/casbinx.html">
+            
+                    
+                    casbinx(策略引擎)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../security/crypto.html">
+            
+                <a href="../security/crypto.html">
+            
+                    
+                    crypto(字段加密)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../security/kms.html">
+            
+                <a href="../security/kms.html">
+            
+                    
+                    kms(密钥管理)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../security/desensitize.html">
+            
+                <a href="../security/desensitize.html">
+            
+                    
+                    desensitize(数据脱敏)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.7" data-path="../security/signx.html">
+            
+                <a href="../security/signx.html">
+            
+                    
+                    signx(接口签名)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.8" data-path="../security/idempotentx.html">
+            
+                <a href="../security/idempotentx.html">
+            
+                    
+                    idempotentx(幂等键)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.9" data-path="../security/ratelimitx.html">
+            
+                <a href="../security/ratelimitx.html">
+            
+                    
+                    ratelimitx(限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.10" data-path="../security/loginlock.html">
+            
+                <a href="../security/loginlock.html">
+            
+                    
+                    loginlock(登录锁定)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.11" data-path="../security/anomalylogin.html">
+            
+                <a href="../security/anomalylogin.html">
+            
+                    
+                    anomalylogin(异常登录检测)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.12" data-path="../security/mfa.html">
+            
+                <a href="../security/mfa.html">
+            
+                    
+                    mfa(登录二次验证)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.13" data-path="../security/scope.html">
+            
+                <a href="../security/scope.html">
+            
+                    
+                    scope(数据范围)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.14" data-path="../security/fieldpolicy.html">
+            
+                <a href="../security/fieldpolicy.html">
+            
+                    
+                    fieldpolicy(字段可见性)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">审计</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../audit/piiaudit.html">
+            
+                <a href="../audit/piiaudit.html">
+            
+                    
+                    piiaudit(PII 审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../audit/cryptaudit.html">
+            
+                <a href="../audit/cryptaudit.html">
+            
+                    
+                    cryptaudit(密钥审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../audit/smsaudit.html">
+            
+                <a href="../audit/smsaudit.html">
+            
+                    
+                    smsaudit(短信审计)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">消息与通知</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../messaging/inbox.html">
+            
+                <a href="../messaging/inbox.html">
+            
+                    
+                    inbox(站内信)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../messaging/notifyx.html">
+            
+                <a href="../messaging/notifyx.html">
+            
+                    
+                    notifyx(通知分发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../messaging/push.html">
+            
+                <a href="../messaging/push.html">
+            
+                    
+                    push(推送通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../messaging/pushx.html">
+            
+                <a href="../messaging/pushx.html">
+            
+                    
+                    pushx(推送下发)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../messaging/permnotify.html">
+            
+                <a href="../messaging/permnotify.html">
+            
+                    
+                    permnotify(权限广播)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../messaging/msn.html">
+            
+                <a href="../messaging/msn.html">
+            
+                    
+                    msn(短信通道)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../messaging/smslimit.html">
+            
+                <a href="../messaging/smslimit.html">
+            
+                    
+                    smslimit(短信限流)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../messaging/smstpl.html">
+            
+                <a href="../messaging/smstpl.html">
+            
+                    
+                    smstpl(短信模板)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.9" data-path="../messaging/emailx.html">
+            
+                <a href="../messaging/emailx.html">
+            
+                    
+                    emailx(邮件)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">调度与可观测</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../scheduling/cronx.html">
+            
+                <a href="../scheduling/cronx.html">
+            
+                    
+                    cronx(定时任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../scheduling/jobs.html">
+            
+                <a href="../scheduling/jobs.html">
+            
+                    
+                    jobs(内置任务)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../scheduling/slowquery.html">
+            
+                <a href="../scheduling/slowquery.html">
+            
+                    
+                    slowquery(慢 SQL 报警)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">业务扩展</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+            
+                <a href="../business/dyn.html">
+            
+                    
+                    dynx(动态业务集合)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+            
+                <a href="../business/approval.html">
+            
+                    
+                    approvalx(通用审批)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">接口文档</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+            
+                <a href="../api-docs/swaggerx.html">
+            
+                    
+                    swaggerx(接口文档)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+            
+                <a href="../api-docs/manual.html">
+            
+                    
+                    框架手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">参考</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../reference/packages.html">
+            
+                <a href="../reference/packages.html">
+            
+                    
+                    包速查表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../reference/examples.html">
+            
+                <a href="../reference/examples.html">
+            
+                    
+                    示例目录
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../reference/config-index.html">
+            
+                <a href="../reference/config-index.html">
+            
+                    
+                    配置项全表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >media(音视频处理)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="media-——-音视频探测与转码">media —— 音视频探测与转码</h1>
+<blockquote>
+<p>上传的视频/音频要能在列表里看到<strong>时长</strong>和<strong>封面</strong>,点开要能<strong>在浏览器里播</strong>。
+media 只做这两件事:用 ffprobe 读元信息、用 ffmpeg 抽帧和转码。</p>
+</blockquote>
+<h2 id="功能">功能</h2>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>函数</th>
+<th>干什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>探测</td>
+<td><code>Probe</code></td>
+<td>ffprobe 读时长 / 分辨率 / 容器 / 编码</td>
+</tr>
+<tr>
+<td>抽封面</td>
+<td><code>ExtractFrame</code></td>
+<td>ffmpeg 抽一帧存成 jpg(缩到 640 宽)</td>
+</tr>
+<tr>
+<td>转码</td>
+<td><code>Transcode</code></td>
+<td>转成浏览器都播得了的 H.264 + AAC / MP4</td>
+</tr>
+<tr>
+<td>判能不能播</td>
+<td><code>BrowserPlayable</code> / <code>UnplayableReason</code></td>
+<td>"ffmpeg 能解" ≠ "浏览器能播"</td>
+</tr>
+<tr>
+<td>判是不是媒体</td>
+<td><code>Classify</code></td>
+<td>按文件名 + Content-Type 判 video / audio</td>
+</tr>
+<tr>
+<td>纯函数工具</td>
+<td><code>NormalizeContainer</code> / <code>FramePosition</code> / <code>PlaybackExt</code> / <code>TranscodeArgs</code> / <code>PlaybackSizeHint</code></td>
+<td>不碰外部命令,单独可测</td>
+</tr>
+</tbody>
+</table>
+<h3 id="边界这个包只管跑命令、解析输出">边界:这个包只管跑命令、解析输出</h3>
+<p>它<strong>不认识数据库、不认识存储、不认识用户</strong> —— 那是 service 层的事。
+分成两层的原因:命令怎么拼、输出怎么解析是<strong>纯逻辑</strong>,可以脱离 ffmpeg 测;
+而"什么时候跑、结果存哪"是业务编排,测它就得把整个 service 搭起来。</p>
+<h3 id="⚠️-工具不可用-≠-报错">⚠️ 工具不可用 ≠ 报错</h3>
+<p>开发机上没装 ffmpeg 是常态(ffmpeg 不是 Go 依赖,不会随仓库分发)。
+所以"找不到二进制"是一个<strong>可识别的哨兵错误</strong> <code>ErrUnavailable</code>,由调用方决定降级 ——
+上传照常成功,只是这个文件没有时长和封面。把它当成"探测失败"泛化处理的话,
+日志里每次上传都会刷一条 error,而用户看不出任何区别(前端就是少个时长)—— 那是噪音。</p>
+<h3 id="⚠️-命令执行器是注入的">⚠️ 命令执行器是注入的</h3>
+<p><code>Runner</code> 接口让测试可以塞一个假执行器进去,断言<strong>命令怎么拼、输出怎么解析</strong>,
+不需要真的装 ffmpeg。真实的 ffmpeg 集成测试是<strong>另一件事</strong>(装了 ffmpeg 才跑,
+没装就跳过 —— 跳过的那条会在测试名里写明原因)。</p>
+<h2 id="配置">配置</h2>
+<p><strong>该包没有独立的 <code>media:</code> yaml 块</strong> —— 媒体相关的键都在 <code>file:</code> 块里
+(<code>internal/config/file.go</code> 的 <code>FileConfig</code>):</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">file:</span>
+  <span class="hljs-comment"># ---- 媒体探测(视频时长 / 封面帧)----</span>
+<span class="hljs-attr">  ffmpeg_path:</span> ffmpeg          <span class="hljs-comment"># ffmpeg 可执行文件路径(默认走 PATH)</span>
+<span class="hljs-attr">  ffprobe_path:</span> ffprobe        <span class="hljs-comment"># ffprobe 可执行文件路径(默认走 PATH)</span>
+<span class="hljs-attr">  media_max_size_mb:</span> <span class="hljs-number">2048</span>      <span class="hljs-comment"># 媒体探测的文件大小上限。0 = 不限</span>
+
+  <span class="hljs-comment"># ---- 转码 ----</span>
+<span class="hljs-attr">  transcode_enabled:</span> <span class="hljs-literal">true</span>      <span class="hljs-comment"># 布尔零值是 false = 关,必须显式写 true</span>
+<span class="hljs-attr">  transcode_workers:</span> <span class="hljs-number">2</span>         <span class="hljs-comment"># 转码并发数</span>
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file.ffmpeg_path</code></td>
+<td>string</td>
+<td><code>ffmpeg</code></td>
+<td>ffmpeg 可执行文件路径,默认走 PATH</td>
+</tr>
+<tr>
+<td><code>file.ffprobe_path</code></td>
+<td>string</td>
+<td><code>ffprobe</code></td>
+<td>ffprobe 可执行文件路径,默认走 PATH</td>
+</tr>
+<tr>
+<td><code>file.media_max_size_mb</code></td>
+<td>int</td>
+<td><code>2048</code></td>
+<td>媒体探测的文件大小上限(MB),<code>0</code> = 不限</td>
+</tr>
+<tr>
+<td><code>file.transcode_enabled</code></td>
+<td>bool</td>
+<td>Go 零值 <code>false</code>(= 关),yaml 模板里显式写 <code>true</code></td>
+<td>是否给"浏览器播不了"的音视频转一份可播副本</td>
+</tr>
+<tr>
+<td><code>file.transcode_workers</code></td>
+<td>int</td>
+<td><code>2</code></td>
+<td>转码并发数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="⚠️-环境变量优先于-yaml">⚠️ 环境变量优先于 yaml</h3>
+<p><code>FFMPEG_PATH</code> / <code>FFPROBE_PATH</code> <strong>优先</strong>于上面两个路径键
+(<code>FileConfig.ResolveMediaTools</code>)。</p>
+<p>ffmpeg 不是 Go 依赖,不随仓库分发,每个部署环境装的位置都不一样
+(Windows 上常常是某个绿色版目录)。<strong>yaml 是仓库里的默认值,环境变量才是
+"这台机器上它到底在哪"的唯一真相。</strong></p>
+<h3 id="代码侧">代码侧</h3>
+<pre><code class="lang-go">media.Probe(ctx, ffprobeBin, path) (*Info, error)
+media.ExtractFrame(ctx, ffmpegBin, in, outPath <span class="hljs-keyword">string</span>, atMs <span class="hljs-keyword">int64</span>) error
+media.Transcode(ctx, ffmpegBin, in, out <span class="hljs-keyword">string</span>, kind Kind) error
+media.DefaultRunner Runner        <span class="hljs-comment">// 默认执行器(真的 exec)</span>
+</code></pre>
+<p><code>Runner</code> 接口可替换:</p>
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> Runner <span class="hljs-keyword">interface</span> {
+    Run(ctx context.Context, name <span class="hljs-keyword">string</span>, args ...<span class="hljs-keyword">string</span>) ([]<span class="hljs-keyword">byte</span>, error)
+}
+</code></pre>
+<h2 id="使用方法">使用方法</h2>
+<p>完整示例:<code>examples/media/main.go</code> —— 本示例只演示<strong>纯函数</strong>部分,
+真正转码需要本机装 ffmpeg / ffprobe。</p>
+<h3 id="种类判定">种类判定</h3>
+<pre><code class="lang-go">k := media.Classify(c.fileName, c.contentType)   <span class="hljs-comment">// media.KindVideo / KindAudio / KindUnknown</span>
+</code></pre>
+<h3 id="容器归一化">容器归一化</h3>
+<pre><code class="lang-go">media.NormalizeContainer(<span class="hljs-string">"mov,mp4,m4a,3gp,3g2,mj2"</span>)   <span class="hljs-comment">// "mp4"</span>
+media.NormalizeContainer(<span class="hljs-string">"matroska,webm"</span>)              <span class="hljs-comment">// "webm"</span>
+</code></pre>
+<h3 id="浏览器可播判定">浏览器可播判定</h3>
+<pre><code class="lang-go">reason := media.UnplayableReason(info)   <span class="hljs-comment">// 空字符串 = 能播</span>
+media.BrowserPlayable(info)              <span class="hljs-comment">// 同一判据的布尔版</span>
+</code></pre>
+<h3 id="播放副本的扩展名">播放副本的扩展名</h3>
+<pre><code class="lang-go">media.PlaybackExt(media.KindVideo)   <span class="hljs-comment">// ".mp4"</span>
+media.PlaybackExt(media.KindAudio)   <span class="hljs-comment">// ".m4a"</span>
+</code></pre>
+<h3 id="转码参数">转码参数</h3>
+<pre><code class="lang-go"><span class="hljs-keyword">for</span> _, a := <span class="hljs-keyword">range</span> media.TranscodeArgs(kind, <span class="hljs-string">"in.xxx"</span>, <span class="hljs-string">"out.yyy"</span>) {
+    fmt.Println(a)
+}
+</code></pre>
+<h3 id="跑命令的三个函数签名">跑命令的三个函数(签名)</h3>
+<pre><code class="lang-go">info, err := media.Probe(ctx, ffprobePath, localPath)              <span class="hljs-comment">// 时长/分辨率/容器/编码</span>
+err = media.ExtractFrame(ctx, ffmpegPath, localPath, outPath, atMs) <span class="hljs-comment">// 抽封面</span>
+err = media.Transcode(ctx, ffmpegPath, localPath, outPath, kind)    <span class="hljs-comment">// 转可播副本</span>
+</code></pre>
+<p><code>atMs</code> 的落点由 <code>media.FramePosition(durationMs)</code> 给(见下)。</p>
+<h2 id="注意事项">注意事项</h2>
+<ul>
+<li><p>⚠️ <strong>ffmpeg / ffprobe 不在 PATH 时的行为</strong>:<code>exec.CommandContext</code> 找不到二进制
+⇒ 错误能被 <code>errors.Is(err, exec.ErrNotFound)</code> 认出 ⇒ 包把它翻译成
+<strong><code>ErrUnavailable</code></strong>。调用方<strong>必须用 <code>errors.Is</code> 认它</strong> —— "没装 ffmpeg"(部署状态)
+和"文件解不开"(文件本身有问题)是两件完全不同的事,混在一起运维看到满屏 error
+会以为文件坏了。</p>
+</li>
+<li><p>⚠️ <strong><code>ErrUnavailable</code> 不是"探测失败",业务照常成功</strong>。service 层把它记成
+<strong>Info 而不是 Warn</strong>:每个媒体文件上传都打一条 Warn 是噪音,而用户看不出任何区别。
+另外"ffprobe 没配"是<strong>整个不探</strong>(不是"跑一次看看报什么错")——
+只配了 ffmpeg 没配 ffprobe 是常见形态(精简包),那时错误信息是 "exec: no command",
+看的人完全猜不到是配置缺了。</p>
+</li>
+<li><p>⚠️ <strong>没装 ffmpeg 也能正常上传</strong> —— 探测是锦上添花,失败只是列表里少一个时长和一张封面。</p>
+</li>
+<li><p>⚠️ <strong>ffmpeg 能解 ≠ 浏览器能播</strong>。WMV / FLV / MKV / MPEG-4 Part 2 这些格式
+ffmpeg 全都能解,于是时长探得出来、封面也抽得出来 —— <strong>看起来一切正常</strong>,
+但用户点开直链,浏览器是把它下载下来而不是播。"看起来正常但其实播不了"是最坏的
+一种状态:没有报错、没有提示。</p>
+</li>
+<li><p>⚠️ <strong>判据是"全平台通吃",不是"某个浏览器能播"</strong>。Safari 不支持 Ogg/Vorbis、
+Firefox 不支持 HEVC、Chrome 对 HEVC 依平台 —— 只要"有一个主流浏览器播不了",
+这个文件就不能算"浏览器可播"。</p>
+</li>
+<li><p>⚠️ <strong>容器和编码是两件事,都要查</strong>。MKV 里面装 H.264 —— 编码支持,但浏览器不解
+MKV 容器 ⇒ 还是播不了;MP4 容器里装 AC-3 ⇒ 画面能看,声音要装 Dolby 插件。
+<strong>视频的音轨也要查</strong>。</p>
+</li>
+<li><p>⚠️ <strong>判不出来 = 放行</strong>。<code>Info</code> 里任何一项为空(比如 ffprobe 没吐 <code>format_name</code>),
+<code>BrowserPlayable</code> 就不拦。别把"空"当成"浏览器一定不能播" —— 转码要烧 CPU、占存储,
+"拿不准"不该触发它。</p>
+</li>
+<li><p>⚠️ <strong>纯 mkv 的 <code>format_name</code> 只有 <code>"matroska"</code>,webm 是 <code>"matroska,webm"</code></strong>
+⇒ 判 webm 必须看<strong>整串里有没有 webm</strong>,不能只看第一项(第一项对两者都是 matroska)。
+<code>NormalizeContainer</code> 里 webm 必须排在 matroska 前面判。</p>
+</li>
+<li><p>⚠️ <strong><code>Classify</code> 扩展名当主判据,MIME 只兜底</strong>。<code>mime.TypeByExtension</code> 在 Windows 上
+会去查注册表,<code>.mkv</code> / <code>.flac</code> 这种冷门格式<strong>不一定</strong>有值,查不到就落到
+<code>application/octet-stream</code> ⇒ 视频被判成"不是媒体" ⇒ 不抽封面。
+反过来:<strong>扩展名认出来了但不在媒体名单里 ⇒ 就是不是媒体</strong>,别再拿 content_type 兜底
+—— 一个叫 <code>a.mp4.txt</code> 的文本文件会被浏览器报成 <code>text/plain</code>,而用户眼里它就是个 txt。</p>
+</li>
+<li><p>⚠️ <strong>时长 <code>"N/A"</code> 当 0,不是错误</strong>。某些容器(尤其 mpeg-ts / 部分 mp4)
+<code>format.duration</code> 是 <code>"N/A"</code>,此时兜底取<strong>视频流</strong>的 duration。
+负时长也当 0(坏数据)。</p>
+</li>
+<li><p>⚠️ <strong>封面落点不是 0</strong>。<code>FramePosition</code> 的规则:≤ 0 → 0;&lt; 3 秒 → 取中点;
+≥ 3 秒 → 取 10% 但不超过 3 秒。很多视频开头是黑屏/片头,抽出来是一片黑,
+用户看到的就是"这个视频没有封面"。</p>
+</li>
+<li><p>⚠️ <strong>抽帧用输入端 seek</strong>(<code>-ss</code> 放在 <code>-i</code> <strong>前面</strong>)= 快但可能不准(跳到最近的关键帧)。
+对"抽一张封面"完全够用;放在 <code>-i</code> 后面才准,代价是要解完整个文件。</p>
+</li>
+<li><p>⚠️ <strong>文件大小闸在 service 层,不在本包</strong>。<code>file.media_max_size_mb</code>(默认 2048)
+决定要不要探测 —— 因为<strong>探测要把文件完整落到本地磁盘</strong>(ffmpeg 只能读本地文件),
+所以这个闸 = "临时盘要留多少空间"。<code>0</code> = 不限。</p>
+</li>
+<li><p>⚠️ <strong><code>transcode_enabled</code> 的布尔零值是 false = 关</strong> —— yaml 模板里必须显式写
+<code>true</code>,否则"配了 ffmpeg 却不转码"这件事<strong>没有任何提示</strong>。
+关掉它只是不转码,别的照旧(时长/封面照旧,列表里会显示"浏览器不支持" + 原因)。</p>
+</li>
+<li><p>⚠️ <strong>每个转码是一个 ffmpeg 进程,吃满一个核</strong> —— <code>transcode_workers</code> 就是
+"最多同时烧几个核"。默认 2 是刻意的:够一个上传高峰用,又不会把一台 2 核的
+小机器打满。</p>
+</li>
+<li><p>⚠️ <strong>转码参数是显式列出来的</strong>(<code>TranscodeArgs</code>),不是拼字符串 —— 拼字符串意味着
+参数来自文件名时会有注入面。其中 <code>-map</code> 必须显式给(不给会把字幕轨和数据轨也搬
+过去,mp4 装不下,报错是 "Could not find tag for codec … in stream #1",极难一眼看懂),
+<code>-movflags +faststart</code> 让 moov atom 放文件头(否则浏览器必须把整个文件下完才起播)。</p>
+</li>
+<li><p>⚠️ <strong>转码产物不一定更小</strong>。H.264 CRF 23 的产物通常比原文件小(尤其 WMV/FLV/
+MPEG-4 Part 2 这些编码效率低的格式),但<strong>低码率的 DivX 反过来会变大</strong> ——
+不能假设"转码完一定更小"。</p>
+</li>
+<li><p>⚠️ <strong>音频不抽帧</strong>。音频的"封面"是图标(前端按扩展名画),抽出来的波形图对一张唱片封面
+没有意义。service 层只在 <code>Kind == KindVideo</code> 时才调 <code>ExtractFrame</code>。</p>
+</li>
+</ul>
+<h2 id="相关">相关</h2>
+<ul>
+<li>源码:<code>internal/pkg/media/</code>(<code>media.go</code> 探测与抽帧,<code>playback.go</code> 可播判定与转码)</li>
+<li>可运行示例:<code>examples/media/main.go</code> —— <code>go run ./examples/media</code></li>
+<li>文件落在哪(直链 / key 形态)→ <a href="oss.html">oss</a></li>
+<li>媒体工具路径优先级:环境变量 <code>FFMPEG_PATH</code> / <code>FFPROBE_PATH</code> &gt; yaml <code>file.ffmpeg_path</code> / <code>file.ffprobe_path</code></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="searchidx.html" class="navigation navigation-prev " aria-label="Previous page: searchidx(盲索引搜索)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="oss.html" class="navigation navigation-next " aria-label="Next page: oss(对象存储)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"media(音视频处理)","level":"4.4","depth":1,"next":{"title":"oss(对象存储)","level":"4.5","depth":1,"path":"storage/oss.md","ref":"storage/oss.md","articles":[]},"previous":{"title":"searchidx(盲索引搜索)","level":"4.3","depth":1,"path":"storage/searchidx.md","ref":"storage/searchidx.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"storage/media.md","mtime":"2026-11-01T08:24:30.181Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-04T13:53:49.053Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+
+    
+
+    </body>
+</html>
+
