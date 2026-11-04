@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="renderer" content="webkit" />
+    <!-- ⚠️ 这里的 title / description 是**水合前那一瞬**的兜底值,
+         运行时由 LangRoot 用后端 branding.app_title 覆盖(见 src/components/common/LangRoot.tsx)。
+         开源通用化:平台名在服务端 yaml 的 branding 块里改,这里保持通用文案。 -->
+    <meta name="description" content="后台管理平台" />
+    <title>后台管理平台</title>
+    <script>
+      // 首屏防闪白(2026-11-03):data-theme 此前要等 React 挂载后由 LangRoot 设置,
+      // 深色用户每次进来都先闪一屏白。这里在渲染前读 zustand persist 的主题
+      // (键名与 src/constants/app.ts STORAGE_KEYS.THEME 一致)提前设上;
+      // 顺带给 <html> 一个深色内联底色 —— CSS 变量要等样式表加载才有值,
+      // 内联底色负责"样式表到达前"那段窗口(body 铺满视口,CSS 到位后它不可见)。
+      try {
+        var t = (JSON.parse(localStorage.getItem('rapid-admin:theme') || '{}').state || {}).theme
+        if (t === 'dark' || t === 'realDark') {
+          document.documentElement.dataset.theme = t
+          document.documentElement.style.background = '#1a1a1a'
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,231 @@
+/**
+ * 设计 Token —— 全局 CSS 变量
+ * 与 main.tsx ConfigProvider theme.token 协同,主题色 / 阴影 / 圆角 / 画布集中管理
+ *
+ * 命名: --app-* (与参考项目 hertz-antd-admin-saas 对齐)
+ *   --app-shadow-l0..l4  5 档阴影
+ *   --app-edge-light*    边缘高光 (Liquid Glass)
+ *   --app-bg-*           画布与表面
+ *   --app-hover-*        hover 反馈
+ *   --app-primary*       品牌色 (橙)
+ */
+
+:root {
+  /* ===== 5 档阴影 (光源自上, 带 slate 调) ===== */
+  /* L0 Sunken:   inset, 无外浮 (输入框/表格 cell) */
+  --app-shadow-l0: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+  /* L1 Rest:     1-3px 紧密 (按钮/分隔) */
+  --app-shadow-l1: 0 1px 2px rgba(15, 23, 42, 0.05),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+  /* L2 Raised:   4-8px 中距模糊 (卡片) */
+  --app-shadow-l2: 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 2px 6px rgba(15, 23, 42, 0.06),
+    0 4px 12px rgba(15, 23, 42, 0.04);
+  /* L3 Floating: 12-20px 宽模糊 (popover/sticky) */
+  --app-shadow-l3: 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 6px 16px rgba(15, 23, 42, 0.08),
+    0 16px 40px rgba(15, 23, 42, 0.06);
+  /* L4 Overlay:  24-40px 极大模糊 (modal/drawer/dropdown) */
+  --app-shadow-l4: 0 2px 4px rgba(15, 23, 42, 0.04),
+    0 12px 24px rgba(15, 23, 42, 0.08),
+    0 28px 64px rgba(15, 23, 42, 0.12),
+    0 48px 96px rgba(15, 23, 42, 0.08);
+
+  /* ===== 边缘高光 (顶部内高光, 模拟玻璃折射) ===== */
+  --app-edge-light: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --app-edge-light-soft: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+  /* ===== 画布 (页面底色 + 表面) ===== */
+  /* 页面底色: 透明元素 (tab/menu) 需要从此透出, 不要让 body 白色穿帮 */
+  --app-bg-layout: #f4f6fa;
+  --app-bg-base: #fafafa;
+  --app-surface-bg: #fafbfc;
+  --app-surface-bg-strong: #ffffff;
+  --app-surface-border: rgba(15, 23, 42, 0.04);
+  --app-scrollbar-thumb: rgba(15, 23, 42, 0.18);
+  --app-scrollbar-thumb-hover: rgba(15, 23, 42, 0.28);
+
+  /* ===== 选中高亮 (半透明蓝系, 跨页复用: 批量条 / 当前会话) ===== */
+  --app-selected-bg: #e6f4ff;
+  --app-selected-border: #91caff;
+  --app-selected-border-strong: #1677ff;
+
+  /* ===== 语义浅底 (diff 增删行 / 失败提示条 / 警告浅底) ===== */
+  --app-diff-add-bg: #f6ffed;
+  --app-diff-del-bg: #fff1f0;
+  --app-error-bg: #fff1f0;
+  --app-error-border: #ffccc7;
+  --app-warning-bg: #fffbe6;
+
+  /* ===== hover 反馈 (中性, 不抢品牌色) ===== */
+  --app-hover-border: rgba(15, 23, 42, 0.1);
+  --app-hover-ring: rgba(15, 23, 42, 0.08);
+  --app-hover-bg: rgba(15, 23, 42, 0.02);
+  --app-hover-bg-strong: rgba(15, 23, 42, 0.04);
+
+  /* ===== 品牌色 (橙) ===== */
+  --app-primary: #f60;
+  --app-primary-hover: #ff8c3a;
+  --app-primary-active: #d35400;
+  --app-primary-bg: #fff5e6;
+  --app-primary-bg-hover: #ffe7c2;
+  --app-primary-border: #ffcaa1;
+  --app-primary-border-hover: #ffae6c;
+
+  /* ===== 文字 (slate 调, 不纯黑) ===== */
+  --app-text: #1f2937;
+  --app-text-secondary: #475569;
+  --app-text-tertiary: #94a3b8;
+  --app-text-quaternary: #cbd5e1;
+  --app-text-disabled: rgba(0, 0, 0, 0.45);
+
+  /* ===== 边框 ===== */
+  --app-border: #eef0f4;
+  --app-border-secondary: #f0f2f5;
+  --app-split: rgba(15, 23, 42, 0.06);
+
+  /* ===== 表格线条 (global.css 排版层用, 暗色跟着切) =====
+   * 行分隔线比表头下边框轻一档 —— 层级靠线的粗细/深浅拉开, 不是靠竖线。
+   */
+  --app-table-line: #eef0f4;
+  --app-table-header-line: #eef0f4;
+
+  /* ===== 状态色 (与 Antd 5 语义对齐) ===== */
+  --app-success: #52c41a;
+  --app-warning: #faad14;
+  --app-error: #ff4d4f;
+
+  /* ===== 圆角 (对齐参考原型 --r-md 12 / --r-lg 16 / --r-xl 22) ===== */
+  --app-radius-xs: 4px;
+  --app-radius-sm: 8px;
+  --app-radius-md: 10px;
+  --app-radius-lg: 16px;
+  --app-radius-xl: 22px;
+
+  /* ===== 间距 ===== */
+  --app-space-xs: 4px;
+  --app-space-sm: 8px;
+  --app-space-md: 16px;
+  --app-space-lg: 24px;
+  --app-space-xl: 32px;
+
+  /* ===== 字体栈 (对齐参考原型 --sans / .mono) =====
+   * 在 antd 默认栈上补 Noto Sans CJK SC / Source Han Sans SC —— Linux 服务器端
+   * 常见中文字体(Windows 上没有),PingFang SC / Hiragino 保留给 mac。
+   * 同一套栈在 main.tsx 的 antd token(fontFamily)里也写了一份, 两边要一起改。
+   */
+  --app-font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica,
+    Arial, sans-serif;
+  --app-font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --app-line-height: 1.6;
+
+  /* ===== 字号 (全站下调一档, 对齐参考原型的排版刻度) =====
+   * 参考原型: 徽标 10 / 表格次级 10.5 / 分页 11 / 表格正文 12 /
+   *           控件基准 13 / 导航 13 / 面包屑 12 / 页面标题 22
+   * ⚠️ 真正生效的是 main.tsx 里的 antd token(antd 控件不读 CSS 变量);
+   *    这一组变量是"手写 CSS 的刻度出处" —— global.css 的排版层直接引用
+   *    --app-font-size-table-sm, 其余留给后续手写样式用(改动时两处一起改)。
+   */
+  --app-font-size-xs: 10px; /* 徽标 Tag */
+  --app-font-size-sm: 11px; /* 分页 / 小控件 */
+  --app-font-size-md: 12px; /* 表格正文 */
+  --app-font-size-base: 13px; /* 控件基准 (= antd fontSize) */
+  --app-font-size-table-sm: 12px; /* 表头 + 单元格次级文字(参考原型 th/td small) */
+  --app-font-size-lg: 16px;
+  --app-font-size-xl: 18px;
+  --app-font-size-xxl: 20px;
+
+  /* ===== 布局 ===== */
+  --app-header-height: 56px;
+  --app-sider-width: 240px;
+  --app-sider-collapsed-width: 64px;
+  --app-footer-height: 48px;
+
+  /* ===== 动效 ===== */
+  --app-ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --app-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --app-duration-fast: 120ms;
+  --app-duration-mid: 220ms;
+  --app-duration-slow: 360ms;
+}
+
+/* ========================================================
+ * 暗色主题覆盖 (§2.8 #19)
+ *  - 由 main.tsx 在 useUIStore.theme==='dark'/'realDark' 时
+ *    把 <html data-theme="dark"> 设上,CSS variables 跟着切
+ *  - 主体改用中性黑系基底(#101010),文字中性灰(#e8e8e8)
+ *  - 阴影上调 alpha(暗色环境阴影要更深)
+ *  - 不动 --app-primary 品牌色(品牌色跨主题统一)
+ * ======================================================== */
+:root[data-theme='dark'],
+:root[data-theme='realDark'] {
+  /* 画布: 中性黑系(2026-11-03 用户拍板,整梯 #1a1a1a/#262626/#333333/#404040) */
+  --app-bg-layout: #1a1a1a;
+  --app-bg-base: #1a1a1a;
+  --app-surface-bg: #202020;
+  --app-surface-bg-strong: #262626;
+  --app-surface-border: rgba(255, 255, 255, 0.08);
+  --app-scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --app-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+
+  /* 选中高亮: 半透蓝, 深底下提亮一档 */
+  --app-selected-bg: rgba(96, 165, 250, 0.15);
+  --app-selected-border: rgba(96, 165, 250, 0.45);
+  --app-selected-border-strong: #60a5fa;
+
+  /* 语义浅底: 状态色 12% 半透明 (深色实色浅底会刺眼) */
+  --app-diff-add-bg: rgba(82, 196, 26, 0.12);
+  --app-diff-del-bg: rgba(255, 77, 79, 0.12);
+  --app-error-bg: rgba(255, 77, 79, 0.12);
+  --app-error-border: rgba(255, 77, 79, 0.35);
+  --app-warning-bg: rgba(250, 173, 20, 0.12);
+
+  /* 文字: 中性灰, 高对比但不死白 */
+  --app-text: #e8e8e8;
+  --app-text-secondary: #bfbfbf;
+  --app-text-tertiary: #8c8c8c;
+  --app-text-quaternary: #666666;
+  --app-text-disabled: rgba(255, 255, 255, 0.35);
+
+  /* 边框: 半透白 (#404040 档留给实边框/tooltip 底) */
+  --app-border: rgba(255, 255, 255, 0.14);
+  --app-border-secondary: rgba(255, 255, 255, 0.08);
+  --app-split: rgba(255, 255, 255, 0.08);
+
+  /* 表格线条: 半透白, 保持"表头重 / 行分隔轻"的层级 */
+  --app-table-line: rgba(255, 255, 255, 0.1);
+  --app-table-header-line: rgba(255, 255, 255, 0.22);
+
+  /* hover 反馈 */
+  --app-hover-border: rgba(255, 255, 255, 0.18);
+  --app-hover-ring: rgba(255, 255, 255, 0.14);
+  --app-hover-bg: rgba(255, 255, 255, 0.04);
+  --app-hover-bg-strong: rgba(255, 255, 255, 0.08);
+
+  /* 阴影: 暗色背景下需要更深 alpha,带颜色,而不是黑色透明 */
+  --app-shadow-l0: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  --app-shadow-l1: 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  --app-shadow-l2: 0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.3);
+  --app-shadow-l3: 0 1px 2px rgba(0, 0, 0, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    0 16px 40px rgba(0, 0, 0, 0.4);
+  --app-shadow-l4: 0 2px 4px rgba(0, 0, 0, 0.35),
+    0 12px 24px rgba(0, 0, 0, 0.5),
+    0 28px 64px rgba(0, 0, 0, 0.55),
+    0 48px 96px rgba(0, 0, 0, 0.4);
+
+  /* 边缘高光: 暗色下用半透白作"玻璃反光" */
+  --app-edge-light: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --app-edge-light-soft: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+  /* 品牌色背景: 暗色下用更深的橙底 */
+  --app-primary-bg: rgba(255, 102, 0, 0.12);
+  --app-primary-bg-hover: rgba(255, 102, 0, 0.2);
+  --app-primary-border: rgba(255, 102, 0, 0.32);
+  --app-primary-border-hover: rgba(255, 102, 0, 0.5);
+}

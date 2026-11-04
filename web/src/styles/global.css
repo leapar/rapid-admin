@@ -1,0 +1,790 @@
+/**
+ * 全局基础样式 —— 框架无关 (box-sizing / 字体 / 滚动条)
+ * 颜色 / 背景由 ConfigProvider theme token 接管, 不在 CSS 硬编码
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /*
+   * body 锁死不滚动 —— BasicLayout 已经 100vh 闭环, body 不可能超 viewport。
+   * 关键作用: Modal / Drawer 打开时, 防止 wheel 事件经 modal mask 冒泡
+   * 驱动 body 滚动(antd v5 的 body 滚动锁依赖 body overflow 字段)。
+   * 真正的页面级滚动由 BasicLayout 内的 Card body / Sider menu 等容器
+   * 各自 overflow-y: auto 接管。
+   */
+  overflow: hidden;
+}
+
+html {
+  /* 页面画布色: 必须有, 否则 .ant-tabs / .menu 等 transparent 元素
+     会从 body 默认白底穿帮 (尤其在某些场景下深色画布) */
+  background: var(--app-bg-layout);
+}
+
+body {
+  /* 字体栈见 variables.css --app-font-sans(与 main.tsx 的 antd fontFamily 同一套) */
+  font-family: var(--app-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 与 antd token fontSize=13 对齐(antd 控件/正文都是 13) */
+  font-size: 13px;
+  line-height: var(--app-line-height);
+  color: var(--app-text);
+  background: var(--app-bg-layout);
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  font-variant-numeric: tabular-nums;
+  text-rendering: optimizeLegibility;
+}
+
+/* 等宽字体(参考原型的 .mono / .cell-id):
+   antd 的 fontFamilyCode 只作用在 <Text code>, 裸 <code> 标签走浏览器默认,
+   这里统一到同一套栈, 让表格里的 ID / 编码列和 antd 的 code 样式一致。 */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--app-font-mono);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+/* 滚动条 (Light 系细滚动) */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--app-scrollbar-thumb);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--app-scrollbar-thumb-hover);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+ * 滚动条宽度统一 —— antd 抢走了表格滚动条的控制权(2026-10-25)
+ *
+ * 现象: antd Table 里的滚动条约 15px(还带上下箭头),别处都是 6px。
+ *
+ * 真凶: antd 5 的 Table 样式给 `.ant-table` 写了 `scrollbar-color`
+ *   (node_modules/antd/es/table/style/index.js:54,token 是 tableScrollThumbBg
+ *    / tableScrollBg)。而 `scrollbar-color` 是**继承属性** → `.ant-table-body`
+ *   也拿到了它。
+ *
+ * 为什么这会让宽度变粗: Chrome 121+ 规定,只要 `scrollbar-color` /
+ *   `scrollbar-width` 取值**不是 auto**,就**忽略 ::-webkit-scrollbar 伪元素**,
+ *   滚动条退回平台原生样式(Windows 上约 15px + 上下箭头按钮)。
+ *   也就是说 antd 这条规则顺手把 ::-webkit-scrollbar **整个关掉了**。
+ *
+ * 实测(Chrome headless,量 offsetWidth - clientWidth = 滚动条占位):
+ *   .ant-table-body  → 15px  ← antd 的 scrollbar-color 生效,伪元素被忽略
+ *   .ant-card-body   →  6px  ← 正常走 ::-webkit-scrollbar
+ *   裸 div overflow  →  6px
+ *   ⚠️ 只写 `.ant-table-body::-webkit-scrollbar { width: 6px }` **没有用**
+ *      —— 规则匹配上了,但浏览器已经因为 scrollbar-color 改用原生滚动条。
+ *      唯一正确的解法是把 scrollbar-color 拨回 auto。
+ *
+ * 处理: 把 antd 写的那两个容器的 scrollbar-color 拨回 auto,
+ *   ::-webkit-scrollbar 重新接管 → 全站统一 6px。
+ *   ⚠️ 必须 !important:antd 的规则是 `.ant-table:where(.css-hash)`,
+ *      特异度 (0,1,0),而且是运行时注入到 <head> 末尾的 —— 同特异度时
+ *      后注入的胜出,不加 !important 会被它压回去。
+ *
+ * 覆盖范围: Table(`.ant-table`)+ DatePicker 面板
+ *   (`.ant-picker-panel-container`,antd/es/date-picker/style/panel.js:474)。
+ *   这两处是 antd 5 全仓仅有的两处 scrollbar-color 赋值(其余命中都是
+ *   rc-util 的 getScrollBarSize 探针,只作用于临时元素)。
+ *   ⚠️ 以后 antd 若在别的组件上加 scrollbar-color,同样的症状会回来 ——
+ *      复现办法:量 offsetWidth - clientWidth,15 就是又中招了。
+ * -------------------------------------------------------------------------- */
+.ant-table,
+.ant-picker-panel-container {
+  scrollbar-color: auto !important;
+}
+
+/* Firefox 不支持 ::-webkit-scrollbar,只能走标准属性。
+ * 放在 @supports 里是为了**不碰 Chromium**:Chrome 一旦看到非 auto 的
+ * scrollbar-width 就会同样忽略 ::-webkit-scrollbar,6px 反而没了。
+ * Firefox 也做不到 6px(thin 约 11px),但至少全站一样细。 */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+  }
+}
+
+/* Heading 微调 */
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+/* Focus ring (a11y) */
+:focus-visible {
+  outline: 2px solid rgba(255, 102, 0, 0.45);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 选区 */
+::selection {
+  background: rgba(255, 102, 0, 0.18);
+  color: inherit;
+}
+
+/* 通用工具类 */
+.flex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-center {
+  text-align: center;
+}
+.mb-16 {
+  margin-bottom: 16px;
+}
+.mt-16 {
+  margin-top: 16px;
+}
+
+/* 减弱动效 (a11y) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+ * 弹窗内部滚动 —— 所有 <Modal> 立即生效
+ *
+ * 场景: 字段多 (如"配置新增" 9+ 字段) 时, 弹窗整体高度超过视口, 默认会
+ * 撑出 viewport, footer 被截掉看不到。期望:
+ *   - 弹窗整体高度 ≤ 100vh - 100px (与 antd Modal 默认 top 100 对齐)
+ *   - header / footer 始终固定可见
+ *   - body 内部独立滚动
+ *   - 短内容 (ConfirmDialog / SmsCodeGuard 等) 不出现空滚动条
+ *
+ * 实现:
+ *   - .ant-modal-content 兜 max-height + flex 列布局 + overflow:hidden
+ *     (防止弹窗整体超 viewport 截掉 footer)
+ *   - .ant-modal-body  flex:1 + min-height:0 + overflow-y:auto
+ *     (body 内部滚, 短内容不出滚动条)
+ *   - 去掉之前的 calc(100vh - 200px) —— 那是 body 高度, 算错基准面
+ *
+ * 覆盖范围: EditModal / ConfirmDialog / SmsCodeGuard / IdentitySwitcher
+ * 以及业务页所有 <Modal> 直接使用, 包括 system/config/change 等。
+ * Drawer 已有自滚动, 不动。
+ * ========================================================================== */
+.ant-modal-content {
+  max-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ant-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+/* ==========================================================================
+ * 弹窗内容留白 + 头部底边线(2026-10-26)
+ *
+ * 场景(用户反馈):
+ *   1. 弹窗内容区的滚动条**紧贴内容** —— 右边不留白,字跟滚动条黏在一起;
+ *      上下也不留白,第一行内容顶着滚动区上沿。
+ *   2. 弹窗标题底下**没有分隔线** —— antd 5 非 wireframe 模式下
+ *      headerBorderBottom = 'none'(antd/es/modal/style/index.js:288),
+ *      标题和正文糊在一起,分不出哪是标题哪是内容。
+ *
+ * 处理:
+ *   - .ant-modal-body 加 padding: 0 16px(左右留白,滚动条不跟字黏在一起)
+ *   - .ant-modal-header 恢复 border-bottom,颜色用 --app-table-header-line
+ *     (亮色 #eef0f4,跟行分隔同色;暗色 rgba(148,163,184,.26) 重一档)
+ *
+ * ⚠️ 为什么必须 !important:
+ *   antd 那两条规则的最终选择器是
+ *     `:where(.css-hash).ant-modal .ant-modal-body` / `... .ant-modal-header`
+ *   —— 哈希类是 :where() 包着(0 特异度),整条落在 (0,2,0)。
+ *   本条写同名选择器也是 (0,2,0) → **同特异度**,而 antd 的 cssinjs 样式是
+ *   运行时注入到 <head> 末尾的(比本文件靠后)→ 同特异度时后注入的胜出,
+ *   padding / border-bottom 会被原样顶回来,只能 !important 硬压。
+ *   (antd 公开的 Modal 组件 token 里没有 bodyPadding / headerBorderBottom,
+ *    想走 token 通道也走不通。)
+ *
+ * 影响: 所有 <Modal> —— EditModal / ConfirmDialog / SmsCodeGuard /
+ *       IdentitySwitcher 以及业务页直接用的 Modal。
+ * ========================================================================== */
+.ant-modal .ant-modal-body {
+  padding: 0 16px !important;
+}
+
+.ant-modal .ant-modal-header {
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 0.5px solid var(--app-table-header-line) !important;
+}
+
+/* ==========================================================================
+ * 所有 table 表头文字居中
+ *
+ * 场景: antd v5 默认表头文字左对齐, 跟国内后台习惯(居中)不一致。
+ *       一次性全局覆盖, 0 业务代码改动; 单元格不动, 保持列内容自然对齐。
+ *       单独列想恢复左对齐, 在该列的 <th>/<td> 上加 style 即可 override。
+ * ========================================================================== */
+.ant-table-thead > tr > th {
+  text-align: center !important;
+}
+
+/* ==========================================================================
+ * 排版层 —— 字号 / 字体 / 表格线条
+ *
+ * 基准: 参考原型(超级管理员.html)的设计系统
+ *   字体   --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",
+ *                   "Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei"
+ *   正文   12px(表格正文)/ 13px(控件基准)/ 行高 1.6
+ *   表头   10.5px / 字重 550 / 字距 .4px / 不换行
+ *   线条   表头下边框与行分隔同色(暗色模式重一档);表头**没有竖线**,表格内**没有竖线**
+ *
+ * ⚠️ 为什么这几条只能写 CSS:
+ *   antd 5 没有"表头字号"和"单元格次级文字字号"这两个 token —— 表头字号直接
+ *   继承表格字号(antd 的 th 只有一个 fontSize 来源: cellFontSize)。
+ *   选择器特意比 antd 生成的
+ *   `.ant-table-wrapper .ant-table.ant-table-middle .ant-table-cell` (0,4,0)
+ *   多一层 `.ant-table`(变成 0,5,2)才能压住 antd 写死的 padding/边框 ——
+ *   cssinjs 的 :where(.css-hash) 哈希类是 0 特异度,所以不需要 !important。
+ * ========================================================================== */
+
+/* 表头: 字号比正文小一号, 靠字重(550)+ 字距(.4px)撑起层级 */
+.ant-table-wrapper .ant-table .ant-table-thead > tr > th.ant-table-cell {
+  font-size: var(--app-font-size-table-sm);
+  font-weight: 550;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  /* 参考原型 th 的纵向内边距是 10px(td 是 12px)—— 表头比正文紧一档 */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  /* 表头下边框: 亮色跟行分隔同色(--app-table-header-line),暗色下重一档 */
+  border-bottom: 0.5px solid var(--app-table-header-line);
+}
+
+/* 行分隔线: 宽度跟 antd 的 lineWidth 保持一致(0.5px 细线) */
+.ant-table-wrapper .ant-table .ant-table-tbody > tr > td.ant-table-cell {
+  border-bottom: 0.5px solid var(--app-table-line);
+}
+
+/* 单元格次级文字(参考原型 td small:10.5px 灰) */
+.ant-table-wrapper .ant-table .ant-table-tbody > tr > td.ant-table-cell .ant-typography-secondary {
+  font-size: var(--app-font-size-table-sm);
+}
+
+/* 表格里的编码/ID 列: 等宽字体(参考原型的 .cell-id) */
+.ant-table-wrapper .ant-table .ant-table-tbody > tr > td.ant-table-cell code {
+  font-size: var(--app-font-size-table-sm);
+}
+
+/* ==========================================================================
+ * 「点整行进入」的行 —— 悬停底色
+ *
+ * 场景(2026-11-01 用户提的「文件夹管理列表要支持点击进入」):
+ *       给行加了 onClick 之后,用户**看不出**哪一行能点 —— 光一个
+ *       `cursor: pointer` 太弱,尤其表格一屏几十行的时候。
+ *
+ * ⚠️ 为什么必须自己写:
+ *       antd 5 **没有默认的行悬停底色** —— `rowHoverBg` 只是个 component
+ *       token(antd/es/table/style/index.js:205),**没有落成任何 CSS 规则**
+ *       (v5 把 v4 的 `.ant-table-row-hover` 底色去掉了)。
+ *       ⇒ 不自己写就没有悬停反馈。
+ *
+ * ⚠️ 选择器比 antd 的多一层 `.ant-table`(0,5,2 起步):
+ *       antd 生成的 `.ant-table:where(.css-hash) .ant-table-tbody > tr > td`
+ *       哈希类是 :where() 包着(0 特异度),本条 (0,6,2) 压得住。
+ *
+ * ⚠️ 颜色用 CSS 变量而不是写死 —— 暗色主题下变量会跟着切
+ *       (variables.css 的 `[data-theme='dark']` 段)。
+ * ========================================================================== */
+.ant-table-wrapper .ant-table .ant-table-tbody > tr.row-clickable:hover > td {
+  background: var(--app-hover-bg-strong);
+}
+
+/* 分页行里的"条/页"选择器: antd 的 Select 走全局字号(13), 比同一行的页码(11)
+   大一号 —— 压到 11, 让整行分页一个刻度(参考原型的 .pager 全部 11px)。
+   antd 没给 selection-item 单独设 fontSize, 所以这里不存在特异度打架。 */
+.ant-pagination .ant-select-selection-item,
+.ant-pagination .ant-select-selection-placeholder {
+  font-size: 11px;
+}
+
+/* ==========================================================================
+ * 表格分页行下边距清零(只保留上边距)
+ *
+ * 场景: antd 的 table 样式给分页行写了 `margin: 16px 0`
+ *       (antd/es/table/style/pagination.js:10),分页行下面多出一截 16px 空白。
+ *       这里只把 margin-bottom 归零,margin-top 保持 16px 不动。
+ *
+ * ⚠️ 为什么必须 !important:
+ *   antd 那条规则的最终选择器是
+ *     `:where(.css-hash).ant-table-wrapper .ant-table-pagination.ant-pagination`
+ *   —— 哈希类是 :where() 包着(0 特异度),整条规则落在 (0,3,0)。
+ *   本条写同名选择器也是 (0,3,0) → **同特异度**,而 antd 的 cssinjs 样式是
+ *   运行时注入到 <head> 末尾的(比本文件靠后)→ 同特异度时后注入的胜出,
+ *   16px 会被原样顶回来。所以只能靠 !important 硬压。
+ *   (只写 `.ant-table-pagination.ant-pagination` 更只有 (0,2,0),连平手都到不了。)
+ *
+ * 影响: ManagementTable.getHeight() 量分页行时**把 margin 也算进去**
+ *       (box height + marginTop + marginBottom),所以这条规则会让分页行
+ *       实测高度少 16px → scroll.y 相应多出 16px,行区变高,不会裁到按钮。
+ * ========================================================================== */
+.ant-table-wrapper .ant-table-pagination.ant-pagination {
+  margin-bottom: 0 !important;
+}
+
+/* ==========================================================================
+ * Card 头的底边线不再被 body 的滚动内容盖掉
+ *
+ * 现象(2026-10-26,部门管理页用户反馈):左边组织树**一滚动**,卡片头底下
+ * 那条分隔线就被树节点压住了 —— 线像被"挡住"断了一截。
+ *
+ * 真凶: antd 给 `.ant-card-head` 写了 `margin-bottom: -1px`
+ *       (antd/es/card/style/index.js:19)。这 1px 让 **body 的滚动视口
+ *       比头的底边线高出 1px**:
+ *         头盒高 44px(border-box,含那 1px 底边线)→ 底边线占 74..75
+ *         body 顶边 = 44 - 1 = 74 → 正好骑在底边线上
+ *       没滚动时内容在 padding 之下,看不出来;**一滚动,内容顶到视口上沿**,
+ *       就压在线上。实测(chrome headless,elementFromPoint 命中):
+ *         74.5px(底边线所在行)→ DIV.ant-tree-treenode
+ *
+ * 处理: 把这 1px 归零 → body 从分隔线**下方**开始,滚到哪儿都压不到线。
+ *   · 选择器比 antd 多一层(.ant-card .ant-card-head = (0,2,0)),
+ *     antd 那条是 `.ant-card-head:where(.css-hash)` = (0,1,0) ——
+ *     cssinjs 的哈希类是 :where() 包着(0 特异度),所以不需要 !important。
+ *   · 顺带把高度补齐 1px:头占 44px + body calc(100% - 44px) = 正好铺满
+ *     卡片内容盒(原来差 1px,卡片底部空一格)。
+ *   · 只影响"头 + 可滚动 body"的卡片;ManagementTable 那种头 display:none
+ *     的卡片本来就没有这条边线。
+ * ========================================================================== */
+.ant-card .ant-card-head {
+  margin-bottom: 0;
+}
+
+.ant-card {
+  margin: 4px;
+  &:hover {
+    box-shadow: var(--app-shadow-l2);
+    border-color: var(--app-hover-border);
+  }
+}
+
+/* ==========================================================================
+ * 系统配置页:表单项下边距清零
+ *
+ * 场景: 系统配置页的结构是"一个配置项 = 一个 Card,Card 里只有一个 Form.Item"
+ *       (label + 输入框)。antd 默认给 `.ant-form-item` 留 24px 下边距
+ *       (itemMarginBottom = marginLG),在这个结构里就是**卡片底部凭空多出
+ *       的一截空白** —— 每张卡下面都拖着 24px,显得松垮。
+ *
+ * 处理: 只对本页这几个表单项生效(挂 .config-form-item 类名),把 margin-bottom
+ *       归零;**卡片之间的 12px 间距(Card 自己的 marginBottom)不动** ——
+ *       那 12px 才是卡片之间的呼吸感,归零会让卡片糊成一片。
+ *
+ * 选择器: `.config-form-item.ant-form-item` = (0,2,0),
+ *   antd 那条是 `.ant-form-item:where(.css-hash)` = (0,1,0)
+ *   (cssinjs 的哈希类是 :where() 包着,0 特异度)→ 稳赢,不需要 !important。
+ *
+ * ⚠️ 挂钩子的坑: 本页的 Form 用了 `component={false}`,不渲染 <form> 元素,
+ *   Form 自己的 className 会被 rc-field-form 丢掉 → 类名只能挂在 Form.Item 上。
+ * ========================================================================== */
+.config-form-item.ant-form-item {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+ * 系统配置页:折叠分组之间的分隔线
+ *
+ * 场景: 分组折叠起来之后**面板之间没有线** —— 一整块白,分不出边界。
+ *
+ * 真凶: antd 的 Collapse 用 `colorBorder` 画分隔线
+ *   (`.ant-collapse-borderless > .ant-collapse-item` 的 border-bottom,
+ *    antd/es/collapse/style/index.js:212),而本项目 colorBorder = #eef0f4 ——
+ *   跟白底几乎同色,线等于没画。
+ *
+ * 处理: 分隔线换成 --app-table-header-line(亮色 #eef0f4,暗色比行分隔重一档),
+ *   跟全站表格表头下边框用同一条线(暗色模式该变量自动切)。
+ *   最后一项不画线(跟 antd borderless 的原意一致)—— 收口交给 Card 的下边缘。
+ *
+ * 选择器: `.ant-collapse.config-collapse > .ant-collapse-item:not(:last-child)`
+ *   = (0,4,0);antd 那条是
+ *   `:where(.css-hash).ant-collapse-borderless > .ant-collapse-item` = (0,2,0)
+ *   (cssinjs 的哈希类是 :where() 包着,0 特异度)→ 稳赢,不需要 !important。
+ * ========================================================================== */
+.ant-collapse.config-collapse > .ant-collapse-item:not(:last-child) {
+  border-bottom: 0.5px solid var(--app-table-header-line);
+}
+
+/* ==========================================================================
+ * 表单提示文字(form-item-extra):字号压到 10px + 取消预留高度 + 6px 上间距
+ *
+ * ⚠️ **`min-height` / `margin-top` 这两行是用户手动加的**(2026-10-29),
+ *    不是某一轮审计的产物 —— 改这块之前先想清楚要不要动。
+ *
+ * 场景: 提示文字(输入框底下那行"留空表示保持原值"之类)跟输入框里的值
+ *       一样是 13px,跟正文一样重,喧宾夺主 —— 输入框的值才是主角。
+ *       压到 10px(跟表格正文 / 徽标一个刻度)之后,提示退成配角。
+ *
+ * ⚠️ 为什么必须 !important:
+ *   antd 那条规则的最终选择器是
+ *     `:where(.css-hash).ant-form-item .ant-form-item-extra` = (0,2,0)
+ *     (cssinjs 的哈希类是 :where() 包着,0 特异度)。
+ *   本条只写 `.ant-form-item-extra` = (0,1,0) → 压不住;
+ *   写成 `.ant-form-item .ant-form-item-extra` 也只是 (0,2,0) 平手,
+ *   而 antd 的 cssinjs 样式是运行时注入到 <head> 末尾的 → 后注入的胜出。
+ *   ⚠️ 也不能靠加一层 `.ant-form` 绕开:系统配置页的 Form 用了
+ *      component={false},不渲染 <form> 元素 → 没有 .ant-form 祖先,规则落空。
+ *   只能 !important 硬压。
+ *
+ * ⚠️ **`min-height: unset` 是有意为之,不是漏写**
+ *
+ *   antd 给 `.ant-form-item-extra` 留了 `min-height: 28px` ——
+ *   用意是"提示出现 / 消失时表单不跳版"(预留一条固定高度的空白带)。
+ *   字号压到 10px 之后,那条 28px 的空白带比提示文字本身高两倍多,
+ *   界面上就是"输入框底下莫名其妙空一大截"。
+ *   ⇒ 把预留高度取消,让提示贴着输入框走。
+ *
+ *   配套的 `margin-top: 6px`:预留高度取消之后,提示跟输入框之间就没有
+ *   任何间距了(antd 原本靠那条 28px 空白带撑开距离),所以显式给 6px。
+ *
+ *   代价(**要接受**):表单项的高度会随提示的出现 / 消失而变化 ——
+ *   antd 原本"不跳版"的性质没了(展开收起某个表单项时,下面的内容会挪一下)。
+ *   这是"提示不再撑出一大片空白"的必要代价。
+ * ========================================================================== */
+.ant-form-item-extra {
+  font-size: 10px !important;
+  min-height: unset !important;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+ * antd 内部写死 1px 的边框也压到 0.5px(2026-10-26)
+ *
+ * 背景: antd 组件的边框基本都读 lineWidth token(本项目 = 0.5),但有几处
+ *   是写死 1px 的 —— 跟周围 0.5px 的细线混在一起,那几根看着特别粗:
+ *     · Tree 的引导线(部门页 / 角色分配抽屉用了 showLine)
+ *       (antd/es/tree/style/index.js:228 / 241 / 295,画在 ::before / ::after 上)
+ *     · Collapse(borderless)的 item 下边框
+ *       (antd/es/collapse/style/index.js:211)—— 系统配置页已被
+ *       .config-collapse 那条规则覆盖,这里不重复管
+ *     · Layout.Sider / Typography 的 code|kbd —— 本项目没用到它们的默认样式
+ *
+ * ⚠️ Tree 的引导线画在**伪元素**上,普通选择器压不到,必须写 ::before/::after;
+ *   且必须 !important —— 本条跟 antd 那条
+ *   (`:where(.css-hash).ant-tree-show-line .ant-tree-indent-unit::before`)
+ *   同为 (0,2,0),同特异度时 antd 靠"后注入"赢,只能 !important 压。
+ *   border-width 只改粗细,不改 style / color:没设 solid 的那几边仍然不画线。
+ * ========================================================================== */
+.ant-tree .ant-tree-switcher-leaf-line::before,
+.ant-tree .ant-tree-switcher-leaf-line::after,
+.ant-tree-show-line .ant-tree-indent-unit::before {
+  border-width: 0.5px !important;
+}
+
+/* ==========================================================================
+ * 取消浏览器自动填充的浅蓝/灰色背景
+ *
+ * 场景: Chrome / Edge / Safari 在检测到 input 被密码管理器或
+ *       "记住我"自动填充时, 会强制给 input 加 !important 的浅色背景
+ *       (login 页 admin / 密码框那个浅蓝灰)。用户问"为什么有背景"——
+ *       因为这是浏览器行为, 不是 antd / 业务代码加的。
+ *
+ * 覆盖: -webkit-box-shadow inset 把"假背景"挡掉(30px > input 默认 padding)
+ *       -webkit-text-fill-color inherit 保留文字颜色
+ *       transition 5000s 是经典 trick: 让浏览器"以为"在过渡, 5000s 内
+ *       不会重新应用 autofill 背景
+ *
+ * 适用范围: 所有 input / textarea(全局生效, 不止 login)
+ *   - login / forgot-password 表单
+ *   - 系统配置 / 个人信息 / 修改密码 等编辑表单
+ *
+ * §2.8 #19 暗色: box-shadow 用 --app-surface-bg-strong(暗色下是 #262626),
+ * 否则会变成白底"光斑"穿透暗色表单
+ * ========================================================================== */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--app-surface-bg-strong) inset !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: inherit;
+}
+
+/* 深色模式: 自动填充 = 深底 + 白字(2026-11-03 用户确认)。
+ * ⚠️ 文字颜色必须**显式写白**,不能用 `inherit` —— Chrome 对 autofill 输入框
+ *   会强制自己的前景色,`inherit` 实测压不住(继承来的值也被浏览器改写),
+ *   结果黑字配深底直接隐形。
+ * 背景与浅色同用 var(--app-surface-bg-strong)(暗色下 = #262626,跟输入框常态一致)。
+ * 选择器多一层 `:root[data-theme='dark']` 祖先 → 特异度压过上面那条通用规则。 */
+:root[data-theme='dark'] input:-webkit-autofill,
+:root[data-theme='dark'] input:-webkit-autofill:hover,
+:root[data-theme='dark'] input:-webkit-autofill:focus,
+:root[data-theme='dark'] input:-webkit-autofill:active,
+:root[data-theme='dark'] textarea:-webkit-autofill,
+:root[data-theme='dark'] textarea:-webkit-autofill:hover,
+:root[data-theme='dark'] textarea:-webkit-autofill:focus,
+:root[data-theme='dark'] textarea:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--app-surface-bg-strong) inset !important;
+  -webkit-text-fill-color: #e8e8e8 !important;
+  caret-color: #e8e8e8;
+}
+
+/* ==========================================================================
+ * 个人中心:整页不出现竖向滚动条(2026-10-29 M113)
+ *
+ * 场景: 用户报"个人中心整个界面存在竖向滚动,内容看不全"。
+ *       根因是这一页**没有高度链** —— Row → Col → Card → Tabs → TabPane
+ *       每一层都是"内容撑开",于是内容多高,页面就多高。
+ *       「登录设备」页签里的历史登录记录表格以前还写死了一个 360px 的行区高度,
+ *       换个分辨率就对不上,行区不是太矮就是太高,把整页撑出滚动条。
+ *
+ * 处理: 给这一页补上 ManagementTable 那条同款的高度链:
+ *   根 div(height:100% / flex column)
+ *     → Row(flex:1 / min-height:0)
+ *       → Col(min-height:0)
+ *         → Card(maxHeight:100% / body flex:1 / min-height:0)
+ *           → Tabs(flex:1 / min-height:0)
+ *             → .ant-tabs-content-holder(flex:1 1 0% / overflow:hidden)
+ *               → .ant-tabs-content(height:100%)
+ *                 → .ant-tabs-tabpane(height:100%)
+ *
+ * ⚠️ **M113-c(2026-10-29):两张 Card 都用 `maxHeight:100%`(用户手改)**
+ *   · `height:100%` ⇒ 卡片被拉成整列高,内容不够时底下留一大片空白
+ *     (用户报"左卡片显示不对"就是它)
+ *   · `maxHeight:100%` ⇒ 卡片贴着内容高度;内容超过上限时才被截断,
+ *     而 **body 是被截断那个盒子的直接子元素** ⇒ body 自己滚,内容不会丢
+ *
+ * ⚠️⚠️ **具体尺寸由用户手调(2026-10-29 用户明确:"这个界面大小那些等下我手动改样式")**
+ *   ⇒ 这条 CSS 只负责**结构**(flex 链 / min-height / overflow 归属),
+ *     不负责"到底多高"。
+ *
+ * ⚠️ **之前那组"实测数字"是复制件上量出来的,已删**
+ *   之前写过"左卡 400px/102px、holder 368、底下 232px 被裁掉"这类数字,
+ *   那是**手搭的 flex 链复制件**(临时 HTML)的测量结果 —— 不是真实页面
+ *   (antd 的真 DOM + 布局壳层)。真页面上这条链的百分比高度能不能解析,
+ *   取决于壳层给不给**确定高度** —— 复制件给不出这个前提。
+ *   ⇒ 那组数字既证明不了"对"也证明不了"错",只是**看起来很精确**。
+ *   教训:**手搭的替身 ≠ 被测对象**,数字越精确越有欺骗性。
+ *
+ * ⚠️ 为什么 content-holder 要写 `flex: 1 1 0%`(而不是沿用 antd 的 `flex: auto`):
+ *   `flex: auto` = `flex: 1 1 auto`,基准尺寸 = **内容高度**,
+ *   而内容高度又是 `height:100%`(要回头看 holder 的高度)⇒ **自指**,
+ *   浏览器只能把百分比当 auto 处理,高度链断在这里。
+ *   基准尺寸改成 0 之后,holder 的高度**只由 flex 剩余空间决定**,与内容无关,
+ *   百分比才有确定的参照物。
+ *
+ * 选择器多一层类名(`.profile-page-tabs .ant-tabs-content-holder` = (0,2,0)),
+ *   antd 那条是 `.ant-tabs-content-holder:where(.css-hash)` = (0,1,0)
+ *   (cssinjs 的哈希类是 :where() 包着,0 特异度)→ 稳赢,不需要 !important。
+ * ========================================================================== */
+.profile-page-tabs .ant-tabs-content-holder {
+  flex: 1 1 0%;
+  overflow: hidden;
+}
+
+.profile-page-tabs .ant-tabs-content,
+.profile-page-tabs .ant-tabs-tabpane {
+  height: 100%;
+}
+
+/* ==========================================================================
+ * 头像上传触发器(M124)
+ *
+ * 用途:个人中心左卡片那张 80px 的大头像。
+ *   用户 2026-10-30 明确要求"不要另外弄一个按钮":
+ *   多一个「更换头像」按钮把这一块撑得很挤 ⇒ 改成
+ *     · 鼠标移上去 → 头像上浮出一层半透明遮罩 + 铅笔图标
+ *     · 点头像(整个区域)直接打开文件选择框
+ *
+ * ⚠️ **遮罩用 `opacity` 而不是 `display`** ——
+ *   `display: none` 会把元素连同它的点击事件一起从渲染树里摘掉;
+ *   这里要的是"盖住但不挡点击"(真正的点击目标是它下面的头像)。
+ * ⚠️ **`pointer-events: none`** —— 遮罩只是装饰。
+ * ⚠️ **遮罩的显隐用 React state 驱动(见 pages/profile/index.tsx)**,
+ *   不用 CSS `:hover` ——
+ *   可聚焦的那个元素是 antd `<Upload>` 的**外层**包裹 span(role=button),
+ *   它是本触发器的**祖先** ⇒ `.avatar-upload-trigger:hover` 只在鼠标悬停时命中,
+ *   键盘 Tab 过去时遮罩不出现(按键 Enter 仍能打开文件框,rc-upload 的 onKeyDown)。
+ *   用 state 才能让"正在上传"也复用同一层遮罩(显示转圈)。
+ * ========================================================================== */
+.avatar-upload-trigger {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.avatar-upload-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+/* 读屏用的文字:视觉上不可见,但要让"这个按钮是干什么的"说清楚 */
+.avatar-upload-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+ * 图标选择器下拉:多列网格(2026-11-02)
+ *
+ * 背景: 图标词表扩到 ~90 个之后,单列下拉要滚 90 行 ——
+ *       用户报「IconSelect 改成多列显示,否则太多上下滚动麻烦」。
+ *
+ * ⚠️ **网格容器是 `.rc-virtual-list-holder-inner`** ——
+ *   它是选项(.ant-select-item-option)的**直接父元素**:
+ *     .ant-select-dropdown
+ *       └ .rc-virtual-list
+ *           └ .rc-virtual-list-holder            ← max-height + overflow-y:auto(滚动在这)
+ *               └ .rc-virtual-list-holder-inner  ← **grid 容器**
+ *                   └ .ant-select-item-option
+ *
+ * ⚠️ **这里必须 !important** ——
+ *   holder-inner 的 display 是**行内样式**(rc-virtual-list/es/Filler.js 的
+ *   innerStyle = { display:'flex', flexDirection:'column' }),
+ *   行内样式压得过任何样式表(同特异度也不行)⇒ 只能 !important 硬压。
+ *   本文件里同类"必须 !important"的先例见上面各节(antd 那条 1px 边框)。
+ *
+ * ⚠️ **下面覆盖 antd 的那几条不用 !important** ——
+ *   antd 的选项样式是 `:where(.css-hash).ant-select-dropdown .ant-select-item-option`
+ *   = (0,2,0);我们那条多一层类名 = (0,3,0) ⇒ 稳赢。
+ *   (antd 运行时注入的 <style> 在 <link> 之后,同特异度是 antd 赢 ——
+ *    所以同特异度不能靠"后注入",必须多一层类名。)
+ *
+ * 磁贴: 图标在上、文字在下,一格一个 ⇒ 横向 6~7 列,90 个图标 13 行看完。
+ * ========================================================================== */
+.icon-select-dropdown .rc-virtual-list-holder-inner {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 4px;
+  padding: 8px;
+}
+
+/* 选项格子:antd 默认是"一行一个"的列表语义(padding 上下 4px 左右 12px),
+   磁贴要方方正正一格 ⇒ 横向 padding 归零,高度交给内容 */
+.icon-select-dropdown .ant-select-item-option.icon-select-option {
+  height: auto;
+  min-height: 56px;
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--app-radius-sm);
+}
+
+/* 选中标记(对勾)挪到格子右上角 —— 否则它会把磁贴挤歪 */
+.icon-select-dropdown .ant-select-item-option-state {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+.icon-select-dropdown .ant-select-item-option-state .anticon {
+  font-size: 10px;
+}
+
+/* 磁贴本体(这是我们自己的元素,antd 不碰它 ⇒ 随便写) */
+.icon-select-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 4px;
+  /* ⚠️ 父级 .ant-select-item-option-content 是 nowrap + 省略号,
+     磁贴要能折行 ⇒ 这里改回 normal(white-space 是继承属性) */
+  white-space: normal;
+}
+
+/* ⚠️ 图标颜色**不写死** —— 继承选项的 color,
+ *   选中那一格的图标才会跟着 antd 的选中色(primary)一起变。 */
+.icon-select-tile-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.icon-select-tile-label {
+  font-size: var(--app-font-size-md);
+  line-height: 1.3;
+  text-align: center;
+  word-break: keep-all;
+}
+
+/* 折叠态(选中后显示在输入框里的那一个) */
+.icon-select-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-select-value-icon {
+  font-size: 14px;
+  line-height: 1;
+}
