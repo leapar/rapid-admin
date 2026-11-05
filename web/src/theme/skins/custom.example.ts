@@ -56,6 +56,12 @@ const skin: SkinDefinition = {
   comp: {
     /* Layout(顶栏毛玻璃 / 侧栏 / 画布 / 触发器) */
     layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
+    /* Header 沉浸式配套 —— 想要沉浸实底(如参考 gov/museum)时:
+       layoutHeaderBg 换实色,下面四个键换浅色文字 */
+    headerTextColor: '#261d35',
+    headerTextSecondaryColor: '#54456e',
+    headerTextTertiaryColor: '#9c90b1',
+    headerBorderColor: 'rgba(38, 29, 53, 0.06)',
     siderBg: '#ffffff',
     bodyBg: '#f5f3f9',
     triggerColor: '#261d35',

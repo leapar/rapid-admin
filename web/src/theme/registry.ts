@@ -39,7 +39,7 @@ export function registerSkin(skin: SkinDefinition): SkinDefinition {
 }
 
 /** 取皮肤;未知 id 显式降级到默认(warn 不报错 —— theming.md §6 容错降级) */
-export function getSkin(id: string | undefined): SkinDefinition {
+export function getSkin(id?: string): SkinDefinition {
   const resolved = (id && LEGACY_ALIASES[id]) || id
   if (resolved && SKINS[resolved]) return SKINS[resolved]
   if (id && id !== DEFAULT_SKIN_ID) {

@@ -3,8 +3,9 @@
  *
  * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
  * 与基准键集一致(漏一个色调即红);新增 token 键时五套皮肤要同步补。
- * 颜色取自 2026-11-05 的一轮 antd seed → map 理念重调:
- * 中性面同一色温、品牌浅底同系衍生 —— 改单个色时保持同明度档位即可。
+ *  * 取值策略:**纯灰中性面** —— 画布/文字/边框不掺品牌橙的色相,"白色"
+ *  * 的 identity 就是干净的中性底;品牌橙只出现在强调位(按钮/链接/选中态)。
+ *  * 顶栏保持白玻璃(78% 白 + blur),文字常规深灰。
  */
 import type { SkinDefinition } from '../types'
 
@@ -48,11 +49,16 @@ const skin: SkinDefinition = {
   },
 
   comp: {
-    /* Layout(顶栏毛玻璃 / 侧栏 / 画布 / 触发器) */
+    /* Layout(顶栏 / 侧栏 / 画布 / 触发器) */
     layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
     siderBg: '#ffffff',
     bodyBg: '#f6f6f6',
     triggerColor: '#292929',
+    /* Header 沉浸式配套(顶栏文字 / 次级 / 三级 / 底边线)—— Header.tsx 消费 */
+    headerTextColor: '#292929',
+    headerTextSecondaryColor: '#595959',
+    headerTextTertiaryColor: '#a1a1a1',
+    headerBorderColor: 'rgba(41, 41, 41, 0.06)',
     /* Menu(侧边菜单) */
     menuItemBg: '#ffffff',
     menuSelectedBg: '#ffeadb',

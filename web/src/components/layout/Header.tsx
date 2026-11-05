@@ -1,13 +1,16 @@
 /**
- * Header —— 顶部栏 (白系, 毛玻璃)
+ * Header —— 顶部栏(皮肤沉浸式)
  *
- * 配色:
- *   - 背景: rgba(255,255,255,0.78) + backdrop-filter: blur(12px)
- *   - 文字: var(--app-text) #1f2937
- *   - 阴影: var(--app-shadow-l1) 营造"漂浮"分离感
- *   - 底边: 0.5px 浅灰(全站细线刻度)
+ * 配色全部来自皮肤对象(getSkin):
+ *   - 背景: comp.layoutHeaderBg —— 浅玻璃(white/black:78% 透 + blur)或
+ *     沉浸实底(gov 国旗红 / museum 深棕 / tech 深蓝)
+ *   - 文字: comp.headerTextColor 系,**内联 remap 到 --app-text* 变量** ——
+ *     子组件(品牌名/用户名/铃铛/身份切换)都消费这些变量,自动跟随顶栏
+ *     深浅;antd text Button 不吃 CSS 变量继承,由 global.css 的
+ *     `.ant-layout-header .ant-btn-text` 规则统一接管
+ *   - 底边: comp.headerBorderColor
  *
- * 退化: 不支持 backdrop-filter 的浏览器自动 fallback 到不透明白底 (CSS 兼容写法)
+ * 退化: 不支持 backdrop-filter 的浏览器自动 fallback 到不透明底 (CSS 兼容写法)
  */
 // ⚠️ import type 而不是 import —— React 在本文件里只当类型用(React.FC /
 //   React.CSSProperties),实值导入会被 consistent-type-imports 判成 error。
@@ -29,6 +32,7 @@ import { useUIStore } from '@/stores/ui'
 import { usePublicConfigStore } from '@/stores/publicConfig'
 import { useAuth } from '@/hooks/useAuth'
 import { useI18n } from '@/locales'
+import { getSkin } from '@/theme/registry'
 import { UserAvatar } from '@/components/common/UserAvatar'
 import { logout as logoutApi } from '@/api/auth'
 import { getBaseURL } from '@/api/baseURL'
@@ -113,7 +117,10 @@ export const Header: React.FC = () => {
     },
   }
 
-  // 头部图标按钮统一样式 (深色, 圆形, hover 浅橙)
+  // 皮肤 comp(2026-11-05 沉浸式顶栏):背景/文字/底边单一来源
+  const headerComp = getSkin(useUIStore((s) => s.skin)).comp
+
+  // 头部图标按钮统一样式 (跟随顶栏文字色, 见文件头 —— 沉浸式顶栏下是浅色)
   const iconBtnStyle: React.CSSProperties = {
     color: 'var(--app-text-secondary)',
   }
@@ -121,9 +128,16 @@ export const Header: React.FC = () => {
   return (
     <AntHeader
       style={{
-        // §2.8 #19: 顶栏背景走 CSS 变量, light 透明 + 暗色半透 slate
-        // (light 用 78% 白, dark 用 78% 深 slate, 都用 --app-surface-bg-strong 做基色)
-        background: 'color-mix(in srgb, var(--app-surface-bg-strong) 78%, transparent)',
+        // 顶栏背景/文字/底边全部来自皮肤对象(沉浸式:gov 红实底 / museum 深棕 /
+        // tech 深蓝;white/black 白/黑玻璃)—— 单一来源是 skin.comp
+        background: headerComp.layoutHeaderBg,
+        // ⚠️ 内联 remap --app-text* 到顶栏专用色:子组件(品牌名/用户名/铃铛/
+        //   身份切换)都消费这些变量,深底顶栏自动切换浅色文字
+        ...({
+          '--app-text': headerComp.headerTextColor,
+          '--app-text-secondary': headerComp.headerTextSecondaryColor,
+          '--app-text-tertiary': headerComp.headerTextTertiaryColor,
+        } as React.CSSProperties),
         backdropFilter: 'saturate(180%) blur(12px)',
         WebkitBackdropFilter: 'saturate(180%) blur(12px)',
         padding: '0 20px',
@@ -132,7 +146,7 @@ export const Header: React.FC = () => {
         justifyContent: 'space-between',
         height: 56,
         lineHeight: '56px',
-        borderBottom: '0.5px solid var(--app-split)',
+        borderBottom: `0.5px solid ${headerComp.headerBorderColor}`,
         // L1 阴影: 营造与内容区的漂浮分离
         boxShadow: 'var(--app-shadow-l1)',
         position: 'sticky',

@@ -26,7 +26,7 @@
  */
 import { useMemo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Row, Col, Card, Statistic, Empty, Space, Typography, Progress, Button } from 'antd'
+import { Row, Col, Card, Statistic, Empty, Space, Typography, Progress, Button, theme } from 'antd'
 import {
   FolderOutlined,
   FileOutlined,
@@ -110,6 +110,8 @@ const HEATMAP_DAY_KEYS = [
 const Dashboard: FC = () => {
   const { t } = useI18n()
   const { has } = usePermission()
+  // 环形进度线色跟随皮肤品牌主色(2026-11-05 皮肤沉浸式,原为写死 antd 蓝)
+  const { token: { colorPrimary } } = theme.useToken()
 
   const {
     data: overview,
@@ -376,7 +378,7 @@ const Dashboard: FC = () => {
                           type="circle"
                           percent={Math.round(metrics.disk_percent)}
                           size={110}
-                          strokeColor="#1677ff"
+                          strokeColor={colorPrimary}
                         />
                       </div>
                     </Card>
@@ -399,7 +401,7 @@ const Dashboard: FC = () => {
                           type="circle"
                           percent={Math.round(metrics.mem_percent)}
                           size={110}
-                          strokeColor="#1677ff"
+                          strokeColor={colorPrimary}
                         />
                       </div>
                     </Card>
@@ -423,7 +425,7 @@ const Dashboard: FC = () => {
                             <Progress
                               percent={Math.round(d.percent)}
                               size="small"
-                              strokeColor="#1677ff"
+                              strokeColor={colorPrimary}
                               style={{ flex: 1, margin: 0 }}
                             />
                             <Text type="secondary" style={{ flexShrink: 0, fontSize: 12 }}>
@@ -452,7 +454,7 @@ const Dashboard: FC = () => {
                               <Progress
                                 percent={Math.round(p)}
                                 size="small"
-                                strokeColor="#1677ff"
+                                strokeColor={colorPrimary}
                                 style={{ flex: 1, margin: 0 }}
                               />
                             </div>

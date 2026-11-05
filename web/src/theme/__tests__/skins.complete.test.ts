@@ -125,9 +125,9 @@ describe('皮肤字段全集(白/黑基准)', () => {
 })
 
 describe('键数守卫(types 与皮肤文件无漂移)', () => {
-  it('palette 25 键 / comp 29 键 / brand 3 键', () => {
+  it('palette 25 键 / comp 33 键 / brand 3 键', () => {
     expect(paletteKeys).toHaveLength(25)
-    expect(compKeys).toHaveLength(29)
+    expect(compKeys).toHaveLength(33)
     expect(brandKeys).toEqual(['active', 'hover', 'primary'])
   })
 })

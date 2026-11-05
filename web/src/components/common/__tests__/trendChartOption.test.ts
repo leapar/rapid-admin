@@ -20,6 +20,7 @@
  */
 import { describe, it, expect } from 'vitest'
 import { buildTrendOption, formatAxisLabel, seriesColor } from '../trendChartOption'
+import { getSkin } from '@/theme/registry'
 
 /** echarts 的 option 类型太宽,测试里只看关心的几个字段 */
 interface Opt {
@@ -37,10 +38,10 @@ describe('趋势图 option 构造', () => {
     expect(formatAxisLabel('abc')).toBe('abc')
   })
 
-  it('序列颜色按顺序取,超过 4 个就循环', () => {
-    expect(seriesColor(0)).toBe('#1677ff')
+  it('序列颜色:0 号 = 皮肤品牌主色,其余按色板循环', () => {
+    expect(seriesColor(0)).toBe(getSkin().brand.primary)
     expect(seriesColor(1)).toBe('#52c41a')
-    expect(seriesColor(4)).toBe('#1677ff')
+    expect(seriesColor(4)).toBe(getSkin().brand.primary)
     // 显式指定优先
     expect(seriesColor(0, '#000000')).toBe('#000000')
   })

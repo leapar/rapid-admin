@@ -3,8 +3,8 @@
  *
  * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
  * 与基准键集一致(漏一个色调即红);新增 token 键时五套皮肤要同步补。
- * 颜色取自 2026-11-05 的一轮 antd seed → map 理念重调:
- * 中性面同一色温、品牌浅底同系衍生 —— 改单个色时保持同明度档位即可。
+ *  * 取值策略:**整体科技蓝(沉浸式)** —— 顶栏深蓝实底 + 白字,侧栏/画布/
+ *  * 表头/卡片带冷蓝晕(226° 相),菜单选中蓝浅底;文字梯度冷藏青。
  */
 import type { SkinDefinition } from '../types'
 
@@ -17,10 +17,10 @@ const skin: SkinDefinition = {
 
   palette: {
     /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
-    colorBgBase: '#f9f9fb',
-    colorBgLayout: '#f2f4fa',
-    colorBgContainer: '#ffffff',
-    colorBgElevated: '#ffffff',
+    colorBgBase: '#fafbfc',
+    colorBgLayout: '#edeff8',
+    colorBgContainer: '#fbfcfe',
+    colorBgElevated: '#fbfcfe',
     colorBgSpotlight: '#172340',
     colorBgMask: 'rgba(23, 35, 64, 0.45)',
     /* 文字梯度(主 → 四级 + 描述 + 占位) */
@@ -31,8 +31,8 @@ const skin: SkinDefinition = {
     colorTextDescription: '#4c5e8b',
     colorTextPlaceholder: 'rgba(24, 34, 58, 0.35)',
     /* 边框 / 分割线 */
-    colorBorder: '#e2e7f3',
-    colorBorderSecondary: '#e9edf6',
+    colorBorder: '#d9deed',
+    colorBorderSecondary: '#e6e9f2',
     colorSplit: 'rgba(24, 34, 58, 0.06)',
     /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#2F6BFF',
@@ -48,13 +48,18 @@ const skin: SkinDefinition = {
   },
 
   comp: {
-    /* Layout(顶栏毛玻璃 / 侧栏 / 画布 / 触发器) */
-    layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
-    siderBg: '#ffffff',
-    bodyBg: '#f2f4fa',
-    triggerColor: '#18223a',
+    /* Layout(顶栏 / 侧栏 / 画布 / 触发器) */
+    layoutHeaderBg: '#192f76',
+    siderBg: '#f4f6fb',
+    bodyBg: '#edeff8',
+    triggerColor: '#ffffff',
+    /* Header 沉浸式配套(顶栏文字 / 次级 / 三级 / 底边线)—— Header.tsx 消费 */
+    headerTextColor: '#ffffff',
+    headerTextSecondaryColor: 'rgba(255, 255, 255, 0.78)',
+    headerTextTertiaryColor: 'rgba(255, 255, 255, 0.55)',
+    headerBorderColor: 'rgba(255, 255, 255, 0.14)',
     /* Menu(侧边菜单) */
-    menuItemBg: '#ffffff',
+    menuItemBg: 'transparent',
     menuSelectedBg: '#dbe6ff',
     menuSelectedColor: '#2F6BFF',
     menuHoverBg: '#ebf0ff',
@@ -63,10 +68,10 @@ const skin: SkinDefinition = {
     menuDarkItemSelectedBg: 'rgba(47, 107, 255, 0.16)',
     menuDarkItemSelectedColor: '#c2d3ff',
     /* Table(表头 / 边框 / 行 hover / 行选中) */
-    tableHeaderBg: '#f2f4fa',
+    tableHeaderBg: '#eff1f8',
     tableHeaderColor: '#3b4d77',
-    tableBorderColor: '#e2e7f3',
-    rowHoverBg: '#f6f7fb',
+    tableBorderColor: '#d9deed',
+    rowHoverBg: '#f3f4f9',
     rowSelectedBg: '#dbe6ff',
     rowSelectedHoverBg: '#d1deff',
     /* Button / Input(阴影 / 聚焦光圈) */
@@ -74,7 +79,7 @@ const skin: SkinDefinition = {
     defaultShadow: '0 1px 2px rgba(24, 34, 58, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(47, 107, 255, 0.18)',
     /* Pagination / DatePicker */
-    paginationItemBg: '#ffffff',
+    paginationItemBg: '#fbfcfe',
     dateCellHoverBg: '#ebf0ff',
     dateCellRangeBg: '#dbe6ff',
     /* Breadcrumb / Tabs / Select */

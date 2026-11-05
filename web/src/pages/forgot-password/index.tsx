@@ -249,7 +249,7 @@ const ForgotPassword: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #1677ff 0%, #69b1ff 100%)',
+    background: 'linear-gradient(135deg, var(--app-primary) 0%, var(--app-primary-hover) 100%)',
     display: 'flex',
     alignItems: 'center',
     padding: '24px 16px',

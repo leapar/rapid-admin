@@ -44,11 +44,20 @@ export interface PaletteTokens {
 
 /** 组件级 token 的皮肤相关子集 —— LangRoot `components` 段 */
 export interface CompTokens {
-  /* Layout(header 毛玻璃 / 侧栏 / 画布) */
+  /* Layout(header 毛玻璃或沉浸实底 / 侧栏 / 画布) */
   layoutHeaderBg: string
   siderBg: string
   bodyBg: string
   triggerColor: string
+  /**
+   * Header 沉浸式配套 —— Header.tsx 消费(内联 remap 到 --app-text* 变量)。
+   * 浅玻璃顶栏(white/black)写常规深字;实底顶栏(gov/museum/tech)写
+   * 浅色文字,保证深底上的对比度。
+   */
+  headerTextColor: string
+  headerTextSecondaryColor: string
+  headerTextTertiaryColor: string
+  headerBorderColor: string
   /* Menu */
   menuItemBg: string
   menuSelectedBg: string

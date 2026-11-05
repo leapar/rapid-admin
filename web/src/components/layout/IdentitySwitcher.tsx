@@ -177,7 +177,7 @@ export const IdentitySwitcher: React.FC = () => {
   const trigger = (
     <a onClick={(e) => e.preventDefault()} style={{ color: 'inherit' }}>
       <Space>
-        <Avatar size="small" style={{ backgroundColor: '#1677ff' }}>
+        <Avatar size="small" style={{ backgroundColor: 'var(--app-primary)' }}>
           {/* ⚠️ M113:`nickname?.[0]` 是 **UTF-16 码元**下标,不是码点下标 ——
               emoji / 𠮷 这类**代理对**字符会被切成半个代理对(渲染成豆腐块);
               中文 / 拉丁文在 BMP 里,两种切法结果一样。

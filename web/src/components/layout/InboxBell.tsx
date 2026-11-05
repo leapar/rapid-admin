@@ -213,7 +213,7 @@ export const InboxBell: React.FC = () => {
                 style={{ cursor: 'pointer', padding: '8px 4px', opacity: unread ? 1 : 0.6 }}
               >
                 <List.Item.Meta
-                  avatar={<NotificationOutlined style={{ color: unread ? '#1677ff' : 'var(--app-text-tertiary)' }} />}
+                  avatar={<NotificationOutlined style={{ color: unread ? 'var(--app-primary)' : 'var(--app-text-tertiary)' }} />}
                   title={
                     <Space size={4}>
                       {msg.title && (

@@ -23,6 +23,9 @@
  *   图画出来了,只是数字对不上。所以 option 的形状必须有单测钉住。
  */
 import type { EChartsOption } from 'echarts'
+// getSkin 是模块级查表(纯对象),图表构造期调用无副作用;
+// 0 号序列颜色跟随皮肤品牌主色(2026-11-05 皮肤沉浸式)
+import { getSkin } from '@/theme/registry'
 
 /** 一个数据序列(一条折线) */
 export interface TrendSeries {
@@ -44,8 +47,8 @@ export interface TrendOptionInput {
   showSymbol?: boolean
 }
 
-/** 默认配色(与 antd 主色同族) */
-export const DEFAULT_SERIES_COLORS = ['#1677ff', '#52c41a', '#fa8c16', '#eb2f96'] as const
+/** 默认配色(0 号序列 = 皮肤品牌主色,其余 antd 色板同族) */
+export const DEFAULT_SERIES_COLORS = ['#52c41a', '#fa8c16', '#eb2f96'] as const
 
 /**
  * X 轴标签:`YYYY-MM-DD` → `MM-DD`
@@ -57,10 +60,13 @@ export function formatAxisLabel(date: string): string {
   return date.length >= 10 ? date.slice(5) : date
 }
 
-/** 取第 i 个序列的颜色 */
+/** 取第 i 个序列的颜色(0 号 = 皮肤品牌主色,跟随换肤;周期 = 主色 + 色板长) */
 export function seriesColor(index: number, override?: string): string {
   if (override) return override
-  return DEFAULT_SERIES_COLORS[index % DEFAULT_SERIES_COLORS.length] ?? '#1677ff'
+  const cycle = DEFAULT_SERIES_COLORS.length + 1
+  const i = ((index % cycle) + cycle) % cycle
+  if (i === 0) return getSkin().brand.primary
+  return DEFAULT_SERIES_COLORS[i - 1] ?? getSkin().brand.primary
 }
 
 /**

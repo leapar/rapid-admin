@@ -3,9 +3,9 @@
  *
  * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
  * 与基准键集一致(漏一个色调即红);新增 token 键时五套皮肤要同步补。
- * 取值策略:**整面暖纸** —— 侧栏/画布/表头都是奶油米色(棕金相 29°),
- * 文字暖棕、品牌浅底同系衍生,整个界面一眼"棕金";大面积表面上色是
- * 2026-11-05 用户实测定的方向(只在强调位上色会跟政务红撞观感)。
+ *  * 取值策略:**整体古风米棕(沉浸式)** —— 顶栏深棕实底 + 米色文字,侧栏/
+ *  * 画布/表头/卡片都是暖纸米色(29° 相),菜单选中棕金浅底,文字梯度暖棕
+ *  * —— 一眼"古籍绢帛"。顶栏文字为米色(headerTextColor 系,Header.tsx 消费)。
  */
 import type { SkinDefinition } from '../types'
 
@@ -17,67 +17,72 @@ const skin: SkinDefinition = {
   brand: { primary: '#8C5A2B', hover: '#af7136', active: '#694320' },
 
   palette: {
-    /* 画布(布局底 / 容器 / 浮层 / 遮罩)—— 暖纸米色 */
+    /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
     colorBgBase: '#fcfbfa',
-    colorBgLayout: '#f4f0eb',
-    colorBgContainer: '#ffffff',
-    colorBgElevated: '#ffffff',
+    colorBgLayout: '#f2e9e1',
+    colorBgContainer: '#fdfbf9',
+    colorBgElevated: '#fdfbf9',
     colorBgSpotlight: '#3b2b1b',
     colorBgMask: 'rgba(59, 43, 27, 0.45)',
-    /* 文字梯度 —— 暖棕 */
+    /* 文字梯度(主 → 四级 + 描述 + 占位) */
     colorText: '#36281c',
     colorTextSecondary: '#705942',
-    colorTextTertiary: '#b3a08f',
-    colorTextQuaternary: '#d0c7be',
+    colorTextTertiary: '#a58c74',
+    colorTextQuaternary: '#cbbca9',
     colorTextDescription: '#836a53',
     colorTextPlaceholder: 'rgba(54, 40, 28, 0.35)',
-    /* 边框 / 分割线 —— 暖米 */
-    colorBorder: '#e8e0d9',
-    colorBorderSecondary: '#efeae6',
+    /* 边框 / 分割线 */
+    colorBorder: '#e4dbd2',
+    colorBorderSecondary: '#ebe5e0',
     colorSplit: 'rgba(54, 40, 28, 0.06)',
-    /* 品牌强调(文字 / 浅底 / 边框 / 链接)—— 棕金系 */
+    /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#8C5A2B',
     primaryTextHover: '#af7136',
     primaryTextActive: '#694320',
-    colorPrimaryBg: '#f9f2eb',
-    colorPrimaryBgHover: '#f4e8dc',
-    colorPrimaryBorder: '#edd8c4',
-    colorPrimaryBorderHover: '#e1be9d',
+    colorPrimaryBg: '#f7efe4',
+    colorPrimaryBgHover: '#f1e4d3',
+    colorPrimaryBorder: '#e9d5bc',
+    colorPrimaryBorderHover: '#dbba92',
     colorLink: '#8C5A2B',
     colorLinkHover: '#af7136',
     colorLinkActive: '#694320',
   },
 
   comp: {
-    /* Layout(顶栏暖玻璃 / 暖米侧栏 / 暖纸画布) */
-    layoutHeaderBg: 'rgba(251, 249, 247, 0.78)',
-    siderBg: '#fbf9f7',
-    bodyBg: '#f4f0eb',
-    triggerColor: '#36281c',
-    /* Menu(选中/hover 走棕金浅底;透明底让暖纸侧栏透出来) */
+    /* Layout(顶栏 / 侧栏 / 画布 / 触发器) */
+    layoutHeaderBg: '#5d4128',
+    siderBg: '#f7f2ee',
+    bodyBg: '#f2e9e1',
+    triggerColor: '#f4eae1',
+    /* Header 沉浸式配套(顶栏文字 / 次级 / 三级 / 底边线)—— Header.tsx 消费 */
+    headerTextColor: '#f4eae1',
+    headerTextSecondaryColor: 'rgba(244, 234, 225, 0.75)',
+    headerTextTertiaryColor: 'rgba(244, 234, 225, 0.5)',
+    headerBorderColor: 'rgba(255, 255, 255, 0.12)',
+    /* Menu(侧边菜单) */
     menuItemBg: 'transparent',
-    menuSelectedBg: '#f1e5da',
+    menuSelectedBg: '#eee0d3',
     menuSelectedColor: '#8C5A2B',
-    menuHoverBg: '#f7f1eb',
+    menuHoverBg: '#f4ede6',
     menuHoverColor: '#8C5A2B',
     menuColor: '#705942',
     menuDarkItemSelectedBg: 'rgba(140, 90, 43, 0.16)',
     menuDarkItemSelectedColor: '#d6a77a',
-    /* Table(暖米表头 / 行选中同菜单浅底) */
-    tableHeaderBg: '#f4f0eb',
+    /* Table(表头 / 边框 / 行 hover / 行选中) */
+    tableHeaderBg: '#f3ede7',
     tableHeaderColor: '#705942',
-    tableBorderColor: '#e8e0d9',
-    rowHoverBg: '#f7f5f2',
-    rowSelectedBg: '#f1e5da',
-    rowSelectedHoverBg: '#ebdbcb',
-    /* Button / Input(阴影暖棕 / 聚焦光圈棕金) */
+    tableBorderColor: '#e4dbd2',
+    rowHoverBg: '#f6f3f1',
+    rowSelectedBg: '#eee0d3',
+    rowSelectedHoverBg: '#ead8c8',
+    /* Button / Input(阴影 / 聚焦光圈) */
     primaryShadow: '0 1px 2px rgba(54, 40, 28, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
     defaultShadow: '0 1px 2px rgba(54, 40, 28, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(140, 90, 43, 0.18)',
     /* Pagination / DatePicker */
-    paginationItemBg: '#ffffff',
-    dateCellHoverBg: '#f7f1eb',
-    dateCellRangeBg: '#f1e5da',
+    paginationItemBg: '#fdfbf9',
+    dateCellHoverBg: '#f4ede6',
+    dateCellRangeBg: '#eee0d3',
     /* Breadcrumb / Tabs / Select */
     breadcrumbItemColor: 'rgba(54, 40, 28, 0.65)',
     breadcrumbLastColor: '#36281c',
@@ -91,10 +96,10 @@ const skin: SkinDefinition = {
     '--app-primary': '#8C5A2B',
     '--app-primary-hover': '#af7136',
     '--app-primary-active': '#694320',
-    '--app-primary-bg': '#f9f2eb',
-    '--app-primary-bg-hover': '#f4e8dc',
-    '--app-primary-border': '#edd8c4',
-    '--app-primary-border-hover': '#e1be9d',
+    '--app-primary-bg': '#f7efe4',
+    '--app-primary-bg-hover': '#f1e4d3',
+    '--app-primary-border': '#e9d5bc',
+    '--app-primary-border-hover': '#dbba92',
   },
 }
 

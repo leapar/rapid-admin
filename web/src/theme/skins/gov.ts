@@ -3,10 +3,10 @@
  *
  * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
  * 与基准键集一致(漏一个色调即红);新增 token 键时五套皮肤要同步补。
- * 取值策略:**红调氛围面** —— 侧栏/画布/表头带浅红晕(359° 相),文字
- * 保持纯灰(掺红相的文字会发棕,2026-11-05 实测踩过),红色再以强调位
- * 收口(按钮/链接/菜单选中/表格选中/聚焦光圈)。大面积红晕 + 纯灰文字
- * 既"一眼红主题",又不与文博棕金的暖纸底混淆。
+ *  * 取值策略:**整体中国红(沉浸式)** —— 顶栏国旗红实底 + 白字,侧栏/画布/
+ *  * 表头/卡片带浅红晕(359° 相),菜单选中/表格选中红浅底收口。文字保持
+ *  * 纯灰(掺红相的文字会发棕,2026-11-05 实测踩过);顶栏文字为白色
+ *  * (headerTextColor 系,Header.tsx 消费)。
  */
 import type { SkinDefinition } from '../types'
 
@@ -18,25 +18,25 @@ const skin: SkinDefinition = {
   brand: { primary: '#C7000B', hover: '#f5000e', active: '#990008' },
 
   palette: {
-    /* 画布(布局底 / 容器 / 浮层 / 遮罩)—— 浅红晕 */
+    /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
     colorBgBase: '#fcfafa',
-    colorBgLayout: '#f8f1f1',
-    colorBgContainer: '#ffffff',
-    colorBgElevated: '#ffffff',
+    colorBgLayout: '#f7eeee',
+    colorBgContainer: '#fdfcfc',
+    colorBgElevated: '#fdfcfc',
     colorBgSpotlight: '#2b2b2b',
     colorBgMask: 'rgba(43, 43, 43, 0.45)',
-    /* 文字梯度 —— 纯灰(不掺红相,防发棕) */
+    /* 文字梯度(主 → 四级 + 描述 + 占位) */
     colorText: '#292929',
     colorTextSecondary: '#595959',
     colorTextTertiary: '#a1a1a1',
     colorTextQuaternary: '#c7c7c7',
     colorTextDescription: '#6b6b6b',
     colorTextPlaceholder: 'rgba(41, 41, 41, 0.35)',
-    /* 边框 / 分割线 —— 浅红晕 */
-    colorBorder: '#ecdfdf',
-    colorBorderSecondary: '#f1eaea',
+    /* 边框 / 分割线 */
+    colorBorder: '#eadcdc',
+    colorBorderSecondary: '#f0e8e8',
     colorSplit: 'rgba(41, 41, 41, 0.06)',
-    /* 品牌强调(文字 / 浅底 / 边框 / 链接)—— 国旗红系 */
+    /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#C7000B',
     primaryTextHover: '#f5000e',
     primaryTextActive: '#990008',
@@ -50,35 +50,40 @@ const skin: SkinDefinition = {
   },
 
   comp: {
-    /* Layout(顶栏红晕玻璃 / 浅红侧栏 / 红晕画布) */
-    layoutHeaderBg: 'rgba(251, 247, 247, 0.78)',
-    siderBg: '#fbf7f7',
-    bodyBg: '#f8f1f1',
-    triggerColor: '#292929',
-    /* Menu(选中/hover 走红浅底;透明底让红晕侧栏透出来) */
+    /* Layout(顶栏 / 侧栏 / 画布 / 触发器) */
+    layoutHeaderBg: '#C7000B',
+    siderBg: '#f9f3f3',
+    bodyBg: '#f7eeee',
+    triggerColor: '#ffffff',
+    /* Header 沉浸式配套(顶栏文字 / 次级 / 三级 / 底边线)—— Header.tsx 消费 */
+    headerTextColor: '#ffffff',
+    headerTextSecondaryColor: 'rgba(255, 255, 255, 0.78)',
+    headerTextTertiaryColor: 'rgba(255, 255, 255, 0.55)',
+    headerBorderColor: 'rgba(255, 255, 255, 0.14)',
+    /* Menu(侧边菜单) */
     menuItemBg: 'transparent',
-    menuSelectedBg: '#fcdede',
+    menuSelectedBg: '#fad6d6',
     menuSelectedColor: '#C7000B',
-    menuHoverBg: '#fbefef',
+    menuHoverBg: '#f9e9ea',
     menuHoverColor: '#C7000B',
     menuColor: '#595959',
     menuDarkItemSelectedBg: 'rgba(199, 0, 11, 0.16)',
     menuDarkItemSelectedColor: '#ff616a',
-    /* Table(红晕表头 / 行选中同菜单浅底) */
-    tableHeaderBg: '#f7f0f0',
+    /* Table(表头 / 边框 / 行 hover / 行选中) */
+    tableHeaderBg: '#f6eeef',
     tableHeaderColor: '#595959',
-    tableBorderColor: '#ecdfdf',
-    rowHoverBg: '#f9f5f6',
-    rowSelectedBg: '#fcdede',
-    rowSelectedHoverBg: '#ffd1d4',
-    /* Button / Input(阴影纯灰 / 聚焦光圈红) */
+    tableBorderColor: '#eadcdc',
+    rowHoverBg: '#f8f4f4',
+    rowSelectedBg: '#fad6d6',
+    rowSelectedHoverBg: '#f6cbcc',
+    /* Button / Input(阴影 / 聚焦光圈) */
     primaryShadow: '0 1px 2px rgba(41, 41, 41, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
     defaultShadow: '0 1px 2px rgba(41, 41, 41, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(199, 0, 11, 0.18)',
     /* Pagination / DatePicker */
-    paginationItemBg: '#ffffff',
-    dateCellHoverBg: '#fbefef',
-    dateCellRangeBg: '#fcdede',
+    paginationItemBg: '#fdfcfc',
+    dateCellHoverBg: '#f9e9ea',
+    dateCellRangeBg: '#fad6d6',
     /* Breadcrumb / Tabs / Select */
     breadcrumbItemColor: 'rgba(41, 41, 41, 0.65)',
     breadcrumbLastColor: '#292929',

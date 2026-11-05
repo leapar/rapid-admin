@@ -788,3 +788,39 @@ textarea:-webkit-autofill:active {
   font-size: 14px;
   line-height: 1;
 }
+
+/* ============================================================
+ * 顶栏按钮文字色 —— 皮肤沉浸式顶栏(2026-11-05)
+ *
+ * Header.tsx 在 .ant-layout-header 上内联 --app-text* remap 到皮肤的
+ * headerTextColor 系;但 antd text Button 的颜色是组件 token(colorText),
+ * 不吃 CSS 变量继承 —— 沉浸式深底顶栏(政务红/文博棕金/科技蓝)下
+ * 默认深字会看不清,这里统一接管(含 hover:白系顶栏 hover 本来就是
+ * 品牌色,深底上改用降透明度表达 hover)。
+ * ⚠️ !important:antd v5 cssinjs 的 hover 规则 (.ant-btn-text:not(:disabled):
+ * not(.ant-btn-dangerous):hover) 与这里同特异性但插入更晚,不用 !important 会输。
+ */
+.ant-layout-header .ant-btn-text:not(:disabled):not(.ant-btn-dangerous) {
+  color: var(--app-text-secondary);
+}
+.ant-layout-header .ant-btn-text:not(:disabled):not(.ant-btn-dangerous):hover {
+  color: var(--app-text-secondary);
+  opacity: 0.72;
+}
+
+/* ============================================================
+ * 信息标签品牌化 —— 2026-11-05 皮肤沉浸式
+ *
+ * 全站 20+ 处 <Tag color="blue"> 是「信息/中性高亮」语义,但 antd 预设蓝
+ * (#1677ff 系)在政务红/文博棕金/科技蓝皮肤下是外来的冷色,整站打架。
+ * 这里把 blue / processing / geekblue 三个预设统一重定义为**品牌色浅底**
+ * (走 applySkinCssVars 注入的 --app-primary* 变量,五套皮肤自动跟随),
+ * 页面代码不动 —— 语义(信息标签)不变,只是颜色归主题管。
+ */
+.ant-tag-blue,
+.ant-tag-processing,
+.ant-tag-geekblue {
+  color: var(--app-primary);
+  background: var(--app-primary-bg);
+  border-color: var(--app-primary-border);
+}
