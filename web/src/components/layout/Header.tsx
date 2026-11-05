@@ -1,7 +1,7 @@
 /**
  * Header —— 顶部栏(皮肤沉浸式)
  *
- * 配色全部来自皮肤对象(getSkin):
+ * 配色全部来自皮肤对象(useSkin):
  *   - 背景: comp.layoutHeaderBg —— 浅玻璃(white/black:78% 透 + blur)或
  *     沉浸实底(gov 国旗红 / museum 深棕 / tech 深蓝)
  *   - 文字: comp.headerTextColor 系,**内联 remap 到 --app-text* 变量** ——
@@ -32,7 +32,7 @@ import { useUIStore } from '@/stores/ui'
 import { usePublicConfigStore } from '@/stores/publicConfig'
 import { useAuth } from '@/hooks/useAuth'
 import { useI18n } from '@/locales'
-import { getSkin } from '@/theme/registry'
+import { useSkin } from '@/theme/useSkin'
 import { UserAvatar } from '@/components/common/UserAvatar'
 import { logout as logoutApi } from '@/api/auth'
 import { getBaseURL } from '@/api/baseURL'
@@ -118,7 +118,9 @@ export const Header: React.FC = () => {
   }
 
   // 皮肤 comp(2026-11-05 沉浸式顶栏):背景/文字/底边单一来源
-  const headerComp = getSkin(useUIStore((s) => s.skin)).comp
+  // ⚠️ 必须走 useSkin()(带 registry 变更订阅):皮肤编辑器试穿是同 id
+  //   换对象,只订阅 store 的话顶栏背景在试穿中不动(用户报过这个 bug)
+  const headerComp = useSkin().comp
 
   // 头部图标按钮统一样式 (跟随顶栏文字色, 见文件头 —— 沉浸式顶栏下是浅色)
   const iconBtnStyle: React.CSSProperties = {

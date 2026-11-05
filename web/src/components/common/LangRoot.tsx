@@ -35,7 +35,7 @@ import 'dayjs/locale/en'
 import { useUIStore } from '@/stores/ui'
 import { usePublicConfigStore } from '@/stores/publicConfig'
 import { useI18n, ensureLocale } from '@/locales'
-import { getSkin, onRegistryChange } from '@/theme/registry'
+import { useSkin } from '@/theme/useSkin'
 import { applySkinCssVars } from '@/theme/apply'
 
 /** LangRoot 包裹层 —— 响应 useUIStore.lang 切换 Antd locale + dayjs locale,响应 theme 切换 algorithm + data-theme */
@@ -72,12 +72,9 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
   // 皮肤 = 整体外观(2026-11-05 扁平化):registry 取用,未知 id 降级默认白。
   // appearance 决定 algorithm 与 <html data-theme>(CSS 语义段跟着切);
   // --app-* 变量由皮肤单套注入(CSS 变量单源,见 theme/apply.ts)
-  // ⚠️ registry 订阅必须要有:皮肤编辑器试穿时 registerSkin 用**同一个 id**
-  //   (custom-draft)反复替换对象 —— store 的 id 不变,不订阅的话
-  //   LangRoot 不重渲染,试穿中的编辑永远不生效(见 theme/registry.ts)。
-  const [, bumpRegistry] = React.useReducer((n: number) => n + 1, 0)
-  React.useEffect(() => onRegistryChange(bumpRegistry), [])
-  const skin = getSkin(useUIStore((s) => s.skin))
+  // ⚠️ 必须走 useSkin():它带 registry 变更订阅 —— 试穿热更新是同 id 换对象,
+  //   只订阅 store 的话编辑永远不生效(见 theme/useSkin.ts)。
+  const skin = useSkin()
   React.useEffect(() => {
     document.documentElement.dataset.theme = skin.appearance
   }, [skin.appearance])
