@@ -680,6 +680,7 @@ const enUS: Locale = {
     switch: 'Switch theme',
     light: 'Light',
     dark: 'Dark',
+    skin: 'Switch skin',
   },
   // Route tabs (§2.8)
   tab: {

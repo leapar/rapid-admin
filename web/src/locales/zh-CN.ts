@@ -697,6 +697,7 @@ const zhCN = {
     switch: '切换主题',
     light: '浅色',
     dark: '深色',
+    skin: '切换皮肤',
   },
   // 路由多 tab(§2.8)
   tab: {
