@@ -151,7 +151,7 @@ const GroupConfigForm: React.FC<GroupConfigFormProps> = ({ group, items, onSaved
               style={{ marginBottom: 12 }}
               title={
                 <Space wrap size="small">
-                  <code style={{ fontSize: 12, color: '#5b21b6' }}>{it.config_key}</code>
+                  <code style={{ fontSize: 12 }}>{it.config_key}</code>
                   {it.is_sensitive && (
                     <Tag color="red" style={{ fontSize: 10 }}>
                       {t('page.config.sensitive')}

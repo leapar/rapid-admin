@@ -39,8 +39,9 @@
  *     `margin-bottom: -1px`,让 body 的滚动视口比分隔线高 1px,内容一滚就骑到
  *     线上。已在 `styles/global.css` 里全局归零(`.ant-card .ant-card-head`),
  *     本页不用再单独处理。
- *   ⚠️ 刻意没动的:图标色 #1677ff(全站统计卡图标也是这个蓝,改了反而不统一)、
- *     Space size=6/8/16(app 间距刻度 4/8/16,不是缺陷)。
+ *   ⚠️ 刻意没动的:Space size=6/8/16(app 间距刻度 4/8/16,不是缺陷)。
+ *   · 图标色已改 var(--app-primary)(2026-11-05 皮肤沉浸式:写死的蓝在
+ *     政务红/文博棕金皮肤下是外来冷色,统计卡图标同理已全站跟主题)。
  *   · 页内大标题去掉(PageHeader title=""):布局里已有面包屑(Breadcrumb 按路由
  *     自动生成菜单名),页内再写一遍「部门管理」是同一句话说两遍。
  *     本页左右两栏的卡片标题(组织架构 / 部门详情)已经说明了这是哪一页。
@@ -384,7 +385,7 @@ const DepartmentList: React.FC = () => {
             }}
             title={
               <Space size={6}>
-                <ApartmentOutlined style={{ color: '#1677ff' }} />
+                <ApartmentOutlined style={{ color: 'var(--app-primary)' }} />
                 {/* 2026-10-25:去掉 fontSize:14 —— Card 头文字本来就是 13
                     (headerFontSizeSM = token.fontSize),写死 14 反而比全站大一号。 */}
                 <Text strong>{t('page.dept.orgTree')}</Text>
@@ -573,7 +574,7 @@ const DepartmentList: React.FC = () => {
                           ]}
                         >
                           <Space size={8}>
-                            <ApartmentOutlined style={{ color: '#1677ff' }} />
+                            <ApartmentOutlined style={{ color: 'var(--app-primary)' }} />
                             {/* 2026-10-25:去掉 fontSize:14 —— 列表项名称跟左边树节点名、
                                 右边 Descriptions 正文统一到 13;code 的字号从 11 提到 12
                                 (全站次级文字惯例:color #999 + fontSize 12)。 */}

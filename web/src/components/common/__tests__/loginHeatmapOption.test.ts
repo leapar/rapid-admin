@@ -22,7 +22,7 @@
  *   · 把 `range: [dates[0] ?? '1970-01-01', …]` 改成只取 `dates[0]` → 「日历范围」红。
  */
 import { describe, it, expect } from 'vitest'
-import { buildHeatmapOption, heatmapLevels, HEATMAP_COLORS, HEATMAP_EMPTY_COLOR } from '../loginHeatmapOption'
+import { buildHeatmapOption, heatmapLevels, HEATMAP_COLORS, heatmapEmptyColor } from '../loginHeatmapOption'
 import type { HeatmapPoint } from '../loginHeatmapOption'
 
 /** echarts 的 option 类型太宽,测试里只看关心的几个字段 */
@@ -62,7 +62,7 @@ describe('heatmapLevels 分档', () => {
     const levels = heatmapLevels(pts(['d1', 'd2', 'd3', 'd4', 'd5'], [1, 2, 3, 4, 5]))
     expect(levels.thresholds).toEqual([2, 3, 4, 5])
     // 颜色 = 空档灰 + 5 档红系
-    expect(levels.colors[0]).toBe(HEATMAP_EMPTY_COLOR)
+    expect(levels.colors[0]).toBe(heatmapEmptyColor())
     expect(levels.colors.slice(1)).toEqual([...HEATMAP_COLORS])
   })
 })
@@ -98,7 +98,7 @@ describe('buildHeatmapOption 形状', () => {
     const pieces = opt.visualMap?.pieces ?? []
     expect(pieces).toHaveLength(6)
     // 第一段 = 0 → 中性灰(不属于红系,与"有但很少"一眼可分)
-    expect(pieces[0]).toMatchObject({ value: 0, color: HEATMAP_EMPTY_COLOR })
+    expect(pieces[0]).toMatchObject({ value: 0, color: heatmapEmptyColor() })
     // 第二段起是数值档
     expect(pieces[1]).toMatchObject({ min: 1, color: HEATMAP_COLORS[0] })
   })

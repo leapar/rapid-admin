@@ -96,7 +96,7 @@ export const PagePlaceholder: React.FC<PagePlaceholderProps> = ({
           )}
 
           <Empty
-            image={<ExperimentOutlined style={{ fontSize: 64, color: '#1677ff' }} />}
+            image={<ExperimentOutlined style={{ fontSize: 64, color: 'var(--app-primary)' }} />}
             description={t('placeholder.placeholderDesc')}
           />
         </Space>

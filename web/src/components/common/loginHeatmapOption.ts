@@ -15,6 +15,8 @@
  *   淡季整体浅、旺季整体深,同一张图里"多"与"少"始终可比。
  */
 import type { EChartsOption } from 'echarts'
+// 空档/格线/标签色跟随皮肤中性面(黑皮肤下是深灰,不再按浅色假设画死)
+import { getSkin } from '@/theme/registry'
 
 /** 一个数据点(后端已按天补全,缺的天是 0) */
 export interface HeatmapPoint {
@@ -25,8 +27,10 @@ export interface HeatmapPoint {
 /** 非零档颜色 —— 红/玫瑰系,浅 → 深,亮度单调递减 */
 export const HEATMAP_COLORS = ['#ffe4e1', '#ffb9b3', '#ff8f86', '#f5554a', '#d3281e'] as const
 
-/** 空档(0 次)颜色 —— 中性灰,不属于红系 */
-export const HEATMAP_EMPTY_COLOR = '#f0f0f0'
+/** 空档(0 次)颜色 —— 跟随皮肤中性面(不写死浅灰,黑皮肤下是深灰) */
+export function heatmapEmptyColor(): string {
+  return getSkin().palette.colorBorderSecondary
+}
 
 /** 热力图的档位:thresholds 是 4 个分界值,colors 是 5 个填充色(含空档) */
 export interface HeatmapLevels {
@@ -61,7 +65,7 @@ export function heatmapLevels(points: HeatmapPoint[]): HeatmapLevels {
   if (t4 <= t3) t4 = t3 + 1
   return {
     thresholds: [t1, t2, t3, t4],
-    colors: [HEATMAP_EMPTY_COLOR, ...HEATMAP_COLORS],
+    colors: [heatmapEmptyColor(), ...HEATMAP_COLORS],
   }
 }
 
@@ -81,8 +85,9 @@ export function buildHeatmapOption(input: HeatmapOptionInput): EChartsOption {
   const { points, monthNames, dayNames, tooltipLabel } = input
   const levels = heatmapLevels(points)
   const dates = points.map((p) => p.date)
+  const palette = getSkin().palette
 
-  const pieces: Array<Record<string, unknown>> = [{ value: 0, color: HEATMAP_EMPTY_COLOR, label: '0' }]
+  const pieces: Array<Record<string, unknown>> = [{ value: 0, color: heatmapEmptyColor(), label: '0' }]
   let lo = 1
   for (let i = 0; i < levels.thresholds.length; i++) {
     const hi = levels.thresholds[i]!
@@ -121,10 +126,10 @@ export function buildHeatmapOption(input: HeatmapOptionInput): EChartsOption {
         // 2px 表面留白 —— 相邻色块必须能分清(数据可视化:spacer 纪律)
         // ⚠️ calendar 的 itemStyle 不支持 borderRadius(echarts 类型定义如此)
         borderWidth: 2,
-        borderColor: '#ffffff',
+        borderColor: palette.colorBgContainer,
       },
       monthLabel: {
-        color: '#8c8c8c',
+        color: palette.colorTextTertiary,
         fontSize: 11,
         // ⚠️ echarts 传的是参数对象 { nameMap, yyyy, MM, M }(直接 String() 会
         //   变成 "[object Object]")—— M 是月份数字,直接当 nameMap 的下标用
@@ -135,7 +140,7 @@ export function buildHeatmapOption(input: HeatmapOptionInput): EChartsOption {
       },
       dayLabel: {
         firstDay: 1,
-        color: '#8c8c8c',
+        color: palette.colorTextTertiary,
         fontSize: 11,
         // echarts 5 的字段是 nameMap(不是 v4 的 names),仍按"周日起头"约定传
         nameMap: dayNames,

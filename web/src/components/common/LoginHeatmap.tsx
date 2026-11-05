@@ -22,7 +22,7 @@ import { useMemo } from 'react'
 import type { FC } from 'react'
 import { Empty, Skeleton } from 'antd'
 import ReactECharts from 'echarts-for-react'
-import { buildHeatmapOption, HEATMAP_COLORS, HEATMAP_EMPTY_COLOR } from './loginHeatmapOption'
+import { buildHeatmapOption, HEATMAP_COLORS, heatmapEmptyColor } from './loginHeatmapOption'
 import type { HeatmapPoint } from './loginHeatmapOption'
 
 export interface LoginHeatmapProps {
@@ -91,7 +91,7 @@ export const LoginHeatmap: FC<LoginHeatmapProps> = ({
         <span style={{ color: 'var(--app-text-tertiary)', fontSize: 11, marginRight: 4 }}>
           {legendStart}
         </span>
-        {[HEATMAP_EMPTY_COLOR, ...HEATMAP_COLORS].map((c) => (
+        {[heatmapEmptyColor(), ...HEATMAP_COLORS].map((c) => (
           <span
             key={c}
             style={{

@@ -115,7 +115,7 @@ const ConfigAudit: React.FC = () => {
       render: (_: any, row: ConfigAuditLog) => (
         <span style={{ fontSize: 12 }}>
           <span style={{ color: 'var(--app-text-tertiary)' }}>{truncate(row.before)}</span>
-          <span style={{ margin: '0 8px', color: '#1677ff' }}>→</span>
+          <span style={{ margin: '0 8px', color: 'var(--app-primary)' }}>→</span>
           <span style={{ color: '#52c41a' }}>{truncate(row.after)}</span>
         </span>
       ),

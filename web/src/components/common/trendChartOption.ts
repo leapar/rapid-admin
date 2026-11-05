@@ -80,20 +80,28 @@ export function buildTrendOption(input: TrendOptionInput): EChartsOption {
   const { dates, series, showSymbol } = input
   const multi = series.length > 1
   const symbol = showSymbol ?? dates.length <= 14
+  // 轴线/标签/分割线取皮肤中性面 —— 黑皮肤下不再出现浅灰假设的刺眼线条
+  const palette = getSkin().palette
 
   return {
     tooltip: { trigger: 'axis' },
     legend: multi
-      ? { show: true, bottom: 0, itemWidth: 12, itemHeight: 8, textStyle: { fontSize: 11 } }
+      ? {
+          show: true,
+          bottom: 0,
+          itemWidth: 12,
+          itemHeight: 8,
+          textStyle: { fontSize: 11, color: palette.colorTextSecondary },
+        }
       : { show: false },
     grid: { left: 4, right: 12, top: 16, bottom: multi ? 28 : 4, containLabel: true },
     xAxis: {
       type: 'category',
       boundaryGap: false,
       data: dates.map(formatAxisLabel),
-      axisLine: { lineStyle: { color: '#e8e8e8' } },
+      axisLine: { lineStyle: { color: palette.colorBorder } },
       axisTick: { show: false },
-      axisLabel: { color: '#8c8c8c', fontSize: 11 },
+      axisLabel: { color: palette.colorTextTertiary, fontSize: 11 },
     },
     yAxis: {
       type: 'value',
@@ -101,8 +109,8 @@ export function buildTrendOption(input: TrendOptionInput): EChartsOption {
       minInterval: 1,
       axisLine: { show: false },
       axisTick: { show: false },
-      axisLabel: { color: '#8c8c8c', fontSize: 11 },
-      splitLine: { lineStyle: { color: '#f0f0f0' } },
+      axisLabel: { color: palette.colorTextTertiary, fontSize: 11 },
+      splitLine: { lineStyle: { color: palette.colorBorderSecondary } },
     },
     series: series.map((s, i) => {
       const color = seriesColor(i, s.color)

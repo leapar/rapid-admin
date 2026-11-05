@@ -45,10 +45,12 @@
   --app-scrollbar-thumb: rgba(15, 23, 42, 0.18);
   --app-scrollbar-thumb-hover: rgba(15, 23, 42, 0.28);
 
-  /* ===== 选中高亮 (半透明蓝系, 跨页复用: 批量条 / 当前会话) ===== */
-  --app-selected-bg: #e6f4ff;
-  --app-selected-border: #91caff;
-  --app-selected-border-strong: #1677ff;
+  /* ===== 选中高亮 (跟随皮肤品牌色, 跨页复用: 批量条 / 当前会话) =====
+     2026-11-05 皮肤沉浸式:写死的 antd 蓝在政务红/文博棕金皮肤下是外来冷色,
+     改指向 --app-primary*(applySkinCssVars 按皮肤注入) */
+  --app-selected-bg: var(--app-primary-bg);
+  --app-selected-border: var(--app-primary-border);
+  --app-selected-border-strong: var(--app-primary);
 
   /* ===== 语义浅底 (diff 增删行 / 失败提示条 / 警告浅底) ===== */
   --app-diff-add-bg: #f6ffed;
@@ -174,10 +176,10 @@
   --app-scrollbar-thumb: rgba(255, 255, 255, 0.2);
   --app-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 
-  /* 选中高亮: 半透蓝, 深底下提亮一档 */
-  --app-selected-bg: rgba(96, 165, 250, 0.15);
-  --app-selected-border: rgba(96, 165, 250, 0.45);
-  --app-selected-border-strong: #60a5fa;
+  /* 选中高亮: 同样跟随皮肤品牌色(暗色皮肤的 --app-primary* 已是半透明档) */
+  --app-selected-bg: var(--app-primary-bg);
+  --app-selected-border: var(--app-primary-border);
+  --app-selected-border-strong: var(--app-primary);
 
   /* 语义浅底: 状态色 12% 半透明 (深色实色浅底会刺眼) */
   --app-diff-add-bg: rgba(82, 196, 26, 0.12);
