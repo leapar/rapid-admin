@@ -25,6 +25,11 @@ type BrandingConfig struct {
 	AppName string `mapstructure:"app_name"`
 	// AppTitle 浏览器标签页标题。空 = 用 AppName;再空 = 前端用语言包兜底
 	AppTitle string `mapstructure:"app_title"`
+	// Skin UI 皮肤 id(docs/theming.md)。空 = 用户本地选择;
+	// 配了 = **部署级覆盖**,所有用户默认用这套皮肤(仍可在顶栏切换)。
+	// ⚠️ 只接受前端内置 id(orange/museum/tech/gov);配了未知 id 不报错 ——
+	// 前端 getSkin 对未知 id 显式降级默认橙并打 warn(theming.md §6 容错降级)。
+	Skin string `mapstructure:"skin"`
 }
 
 // DisplayName 返回用于界面展示的平台名(空 = 没配,调用方自行兜底)

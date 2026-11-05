@@ -46,6 +46,10 @@ type PublicConfigView struct {
 	AppName string `json:"app_name"`
 	// AppTitle 浏览器标签页标题。**空串 = 没配** —— 前端回退到语言包。
 	AppTitle string `json:"app_title"`
+	// Skin UI 皮肤 id(branding.skin)。**空串 = 没配** —— 前端用用户本地选择;
+	// 配了 = 部署级默认皮肤。未知 id 由前端显式降级(server 不校验内置清单,
+	// 免得后端维护一份前端皮肤表的两份拷贝 —— theming.md §7.3)。
+	Skin string `json:"skin"`
 }
 
 // PublicConfig GET /rapid-admin/v1/public/config 匿名开关 + 品牌信息下发
@@ -65,6 +69,7 @@ func (h *ConfigHandler) PublicConfig(ctx context.Context, c *app.RequestContext)
 			CaptchaSmsSendEnabled: cfg.Captcha.SmsSendEnabled,
 			AppName:               cfg.Branding.AppName,
 			AppTitle:              cfg.Branding.TabTitle(),
+			Skin:                  cfg.Branding.Skin,
 		}
 	} else {
 		// config 未加载(单测直接 new handler)—— 按"都要"处理,理由同 config.CaptchaEnabled

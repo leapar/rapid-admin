@@ -167,6 +167,8 @@ export function getPublicConfig() {
     captcha_sms_send_enabled: boolean
     app_name?: string
     app_title?: string
+    /** 部署级默认皮肤(branding.skin);老后端/没配 = undefined → 用户本地选择 */
+    skin?: string
   }>('/public/config')
 }
 

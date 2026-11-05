@@ -51,12 +51,14 @@ func TestPublicConfig_Branding被下发(t *testing.T) {
 		Branding: config.BrandingConfig{
 			AppName:  "Acme 交付平台",
 			AppTitle: "Acme 交付平台 - 后台管理",
+			Skin:     "gov",
 		},
 	}
 
 	data := publicConfigData(t)
 	assert.Equal(t, "Acme 交付平台", data["app_name"])
 	assert.Equal(t, "Acme 交付平台 - 后台管理", data["app_title"])
+	assert.Equal(t, "gov", data["skin"])
 }
 
 func TestPublicConfig_Branding没配时是空串而不是null(t *testing.T) {
@@ -70,6 +72,7 @@ func TestPublicConfig_Branding没配时是空串而不是null(t *testing.T) {
 	//   null 也会让 `||` 短路,但 `appName ?? t(...)` 之外的写法会显示 "null"
 	assert.Equal(t, "", data["app_name"])
 	assert.Equal(t, "", data["app_title"])
+	assert.Equal(t, "", data["skin"])
 }
 
 func TestPublicConfig_只返白名单字段(t *testing.T) {
@@ -88,8 +91,9 @@ func TestPublicConfig_只返白名单字段(t *testing.T) {
 		"captcha_sms_send_enabled",
 		"app_name",
 		"app_title",
+		"skin",
 	} {
 		assert.Contains(t, data, k)
 	}
-	assert.Len(t, data, 4, "公开配置接口多返了字段 —— 白名单被撑破了")
+	assert.Len(t, data, 5, "公开配置接口多返了字段 —— 白名单被撑破了")
 }

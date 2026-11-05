@@ -37,6 +37,7 @@
  */
 import { create } from 'zustand'
 import { getPublicConfig } from '@/api/auth'
+import { useUIStore } from '@/stores/ui'
 
 interface PublicConfigState {
   /** null = 未知(未拉到或拉失败),按"开启"处理,见文件头说明 */
@@ -47,6 +48,8 @@ interface PublicConfigState {
   appName: string
   /** 浏览器标签页标题(后端 branding.app_title / app_name);空串 = 没配 */
   appTitle: string
+  /** 部署级默认皮肤(branding.skin,theming.md);空串 = 没配 → 用户本地选择 */
+  skin: string
   loading: boolean
   /** 拉取;已在拉或已成功过则直接返回 */
   fetch: () => Promise<void>
@@ -63,6 +66,7 @@ export const usePublicConfigStore = create<PublicConfigState>((set, get) => ({
   captchaSmsSendEnabled: null,
   appName: '',
   appTitle: '',
+  skin: '',
   loading: false,
 
   fetch: async () => {
@@ -82,7 +86,13 @@ export const usePublicConfigStore = create<PublicConfigState>((set, get) => ({
         captchaSmsSendEnabled: on(r?.captcha_sms_send_enabled),
         appName: str(r?.app_name),
         appTitle: str(r?.app_title),
+        skin: str(r?.skin),
       })
+      // 部署级默认皮肤(branding.skin,theming.md P2):配了就覆盖用户本地选择。
+      // registry.getSkin 对未知 id 显式降级默认橙 + warn —— 后端不校验内置清单,
+      // 免得后端维护一份前端皮肤表的两份拷贝。
+      const skin = str(r?.skin)
+      if (skin) useUIStore.getState().setSkin(skin)
     } catch {
       // 拦截器已提示;保持 null = 按开启渲染,不阻塞登录页
     } finally {
