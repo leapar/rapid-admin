@@ -816,11 +816,29 @@ textarea:-webkit-autofill:active {
  * 这里把 blue / processing / geekblue 三个预设统一重定义为**品牌色浅底**
  * (走 applySkinCssVars 注入的 --app-primary* 变量,五套皮肤自动跟随),
  * 页面代码不动 —— 语义(信息标签)不变,只是颜色归主题管。
+ * ⚠️ 必须 !important:antd cssinjs 是运行时注入 <head>,同优先级平局时
+ * 后注入者(antd)赢 —— 2026-11-05 实测不加会被压住(Tag/Alert 都不生效)。
  */
 .ant-tag-blue,
 .ant-tag-processing,
 .ant-tag-geekblue {
-  color: var(--app-primary);
-  background: var(--app-primary-bg);
-  border-color: var(--app-primary-border);
+  color: var(--app-primary) !important;
+  background: var(--app-primary-bg) !important;
+  border-color: var(--app-primary-border) !important;
+}
+
+/* ============================================================
+ * 信息 Alert 品牌化 —— 2026-11-05 皮肤沉浸式
+ *
+ * 与上面 Tag 同一条通道:type="info" 的 Alert(全站约 20 处)是
+ * 「提示/说明」语义,antd 默认蓝底(#e6f4ff/#1677ff 系)同样与品牌
+ * 皮肤打架。重定义为品牌浅底,warning/success/error 三种语义态不动。
+ * 注意:--app-primary* 深色皮肤的浅底是半透明档,黑皮肤下同样成立。
+ */
+.ant-alert-info {
+  background: var(--app-primary-bg) !important;
+  border-color: var(--app-primary-border) !important;
+}
+.ant-alert-info .ant-alert-icon {
+  color: var(--app-primary) !important;
 }
