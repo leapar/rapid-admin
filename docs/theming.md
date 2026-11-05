@@ -4,8 +4,8 @@
 > 各是一份声明式的皮肤定义;再配合后端 `branding:` 改 yaml 就能切,
 > 延续本仓库"平台名是配置项不是常量"的既定哲学。
 
-状态:规划稿(2026-11-05)。本文档 = 规划(§1–§4)+ 上手指南(§5)。
-落地前,§5 就是"将来怎么定义皮肤"的最终形态说明书。
+状态:**P0–P2 已落地**(2026-11-05,五套皮肤 + 沉浸式 + 全站去外来色);
+P3 皮肤编辑器(§7)未做。本文档 = 设计定稿(§3–§4 即实现形态)+ 上手指南(§5)。
 
 > **⚠️ 2026-11-05 扁平化更新(以本横幅为准,正文未及之处按此理解)**
 > P0/P1/P2 落地当天,架构按用户拍板从"双轴"改为**扁平单轴**:
@@ -46,8 +46,8 @@
 ## 2. 目标形态
 
 1. **一个皮肤 = 一个文件**:`src/theme/skins/<id>.ts`,声明式对象,不懂 antd token 体系也能照着模板改。
-2. **换肤不改框架代码**:内置皮肤(橙/文博/科技/政务)+ 后端 `branding.skin: gov` 一行切换;
-   自定义皮肤放 `src/theme/skins/custom.ts`(git 忽略模板提供),升级框架不冲突。
+2. **换肤不改框架代码**:内置皮肤(白/黑/文博/科技/政务)+ 后端 `branding.skin: gov` 一行切换;
+   自定义皮肤拷 `src/theme/skins/custom.example.ts` 模板,升级框架不冲突。
 3. **单源,无双份维护**:CSS 变量从皮肤对象**运行时注入**,不搞"TS 一份、CSS 一份"漂移。
 4. **明暗轴保持独立**:每套皮肤自带 light/dark 两套色板,`ThemeSwitcher` 行为不变。
    **〔已废弃 —— 2026-11-05 扁平化:皮肤即整体外观,见顶部横幅〕**
@@ -57,49 +57,58 @@
 ### 3.1 皮肤定义类型(核心)
 
 ```ts
-// web/src/theme/types.ts
+// web/src/theme/types.ts —— **扁平单轴**(2026-11-05 落地形态)
+export type SkinAppearance = 'light' | 'dark'
+
 export interface SkinDefinition {
-  id: string                       // 'orange' | 'museum' | 'tech' | 'gov' | ...
-  name: string                     // 展示名,例:"文博棕金"
-  /** 品牌主色三态 —— antd token 会从 colorPrimary 派生大量梯度,只补显式覆盖 */
+  id: string                       // 'white' | 'black' | 'museum' | 'tech' | 'gov'
+  name: string                     // 展示名,例:"政务红"
+  appearance: SkinAppearance       // 决定 antd 算法与 <html data-theme>
+  /** 品牌主色三态:hover 亮一档 / active 暗一档(L 轴) */
   brand: { primary: string; hover: string; active: string }
-  /** 语义色板(替换 LangRoot 里现 palette 的硬编码) */
-  palette: { light: PaletteTokens; dark: PaletteTokens }
-  /** 组件级差异(替换现 comp 的硬编码) */
-  comp: { light: CompTokens; dark: CompTokens }
-  /** --app-* CSS 变量(替换 variables.css 里随皮肤变的部分;阴影/边缘高光等皮肤无关项留在 :root) */
-  cssVars: { light: Record<string, string>; dark: Record<string, string> }
+  /** 语义色板 25 键(antd 全局 token 的品牌相关子集) */
+  palette: PaletteTokens
+  /** 组件级 token 33 键(header/sider/menu/table/breadcrumb…,含沉浸式 header 文字 4 键) */
+  comp: CompTokens
+  /** --app-* CSS 变量(品牌系 7 键必给,applySkinCssVars 运行时注入) */
+  cssVars: Record<string, string>
 }
 ```
 
-`PaletteTokens` / `CompTokens` 直接复用现 LangRoot 中 palette / comp 两个对象的键,
-**首次抽取不做任何"优化",先原样搬家** —— 橙色皮肤(`skins/orange.ts`)落地后
-LangRoot 与 variables.css 的行为应与搬家前逐像素一致,以此作为验收标准。
+键集唯一定义处是 `types.ts`;`skins.complete.test.ts` 守"所有皮肤与 white/black
+基准键集完全一致"(palette 25 / comp 33 / brand 3,漏一个色调即红)。
 
 ### 3.2 目录与数据流
 
 ```
 web/src/theme/
-├── types.ts            # SkinDefinition 类型
+├── types.ts            # SkinDefinition / PaletteTokens / CompTokens 类型
 ├── skins/
-│   ├── orange.ts       # 默认(现配色原样搬入)
-│   ├── museum.ts       # 文博棕金(§4.1)
-│   ├── tech.ts         # 科技蓝(§4.2)
-│   ├── gov.ts          # 政务红(§4.3)
+│   ├── white.ts        # 白色(默认,纯灰中性面 + 橙强调)
+│   ├── black.ts        # 黑色(深色面)
+│   ├── museum.ts       # 文博棕金
+│   ├── tech.ts         # 科技蓝
+│   ├── gov.ts          # 政务红
 │   └── custom.example.ts  # 自定义模板(拷走改名即用)
-├── registry.ts         # id → SkinDefinition;useSkin(id) 取用
-└── apply.ts            # applySkin(skin, isDark):注入 antd token + document.documentElement.style.setProperty(--app-*)
+├── registry.ts         # SKINS 表 + getSkin()/registerSkin();useSkin(id) 取用
+└── apply.ts            # applySkinCssVars(skin):把品牌系 + 中性面/文字梯度
+                        # 映射成 --app-* 注入 <html style>(见下"数据流")
 ```
 
-数据流(替换现 LangRoot 硬编码路径):
+数据流(LangRoot 消费):
 
 ```
-useUIStore.skin ──┐
-useUIStore.theme ─┴─→ LangRoot
-                      ├─ registry 取 active skin
-                      ├─ applySkin() → <html style="--app-*"> (CSS 变量,单源)
-                      └─ ConfigProvider token/components ← skin.palette[isDark] + skin.comp[isDark]
+useUIStore.skin ──→ LangRoot
+                    ├─ applySkinCssVars(skin) → <html style="--app-*">
+                    │    (品牌 7 键 + bodyBg/siderBg/中性面/文字梯度映射,单源)
+                    └─ ConfigProvider token/components ← skin.palette + skin.comp
+                         (appearance 决定 algorithm 与 data-theme)
 ```
+
+> **`variables.css` 的定位**(2026-11-05 起):静态明暗两套 `--app-*` 只是
+> **首帧(注入前)兜底**;皮肤一旦应用,`--app-bg-layout` / `--app-surface-*` /
+> `--app-text*` / `--app-primary*` 全部由 `applySkinCssVars` 按皮肤注入覆盖,
+> variables.css 不再承载第二份真值。
 
 ### 3.3 关键取舍
 
@@ -111,47 +120,57 @@ useUIStore.theme ─┴─→ LangRoot
 | 不做运行时上传皮肤文件 | XSS 面 + 复杂度;真有需求走 P3 再议 |
 | `comp` 不抽公共默认 + per-skin 覆盖 | 先全量声明(照模板改),落地稳定后再考虑抽 `baseSkin` 合并;过早抽象会把"改一处懂全局"变成"改一处查三层" |
 
-## 4. 内置皮肤规格(三套示例)
+### 4. 内置皮肤规格(2026-11-05 落地值)
 
-每套给最小区别集:`brand` 三态 + 画布/表面 + menu/table 选中系。
-`palette`/`comp` 其余键照模板补齐(下表只列**与默认橙的差异键**)。
+五套皮肤的取值策略 = **沉浸式**:顶栏用品牌色实底(gov/museum/tech)配浅色
+文字(`comp.headerTextColor` 四键,Header.tsx 内联 remap 到 `--app-text*`),
+侧栏/画布/表头/菜单选中带同色相的品牌晕;white/black 保持毛玻璃顶栏。
+文字梯度:gov 保持纯灰(掺红相会发棕,实测踩过),museum 用暖棕。
+**三段深度**:顶栏(最深)→ 侧栏(中,比画布深约 2 档)→ 画布/卡片(亮,
+承载内容)。
 
 ### 4.1 `museum` 文博棕金(博物馆/文博领域)
 
 | Token | 值 | 说明 |
 |---|---|---|
-| brand.primary | `#8C5A2B` | 赭石棕 |
-| brand.hover / active | `#A9743D` / `#6E4520` | |
-| palette.light.colorBgLayout | `#F7F4EF` | 宣纸暖灰 |
-| palette.light.colorBgContainer | `#FFFDF9` | 微暖白 |
-| palette.light.colorPrimaryBg | `#F5EBDD` | 浅驼底 |
-| comp.light.siderBg | `#2E2118` | 深胡桃侧栏(可选庄重款) |
-| comp.light.menuSelectedBg | `#F0E4D2` | |
-| cssVars.light --app-selected-* | 棕金系 | |
+| brand | `#8C5A2B` / `#af7136` / `#694320` | 赭石棕三态 |
+| comp.layoutHeaderBg | `#5d4128` | 深棕实底顶栏 + 米色文字(#f4eae1) |
+| palette.colorBgLayout | `#ecdfd2` | 暖纸画布 |
+| palette.colorBgContainer | `#fdf7f1` | 微暖白卡片 |
+| comp.siderBg | `#e9dcc9` | 比画布深一档的暖棕侧栏 |
+| comp.menuSelectedBg / menuHoverBg | `#e9d6c3` / `#f0e5d8` | 棕金浅底收口 |
+| palette.colorPrimaryBg | `#f7efe4` | 品牌浅底(29° 同色相) |
 
 ### 4.2 `tech` 科技蓝(数据/科技产品)
 
 | Token | 值 | 说明 |
 |---|---|---|
-| brand.primary | `#2F6BFF` | 电光蓝(避开 antd 默认 #1677ff 示范"换肤真的生效") |
-| brand.hover / active | `#5384FF` / `#1E4FD6` | |
-| palette.light.colorBgLayout | `#F3F6FC` | 冷灰蓝 |
-| palette.dark.colorBgBase | `#0B0F1A` | 深空黑蓝(区别默认暖黑) |
-| palette.dark.colorBgContainer | `#141A2B` | |
-| comp.dark.menuSelectedColor | `#7CA0FF` | 暗底提亮一档 |
-| cssVars --app-shadow-l* | 带 `rgba(47,107,255,…)` 淡蓝晕 | 冷调阴影是"科技感"的关键,不只是换主色 |
+| brand | `#2F6BFF` / `#5d8cff` / `#014aff` | 电光蓝(避开 antd 默认 #1677ff) |
+| comp.layoutHeaderBg | `#192f76` | 深蓝实底顶栏 + 白字 |
+| palette.colorBgLayout | `#e6e9f5` | 冷蓝画布 |
+| palette.colorBgContainer | `#fafbfe` | 卡片 |
+| comp.siderBg | `#dfe5f4` | 冷蓝侧栏 |
+| comp.menuSelectedBg / menuHoverBg | `#d0deff` / `#e4ebff` | |
+| palette.colorPrimaryBg | `#e5edff` | |
 
 ### 4.3 `gov` 政务红(政务/国企)
 
 | Token | 值 | 说明 |
 |---|---|---|
-| brand.primary | `#C7000B` | 国旗红(即 antd dustyRed 基调) |
-| brand.hover / active | `#E02020` / `#A3000A` | |
-| palette.light.colorBgLayout | `#F9F5F4` | 微暖灰 |
-| palette.light.colorPrimaryBg | `#FBE8E8` | |
-| comp.light.menuSelectedBg | `#F9E5E5` | |
-| comp.light.menuSelectedColor | `#C7000B` | |
-| cssVars --app-diff-del-bg / --app-error-* | ⚠️ 需与品牌红拉开 | 红 skin 唯一的语义冲突点,见 §6 风险 |
+| brand | `#C7000B` / `#f5000e` / `#990008` | 国旗红三态 |
+| comp.layoutHeaderBg | `#C7000B` | 国旗红实底顶栏 + 白字 |
+| palette.colorBgLayout | `#f3e2e2` | 红晕画布 |
+| palette.colorBgContainer | `#fef7f7` | 近白卡片 |
+| comp.siderBg | `#efdbdb` | 红晕侧栏 |
+| comp.menuSelectedBg / menuHoverBg | `#f8caca` / `#f7dedf` | |
+| palette.colorPrimaryBg | `#ffe5e7` | |
+| palette.colorText | `#292929`(纯灰) | ⚠️ 掺红相的文字会发棕,2026-11-05 实测踩过 |
+
+语义色(success 绿 / warning 金 / error 红 / diff 增删底)全站统一,**不随
+皮肤走** —— 红 skin 与 error 语义的分工靠语义色本身是 antd 默认 `#ff4d4f` 系。
+品牌浅底收口(信息 Tag blue/processing/geekblue 与 info Alert)走
+`styles/global.css` 的 CSS 覆盖通道(`--app-primary*` 变量 + `!important`,
+antd cssinjs 运行时注入 <head>,同优先级平局时后注入者赢,不加会被压住)。
 
 ## 5. 上手指南:定义你自己的皮肤(最终形态)
 
@@ -166,34 +185,34 @@ cp custom.example.ts my-brand.ts
 
 ### 第 2 步:填色板
 
-打开 `my-brand.ts`,按注释逐键替换。**必改 6 个键**(其余保持模板默认就已经协调):
+打开 `my-brand.ts`,按注释逐键替换。**必改头部几项**(其余保持模板默认就已经协调):
 
 ```ts
-export default {
-  id: 'my-brand',
-  name: '我的品牌',
-  brand: { primary: '#7C3AED', hover: '#9B5CF6', active: '#5B21B6' },  // ← 主色三态
-  palette: {
-    light: { colorBgLayout: '#F6F4FA', colorPrimaryBg: '#F1EAFD' /* … */ },
-    dark:  { /* 模板给了同梯度暗色,主色亮一档即可 */ },
-  },
-  // comp / cssVars 模板已按主色派生好,只微调 menuSelectedBg / rowSelectedBg / --app-selected-* 三组
-} satisfies SkinDefinition
+id: 'my-brand',
+name: '我的品牌',
+appearance: 'light',   // 深色外观写 'dark' 并整表换暗色值(参考 black.ts)
+brand: { primary: '#7C3AED', hover: '#9864f1', active: '#6115e4' },  // ← 主色三态
 ```
+
+皮肤是**显式全量定义**(palette 25 键 / comp 33 键 / cssVars 品牌系 7 键,
+逐参数一个色值)—— 想要沉浸实底顶栏就把 `comp.layoutHeaderBg` 换实色、
+`headerTextColor` 四键换浅色文字(参考 gov.ts);其余色值**对着内置皮肤同
+键位抄档位**最稳,不要手调新色相。
 
 选色心法(照做就不会丑):
 
 1. 主色只定一个 `brand.primary`,hover/active 分别亮/暗 8–12%;
 2. 一切"浅底"(Bg 系)用主色 **≥10% 透明度或 95% 明度**的衍生色,不要手调新色相;
-3. 深色模式下"品牌文字/链接"比主色提亮一档(默认皮肤 #f60→#ff8c3a 就是这个规律);
-4. 阴影别动结构,只把 `rgba(15,23,42,…)` 的 slate 色相换成你的主色淡晕(参考 tech 皮肤)。
+3. 深色皮肤(appearance='dark')的"品牌文字/链接"比主色提亮一档(参考 black.ts);
+4. 阴影别动结构,只换色相成主色淡晕;改完跑 `pnpm vitest run src/theme`,
+   `skins.complete.test.ts` 会核对字段全集与同调性。
 
 ### 第 3 步:注册 + 启用
 
 ```ts
-// src/theme/registry.ts
+// src/theme/registry.ts —— SKINS 表挂一行
 import myBrand from './skins/my-brand'
-export const SKINS = { orange, museum, tech, gov, 'my-brand': myBrand }
+const SKINS = Object.fromEntries([white, black, museum, tech, gov, myBrand].map((s) => [s.id, s]))
 ```
 
 启用二选一:
@@ -204,7 +223,7 @@ export const SKINS = { orange, museum, tech, gov, 'my-brand': myBrand }
 ```yaml
 branding:
   app_name: "文博数字资产管理平台"
-  skin: museum        # ← 只认内置 id;不在清单里 = 落回默认 orange 并打 warn 日志
+  skin: museum        # ← 只认内置 id;不在清单里 = 落回默认 white 并打 warn 日志
 ```
 
 验收:`pnpm dev` 打开登录页与首页,**登录页背景/按钮、侧栏选中态、表格 hover、
@@ -217,7 +236,7 @@ branding:
 | 搬家时漏改导致行为回归 | 首个 PR 只做 `orange.ts` 原样搬家,验收 = 视觉零变化;新皮肤后续 PR 各自独立 |
 | 红 skin 与 error 语义色混淆 | gov 皮肤把 `--app-error-*` 明确为更橙的 `#FF4D4F` 系并写进注释;§4.3 已标 |
 | 派生梯度(antd 自动生成的 colorPrimary 系)与新主色不协调 | 只显式覆盖 §4 列出的键,其余信任 darkAlgorithm/defaultAlgorithm 推导 —— 与现实现同一策略 |
-| branding.skin 配了不存在的 id | publicConfig 校验 + console.warn + 落回 orange;不算错误(容错降级,符合"显式降级"前提) |
+| branding.skin 配了不存在的 id | publicConfig 校验 + console.warn + 落回 white;不算错误(容错降级,符合"显式降级"前提) |
 | 未来 login 页 logo/插画也算皮肤的一部分 | 列入 P2:`branding.logo_url` 走 publicConfig,与本规划同机制,不另起炉灶 |
 
 ## 7. 皮肤管理界面(P3 规划)
@@ -302,10 +321,10 @@ P0 的两个设计决策在这里兑现:
 
 | 阶段 | 内容 | 工作量 |
 |---|---|---|
-| **P0** | `types.ts` + `apply.ts` + `registry.ts`;把 LangRoot palette/comp 与 variables.css 中的皮肤相关值**原样搬进 `skins/orange.ts`**,行为零变化;ui store 加 `skin` 字段 | 1 天(搬家占大半,靠 dev 逐页目检) |
-| **P1** | 内置 `museum` / `tech` / `gov` 三皮肤 + `custom.example.ts` 模板 + 顶栏皮肤切换器(复用 ThemeSwitcher 模式) | 半天 |
-| **P2** | 后端 `branding.skin` 下发(publicConfig 扩展 + 校验降级)+ `branding.logo_url`;本文档 §5 定稿为对外文档,挂进手册与 llms.txt(见 docs/ai-coding.md) | 半天 |
-| **P3** | 皮肤管理界面(§7):基础/高级两级编辑 + 实时预览 + 后端持久化与 RBAC 权限码 | 2–3 天 |
+| **P0** ✅ | `types.ts` + `apply.ts` + `registry.ts`;LangRoot palette/comp 与 variables.css 的皮肤相关值搬进 `skins/`(后按用户拍板改为显式全量定义);ui store 加 `skin` 字段 | 已落地 |
+| **P1** ✅ | 内置 `white` / `black` / `museum` / `tech` / `gov` 五皮肤 + `custom.example.ts` 模板 + 顶栏皮肤切换器 | 已落地 |
+| **P2** ✅ | 后端 `branding.skin` 下发(publicConfig 扩展 + 校验降级);本章手册版挂 `server/docs/web/theming.md` 与 llms.txt。`branding.logo_url` 未做 | 已落地(logo_url 除外) |
+| **P3** | 皮肤管理界面(§7):基础/高级两级编辑 + 实时预览 + 后端持久化与 RBAC 权限码 | 2–3 天(未做) |
 
 守卫:P0 验收后给 LangRoot 加一条注释锚点("新增品牌色值必须进 skins/,不得直接写 token"),
 并让 `check_docs_links` 收录本文档;待 module-list 生成脚本上线(见 docs/ai-coding.md §5.3),

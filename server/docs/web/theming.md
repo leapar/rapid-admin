@@ -72,8 +72,28 @@ const SKINS = { white, black, tech, gov, museum, 'my-brand': myBrand }
 阴影只换色相不动结构。改完跑 `pnpm vitest run src/theme` ——
 `skins.complete.test.ts` 会核对字段全集与同调性。
 
+### 沉浸式(皮肤怎么"铺满"界面)
+
+内置品牌皮肤(gov/museum/tech)是**沉浸式**的:顶栏用品牌色实底
+(`comp.layoutHeaderBg`)配浅色文字(`headerTextColor` 四键,Header.tsx
+内联 remap 到 `--app-text*` 变量),侧栏/画布/表头/菜单选中带同色相的品牌晕;
+white/black 保持毛玻璃顶栏。三段深度:顶栏(最深)→ 侧栏(中)→ 画布/卡片(亮)。
+自定义皮肤想要实底顶栏,把 `layoutHeaderBg` 换实色 + `headerTextColor`
+四键换浅色文字即可(参考 `gov.ts`);侧栏背景由 LangRoot 的 `Layout.siderBg`
+token 驱动,**不要在布局组件里写死内联 background**(内联样式会压过 token)。
+
+### 语义色边界(哪些颜色不随皮肤)
+
+success 绿 / warning 金 / error 红 / diff 增删底是**状态语义**,全站统一,
+不随皮肤走。antd 预设蓝的"信息高亮"(`Tag color="blue"` 与 `type="info"`
+的 Alert)已由 `styles/global.css` 的 CSS 覆盖统一重定义为品牌浅底
+(走 `--app-primary*` 变量)—— ⚠️ 这类覆盖**必须加 `!important`**:
+antd cssinjs 是运行时注入 `<head>`,同优先级平局时后注入者赢。
+
 ### 硬约束
 
 **新增品牌色值必须进 `web/src/theme/skins/`,不得直接写进 `LangRoot` 的 token** ——
-色值的单一来源是皮肤对象;`variables.css` 里的 `--app-primary-*` 只是首帧 fallback,
-运行时由 `applySkinCssVars` 注入覆盖。这条在根 `AGENTS.md` 硬约束 #6。
+色值的单一来源是皮肤对象;`variables.css` 里的 `--app-*` 静态值只是首帧 fallback,
+运行时由 `applySkinCssVars` 注入覆盖(品牌系 7 键之外,还映射 `--app-bg-layout` /
+`--app-surface-*` / `--app-text*` 等中性面与文字梯度 —— 皮肤切换后 CSS 变量
+消费方也跟着换色温)。这条在根 `AGENTS.md` 硬约束 #6。

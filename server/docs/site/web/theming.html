@@ -1118,10 +1118,26 @@ brand: { primary: <span class="hljs-string">'#7C3AED'</span>, hover: <span class
 ≥10% 透明度或 95% 明度的衍生色;深色皮肤(如 black)的品牌文字比主色提亮一档;
 阴影只换色相不动结构。改完跑 <code>pnpm vitest run src/theme</code> ——
 <code>skins.complete.test.ts</code> 会核对字段全集与同调性。</p>
+<h3 id="沉浸式皮肤怎么铺满界面">沉浸式(皮肤怎么"铺满"界面)</h3>
+<p>内置品牌皮肤(gov/museum/tech)是<strong>沉浸式</strong>的:顶栏用品牌色实底
+(<code>comp.layoutHeaderBg</code>)配浅色文字(<code>headerTextColor</code> 四键,Header.tsx
+内联 remap 到 <code>--app-text*</code> 变量),侧栏/画布/表头/菜单选中带同色相的品牌晕;
+white/black 保持毛玻璃顶栏。三段深度:顶栏(最深)→ 侧栏(中)→ 画布/卡片(亮)。
+自定义皮肤想要实底顶栏,把 <code>layoutHeaderBg</code> 换实色 + <code>headerTextColor</code>
+四键换浅色文字即可(参考 <code>gov.ts</code>);侧栏背景由 LangRoot 的 <code>Layout.siderBg</code>
+token 驱动,<strong>不要在布局组件里写死内联 background</strong>(内联样式会压过 token)。</p>
+<h3 id="语义色边界哪些颜色不随皮肤">语义色边界(哪些颜色不随皮肤)</h3>
+<p>success 绿 / warning 金 / error 红 / diff 增删底是<strong>状态语义</strong>,全站统一,
+不随皮肤走。antd 预设蓝的"信息高亮"(<code>Tag color="blue"</code> 与 <code>type="info"</code>
+的 Alert)已由 <code>styles/global.css</code> 的 CSS 覆盖统一重定义为品牌浅底
+(走 <code>--app-primary*</code> 变量)—— ⚠️ 这类覆盖<strong>必须加 <code>!important</code></strong>:
+antd cssinjs 是运行时注入 <code>&lt;head&gt;</code>,同优先级平局时后注入者赢。</p>
 <h3 id="硬约束">硬约束</h3>
 <p><strong>新增品牌色值必须进 <code>web/src/theme/skins/</code>,不得直接写进 <code>LangRoot</code> 的 token</strong> ——
-色值的单一来源是皮肤对象;<code>variables.css</code> 里的 <code>--app-primary-*</code> 只是首帧 fallback,
-运行时由 <code>applySkinCssVars</code> 注入覆盖。这条在根 <code>AGENTS.md</code> 硬约束 #6。</p>
+色值的单一来源是皮肤对象;<code>variables.css</code> 里的 <code>--app-*</code> 静态值只是首帧 fallback,
+运行时由 <code>applySkinCssVars</code> 注入覆盖(品牌系 7 键之外,还映射 <code>--app-bg-layout</code> /
+<code>--app-surface-*</code> / <code>--app-text*</code> 等中性面与文字梯度 —— 皮肤切换后 CSS 变量
+消费方也跟着换色温)。这条在根 <code>AGENTS.md</code> 硬约束 #6。</p>
 
                                 
                                 </section>
@@ -1165,7 +1181,7 @@ brand: { primary: <span class="hljs-string">'#7C3AED'</span>, hover: <span class
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"theming(UI 皮肤)","level":"11.1","depth":1,"next":{"title":"包速查表","level":"12.1","depth":1,"path":"reference/packages.md","ref":"reference/packages.md","articles":[]},"previous":{"title":"框架手册","level":"10.2","depth":1,"path":"api-docs/manual.md","ref":"api-docs/manual.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"web/theming.md","mtime":"2026-11-05T06:05:18.508Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-05T06:06:21.609Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"theming(UI 皮肤)","level":"11.1","depth":1,"next":{"title":"包速查表","level":"12.1","depth":1,"path":"reference/packages.md","ref":"reference/packages.md","articles":[]},"previous":{"title":"框架手册","level":"10.2","depth":1,"path":"api-docs/manual.md","ref":"api-docs/manual.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"web/theming.md","mtime":"2026-11-05T07:55:20.829Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-05T07:55:45.693Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
