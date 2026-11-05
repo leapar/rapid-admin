@@ -7,9 +7,8 @@
  *   - Content: overflow: hidden, 内层 div 自带 overflow-y: auto (内容长时内部滚动)
  *   - 表格: ManagementTable 已配 scroll.y, 表格内部独立滚动
  *
- * 配色 (白系):
- *   - Sider 白底 + 浅边框
- *   - Header 半透明白 + 毛玻璃
+ * 配色: 全部跟随皮肤 token(不写死)
+ *   - Sider: LangRoot Layout.siderBg / Header: 皮肤 comp.layoutHeaderBg
  *   - 品牌名移至 Header 左侧 (替代原 Sider logo 块)
  *   - 删除 Footer (品牌名已在 Header)
  */
@@ -82,9 +81,9 @@ export const BasicLayout: React.FC = () => {
         width={240}
         collapsedWidth={64}
         style={{
-          // ⚠️ 不写死白底 —— 深色模式跟随 CSS 变量切换(variables.css 暗色段)
+          // 背景跟随皮肤 token(LangRoot Layout.siderBg)—— 不写死,
+          // 沉浸式皮肤(gov/museum/tech)的侧栏带品牌色晕
           borderRight: '0.5px solid var(--app-split)',
-          background: 'var(--app-surface-bg-strong)',
           height: '100vh',
         }}
       >
