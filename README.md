@@ -3,7 +3,7 @@
 > 开箱即用的 Go + React 通用后台骨架:RBAC 权限、数据范围、字段级脱敏、双级缓存、审计、手册与 Swagger 全内置。
 > A production-ready admin boilerplate in Go (Hertz + GORM + Casbin) with a React 18 + Ant Design 5 frontend.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Go](https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
 ![Ant Design](https://img.shields.io/badge/Ant%20Design-5-1677FF?logo=antdesign&logoColor=white)
@@ -77,4 +77,4 @@ rapid-admin/
 
 ## License
 
-[MIT](LICENSE)
+[Apache-2.0](LICENSE)
