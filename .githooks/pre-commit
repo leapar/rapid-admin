@@ -32,7 +32,7 @@ echo -e "${YELLOW}=== rapid-admin pre-commit 检查 ===${NC}"
 #    .eslintrc.cjs 已配置 no-restricted-syntax,pnpm lint 会自动跑
 #    仅在 web/ 改动时跑(避免 go-only commit 误触发)
 if git diff --cached --name-only | grep -q "^web/"; then
-  echo -e "${YELLOW}[1/3] ESLint + 字典硬编码检测(改动涉及 web/)${NC}"
+  echo -e "${YELLOW}[1/4] ESLint + 字典硬编码检测(改动涉及 web/)${NC}"
   if command -v pnpm >/dev/null 2>&1; then
     # pnpm 在 win32 上 lint 失败时 exit code 不可靠,直接 grep 输出
     LINT_OUT=$(pnpm --dir web lint 2>&1 || true)
@@ -49,14 +49,14 @@ if git diff --cached --name-only | grep -q "^web/"; then
     echo -e "${YELLOW}   ⚠ pnpm 未安装,跳过 ESLint(本机需 npm i -g pnpm)${NC}"
   fi
 else
-  echo -e "${YELLOW}[1/3] 跳过(本次改动不涉及 web/)${NC}"
+  echo -e "${YELLOW}[1/4] 跳过(本次改动不涉及 web/)${NC}"
 fi
 
 # ============================================================================
 # 2. 后端构建(仅当 server/ 改动时,Go 编译 sanity)
 # ============================================================================
 if git diff --cached --name-only | grep -q "^server/"; then
-  echo -e "${YELLOW}[2/3] Go 编译 sanity(改动涉及 server/)${NC}"
+  echo -e "${YELLOW}[2/4] Go 编译 sanity(改动涉及 server/)${NC}"
   if command -v go >/dev/null 2>&1; then
     if ! (cd server && go build ./...) 2>/dev/null; then
       echo -e "${RED}❌ Go 编译失败,请先修${NC}"
@@ -68,7 +68,7 @@ if git diff --cached --name-only | grep -q "^server/"; then
     echo -e "${YELLOW}   ⚠ go 未安装,跳过(本机需装 Go 1.24+)${NC}"
   fi
 else
-  echo -e "${YELLOW}[2/3] 跳过(本次改动不涉及 server/)${NC}"
+  echo -e "${YELLOW}[2/4] 跳过(本次改动不涉及 server/)${NC}"
 fi
 
 # ============================================================================
@@ -82,7 +82,7 @@ fi
 #    "docs/å..." 这种八进制,直接 grep 中文名**永远匹配不上**,
 #    这条检查就会静默地永远不跑(假绿)。
 if git -c core.quotepath=false diff --cached --name-only | grep -q "docs/框架层未完成项清单v1.md"; then
-  echo -e "${YELLOW}[3/3] 框架层清单自洽检查(改动涉及该清单)${NC}"
+  echo -e "${YELLOW}[3/4] 框架层清单自洽检查(改动涉及该清单)${NC}"
   if command -v python >/dev/null 2>&1 || command -v python3 >/dev/null 2>&1; then
     PY=$(command -v python || command -v python3)
     # Windows 控制台是 GBK,✅ 之类会 UnicodeEncodeError —— 强制 utf-8
@@ -95,7 +95,30 @@ if git -c core.quotepath=false diff --cached --name-only | grep -q "docs/框架�
     echo -e "${YELLOW}   ⚠ python 未安装,跳过清单检查${NC}"
   fi
 else
-  echo -e "${YELLOW}[3/3] 跳过(本次改动不涉及该清单)${NC}"
+  echo -e "${YELLOW}[3/4] 跳过(本次改动不涉及该清单)${NC}"
+fi
+
+# ============================================================================
+# 4. AI 接入文档生成一致性(改动涉及数据源时)—— docs/ai-coding.md §5.3/§5.5
+# ============================================================================
+#    module-list.md 与 llms.txt 是**生成物**,数据源(SUMMARY / internal/pkg /
+#    examples)变了而产物没跟 ⇒ 退出码 1。
+#    同样需要 -c core.quotepath=false,理由同第 3 步。
+AI_DOC_SRCS=$(git -c core.quotepath=false diff --cached --name-only | grep -E "^(server/docs/SUMMARY\.md|server/internal/pkg/|server/examples/)" | head -1)
+if [ -n "$AI_DOC_SRCS" ]; then
+  echo -e "${YELLOW}[4/4] AI 接入文档生成一致性(改动涉及 module-list / llms 数据源)${NC}"
+  if command -v python >/dev/null 2>&1 || command -v python3 >/dev/null 2>&1; then
+    PY=$(command -v python || command -v python3)
+    if ! PYTHONIOENCODING=utf-8 "$PY" scripts/gen_ai_docs.py --check; then
+      echo -e "${RED}❌ 生成产物过期,先跑:python scripts/gen_ai_docs.py${NC}"
+      exit 1
+    fi
+    echo -e "${GREEN}   ✓ module-list / llms.txt 与数据源一致${NC}"
+  else
+    echo -e "${YELLOW}   ⚠ python 未安装,跳过生成一致性检查${NC}"
+  fi
+else
+  echo -e "${YELLOW}[4/4] 跳过(本次改动不涉及生成数据源)${NC}"
 fi
 
 echo -e "${GREEN}=== pre-commit 通过 ✓ ===${NC}"

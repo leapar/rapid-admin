@@ -1,0 +1,168 @@
+# Rapid Admin
+
+> 开箱即用的 Go + React 通用后台管理框架:RBAC 权限、数据范围、字段级加密脱敏、双级缓存、审计、通知、定时任务;51 个框架模块各配手册章节与 `go run` 即跑的示例。技术栈:Go 1.22+(Hertz + GORM + Casbin)· React 18 + Ant Design 5。
+
+改本仓库代码的 AI agent 先读 [AGENTS.md](AGENTS.md)(构建/测试命令与硬约束);拿框架开发自己业务的 agent 从下面的手册章节按需取。
+
+## 手册 · 开始
+
+- [首页](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/README.md)
+
+- [快速开始](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/README.md)
+
+- [配置体系](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/configuration.md)
+
+- [框架约定](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/conventions.md)
+
+## 手册 · 基础设施
+
+- [logger(日志)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/logger.md): 多 Core 装配:控制台 + info/warn/error/audit/access 分文件
+
+- [errcode(业务错误码)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/errcode.md): 分类、HTTP 映射、错误对象
+
+- [response(统一响应体)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/response.md): 成功 / 失败 / 分页三种形状
+
+- [validatorx(参数校验)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/validatorx.md): 统一参数校验:自定义规则 + 中文错误
+
+- [pagination(分页)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/pagination.md): 分页参数解析与上限保护
+
+- [jsonid(字符串 ID)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/jsonid.md): 以字符串形式上 wire 的主键(雪花 ID 不能用数字)
+
+- [sonyflake(分布式 ID)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/sonyflake.md): 分布式 ID 生成 + worker id 分配
+
+- [timeutil(时间工具)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/timeutil.md): 统一东八区的时间工具
+
+- [buildinfo(构建信息)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/buildinfo.md): 编译期构建信息注入
+
+- [syncx(并发原语)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/syncx.md): 单飞 / 优雅关停 / 计数信号量 / worker pool
+
+- [randomx(安全随机)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/randomx.md): 安全随机 token 生成
+
+- [retryx(重试)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/retryx.md): 指数退避重试
+
+- [uainfo(UA 解析)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/uainfo.md): 解析 User-Agent,取出浏览器与操作系统
+
+- [metricsx(指标)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/metricsx.md): Prometheus 指标 + `/metrics` handler
+
+- [otelx(链路追踪)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/otelx.md): OpenTelemetry TracerProvider 初始化
+
+- [apiverx(版本协商)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/apiverx.md): API 版本协商
+
+- [grayx(灰度发布)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/infrastructure/grayx.md): 灰度发布 header 透传
+
+## 手册 · 存储与缓存
+
+- [cachex(两级缓存)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/storage/cachex.md): 两级缓存(L1 本地 LRU + L2 Redis)+ 三防
+
+- [kvstore(计数与窗口)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/storage/kvstore.md): 计数 + 滑动窗口:Redis / 内存两种实现
+
+- [searchidx(盲索引搜索)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/storage/searchidx.md): 加密字段的全文搜索(盲索引)
+
+- [media(音视频处理)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/storage/media.md): 音视频处理:ffprobe 探测与 ffmpeg 转码
+
+- [oss(对象存储)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/storage/oss.md): 对象存储统一抽象:本地磁盘 / 阿里云 OSS
+
+## 手册 · 安全与合规
+
+- [auth(登录鉴权)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/auth.md): JWT 签发 / 解析 / 吊销 + 强制下线
+
+- [authz(资源鉴权)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/authz.md): 资源级鉴权原语:principal / grant
+
+- [casbinx(策略引擎)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/casbinx.md): Casbin 初始化 + 策略行格式
+
+- [crypto(字段加密)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/crypto.md): 字段级加密(AES-256-GCM)+ 盲索引
+
+- [kms(密钥管理)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/kms.md): 密钥管理服务抽象层 + 轮转
+
+- [desensitize(数据脱敏)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/desensitize.md): 请求体 / 查询串脱敏
+
+- [signx(接口签名)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/signx.md): HMAC 接口签名 + 防重放
+
+- [idempotentx(幂等键)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/idempotentx.md): 幂等键:防重复提交
+
+- [ratelimitx(限流)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/ratelimitx.md): 进程内限流原语
+
+- [loginlock(登录锁定)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/loginlock.md): 登录失败计数 + 账号锁定
+
+- [anomalylogin(异常登录检测)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/anomalylogin.md): 异常登录检测
+
+- [mfa(登录二次验证)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/mfa.md): 密码 + 短信码双因子:两步登录 / 自助开关 / 管理员恢复
+
+- [scope(数据范围)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/scope.md): 数据范围(行级权限):规则 → 作用域 → WHERE
+
+- [fieldpolicy(字段可见性)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/security/fieldpolicy.md): 字段级可见性(列级权限):三态模式 + 逐字段叠加 + 响应出口脱敏
+
+## 手册 · 审计
+
+- [piiaudit(PII 审计)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/audit/piiaudit.md): PII 访问审计:谁在什么时候看了手机号
+
+- [cryptaudit(密钥审计)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/audit/cryptaudit.md): 密钥使用审计:哪个 key 被用过
+
+- [smsaudit(短信审计)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/audit/smsaudit.md): 短信发送审计
+
+## 手册 · 消息与通知
+
+- [inbox(站内信)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/inbox.md): 站内信 + 通知中心:未读数 / 幂等 / 防 IDOR
+
+- [notifyx(通知分发)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/notifyx.md): 多通道通知分发
+
+- [push(推送通道)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/push.md): 服务端事件推送通道(SSE 的传输层地基)
+
+- [pushx(推送下发)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/pushx.md): App 推送:抽象 Provider + 阿里云 EMNS
+
+- [permnotify(权限广播)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/permnotify.md): 权限失效广播:改权限后让前端重拉
+
+- [msn(短信通道)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/msn.md): 运行时可切换的短信 sender
+
+- [smslimit(短信限流)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/smslimit.md): 短信发送限流:冷却 / 1 分钟 / 1 天三道闸
+
+- [smstpl(短信模板)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/smstpl.md): 短信模板审核流 + 发送前守卫
+
+- [emailx(邮件)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/emailx.md): 邮件下发:阿里云 DirectMail
+
+## 手册 · 调度与可观测
+
+- [cronx(定时任务)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/cronx.md): 定时任务调度:代码注册 + DB 覆盖 + 两层去重
+
+- [jobs(内置任务)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/jobs.md): 平台内置定时任务:框架任务注册 + 执行记录清理
+
+- [slowquery(慢 SQL 报警)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/slowquery.md): 慢 SQL 报警:两种接入方式 + Prometheus 指标
+
+## 手册 · 业务扩展
+
+- [dynx(动态业务集合)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/business/dyn.md): 用户自己设计业务表,菜单/接口/权限/页面全自动
+
+- [approvalx(通用审批)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/business/approval.md): 通用审批系统使用教程:一张单子的旅程(状态机)/ 或签会签详解(D5:逐级审批必须会签)/ 内置三条案例模板(请假/报销/采购,默认停用)+ 按角色配置的建模板教程 / 引擎内部逻辑(提交快照、会签数票、事务纪律、站内信与巡检)
+
+## 手册 · 接口文档
+
+- [swaggerx(接口文档)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/api-docs/swaggerx.md): Swagger UI + 自动生成的 OpenAPI 3.0 spec
+
+- [框架手册](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/api-docs/manual.md): 这一本手册怎么构建 / 内嵌 / 访问(`/docs`)
+
+## 手册 · 前端
+
+- [theming(UI 皮肤)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/web/theming.md): 四套内置皮肤 + 自定义换肤(一个文件)+ branding.skin 部署级下发
+
+## 手册 · 参考
+
+- [包速查表](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/packages.md): 58 个 Go 包一句话索引
+
+- [示例目录](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/examples.md): 52 个可运行示例怎么用
+
+- [配置项全表](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/config-index.md): yaml 配置项 → 框架模块对照
+
+## 仓库文档(给 AI 的入口)
+
+- [AGENTS.md](https://raw.githubusercontent.com/leapar/rapid-admin/main/AGENTS.md): 改仓库代码必读 —— 常用命令 + 硬约束
+- [install.md](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/ai/install.md): 从零跑起来并打第一个接口的可执行剧本
+- [module-add.md](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/ai/module-add.md): 新增一个框架模块的七步配方
+- [module-list.md](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/ai/module-list.md): 51 个框架模块速查表
+- [错误码全表](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/reference/error-codes.md): 业务错误码与语义
+
+## Optional
+
+- [设计文档目录](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/design/): SRS 与设计稿
+- [ROADMAP](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/ROADMAP.md): 里程碑与状态
+- [AI 接入规划](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/ai-coding.md): 本文件的生成依据与后续计划
+- [UI 皮肤规划](https://raw.githubusercontent.com/leapar/rapid-admin/main/docs/theming.md): 换肤架构与皮肤编辑器规划
