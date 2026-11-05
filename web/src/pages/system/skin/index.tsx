@@ -323,7 +323,11 @@ export const SkinEditorPage: React.FC = () => {
         <Card
           size="small"
           title={t('page.skin.listTitle')}
-          style={{ width: 230, flexShrink: 0, overflowY: 'auto' }}
+          style={{ width: 230, flexShrink: 0, overflowY: 'auto', margin: 0, height: 'calc(100% - 8px)', padding: '14px 16px' }}
+          styles={{
+             header: { padding: '0' },
+            body: { padding: '14px 16px', height: 'calc(100% - 44px)', overflow: 'auto' },
+          }}
         >
           <Space direction="vertical" size={6} style={{ width: '100%' }}>
             {listSkins().map((s) => (
@@ -366,7 +370,11 @@ export const SkinEditorPage: React.FC = () => {
               {draft && <Tag>{draft.appearance === 'dark' ? t('page.skin.appearanceDark') : t('page.skin.appearanceLight')}</Tag>}
             </Space>
           }
-          style={{ flex: 1, minWidth: 380, overflowY: 'auto' }}
+          style={{ flex: 1, minWidth: 380, overflowY: 'auto', margin: 0, height: 'calc(100% - 8px)', padding: '14px 16px' }}
+          styles={{
+             header: { padding: '0' },
+            body: { padding: '14px 16px', height: 'calc(100% - 44px)', overflow: 'auto' },
+          }}
         >
           {!draft ? (
             <Typography.Text type="secondary">{t('page.skin.pickFirst')}</Typography.Text>
@@ -452,7 +460,11 @@ export const SkinEditorPage: React.FC = () => {
         <Card
           size="small"
           title={t('page.skin.previewTitle')}
-          style={{ width: 320, flexShrink: 0, overflowY: 'auto' }}
+          style={{ width: 320, flexShrink: 0, overflowY: 'auto', margin: 0, height: 'calc(100% - 8px)', padding: '14px 16px' }}
+          styles={{
+             header: { padding: '0' },
+            body: { padding: '14px 16px', height: 'calc(100% - 44px)', overflow: 'auto' },
+          }}
           extra={
             draft && (
               <Space size={4}>
