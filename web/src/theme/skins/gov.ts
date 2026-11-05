@@ -52,7 +52,7 @@ const skin: SkinDefinition = {
   comp: {
     /* Layout(顶栏 / 侧栏 / 画布 / 触发器) */
     layoutHeaderBg: '#C7000B',
-    siderBg: '#f6e9e9',
+    siderBg: '#efdbdb',
     bodyBg: '#f3e2e2',
     triggerColor: '#ffffff',
     /* Header 沉浸式配套(顶栏文字 / 次级 / 三级 / 底边线)—— Header.tsx 消费 */
