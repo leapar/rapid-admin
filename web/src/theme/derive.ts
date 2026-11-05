@@ -8,14 +8,20 @@
  * 用户在高级模式可逐键覆盖;导出/保存的产物与内置皮肤**同构**
  * (同一 SkinDefinition,不存在第二套格式)。
  *
- * # 算法:参考皮肤重色相(rehue)
+ * # 算法:参考皮肤重色相(rehue)—— 双输入
  *
  * 以 museum(浅色)/ black(深色)为**结构参考** —— 它们的明度阶梯
- * (画布 90% / 容器 99% / 文字 16%…)承载了全部对比度关系;
- * 换肤 = 把参考皮肤每个色值的色相换成品牌主色色相、饱和度按
- * (主色饱和度 / 参考主色饱和度)等比缩放,**明度全部保留**。
+ * (画布 90% / 容器 99% / 文字 16%…)承载了全部对比度关系。
+ * **两个互相独立的创意输入**(2026-11-05 用户拍板拆开):
+ * - **主色**(品牌强调色):只决定按钮 / 链接 / 选中态等强调键 ——
+ *   white / black 皮肤的中性面与 #f60 无关,就是这个道理;
+ * - **界面基色 surface**:决定中性面(画布 / 文字 / 边框 / 顶栏 / 侧栏)的
+ *   色相与浓度 —— 选纯灰(s=0)即 white / black 式"无彩中性底"。
+ *
+ * 换肤 = 把参考皮肤每个色值的色相换成所属输入的色相、饱和度按
+ * (输入饱和度 / 参考锚点饱和度)等比缩放,**明度全部保留**。
  * 这样"浅底比容器浅、文字比画布深"等所有关系自动成立,用户怎么选
- * 主色都不会配出脏色。纯灰(s=0)不受影响;rgba()/阴影串里的色值
+ * 都不会配出脏色。纯灰(s=0)不受影响;rgba()/阴影串里的色值
  * 一并重着色(alpha 不动)。
  */
 import type { SkinDefinition, SkinAppearance, PaletteTokens, CompTokens } from './types'
@@ -103,12 +109,48 @@ const DARK_REF = black
 /** 生成建议值的入参(编辑器基础模式的全部输入) */
 export interface SuggestInput {
   appearance: SkinAppearance
-  /** 品牌主色(#rrggbb)—— 唯一必填的"创意输入" */
+  /** 品牌主色(#rrggbb)—— 按钮/链接/选中态等**强调键**的色相来源 */
   primary: string
-  /** hover/active 不传就按参考皮肤的三态档位重色相(L 与参考一致) */
+  /**
+   * 界面基色(#rrggbb)—— 中性面(画布/文字/边框/顶栏/侧栏)的色相与
+   * 浓度来源;选纯灰即 white/black 式无彩底。缺省跟随主色(单输入旧行为)。
+   */
+  surface?: string
+  /** hover/active 不传就按主色明度 L±8 派生 */
   hover?: string
   active?: string
 }
+
+/**
+ * 跟随**品牌主色**的强调键 —— 其余 palette/comp 键全部跟随界面基色。
+ * 划分依据 = museum 的取值:强调键的色相与 brand.primary 同族,
+ * 中性键的色相与 colorBgLayout 同族(文字梯度也带界面色相,是"暖灰"不是品牌色)。
+ */
+const BRAND_PALETTE_KEYS = new Set<string>([
+  'primaryText',
+  'primaryTextHover',
+  'primaryTextActive',
+  'colorPrimaryBg',
+  'colorPrimaryBgHover',
+  'colorPrimaryBorder',
+  'colorPrimaryBorderHover',
+  'colorLink',
+  'colorLinkHover',
+  'colorLinkActive',
+])
+const BRAND_COMP_KEYS = new Set<string>([
+  'menuSelectedBg',
+  'menuSelectedColor',
+  'menuHoverColor',
+  'menuDarkItemSelectedBg',
+  'menuDarkItemSelectedColor',
+  'rowSelectedBg',
+  'rowSelectedHoverBg',
+  'dateCellRangeBg',
+  'inputActiveShadow',
+  'tabsActiveColor',
+  'selectOptionSelectedColor',
+])
 
 /**
  * 生成一套完整的 palette + comp + cssVars + brand 建议值。
@@ -126,6 +168,18 @@ export function suggestSkinParts(input: SuggestInput): {
   const { s: sRef } = hexToHsl(ref.brand.primary)
   const scale = sRef === 0 ? 1 : sBrand / sRef
 
+  // 界面基色(缺省跟随主色 = 单输入旧行为);饱和度锚点取参考皮肤三个
+  // 代表性中性面的最大值(下限 4 防除零,上限 3 防深色参考低饱和锚点失控)
+  const surf = input.surface ?? input.primary
+  const { h: hueS, s: sSurf } = hexToHsl(surf)
+  const refSurfAnchor = Math.max(
+    4,
+    hexToHsl(ref.palette.colorBgLayout).s,
+    hexToHsl(ref.palette.colorBgContainer).s,
+    hexToHsl(ref.comp.siderBg).s
+  )
+  const scaleS = sSurf === 0 ? 0 : Math.min(3, sSurf / refSurfAnchor)
+
   // hover/active 从**用户主色**的明度派生(L±8,theming.md §5 心法),
   // 不从参考皮肤继承 —— 参考档位只在用户主色明度与参考一致时才成立
   const brand: SkinDefinition['brand'] = {
@@ -134,10 +188,16 @@ export function suggestSkinParts(input: SuggestInput): {
     active: input.active ?? hslToHex({ h: hue, s: sBrand, l: Math.max(4, lPrimary - 8) }),
   }
   const palette = Object.fromEntries(
-    Object.entries(ref.palette).map(([k, v]) => [k, recolor(v, hue, scale)])
+    Object.entries(ref.palette).map(([k, v]) => {
+      const brandKey = BRAND_PALETTE_KEYS.has(k)
+      return [k, recolor(v, brandKey ? hue : hueS, brandKey ? scale : scaleS)]
+    })
   ) as unknown as PaletteTokens
   const comp = Object.fromEntries(
-    Object.entries(ref.comp).map(([k, v]) => [k, recolor(v, hue, scale)])
+    Object.entries(ref.comp).map(([k, v]) => {
+      const brandKey = BRAND_COMP_KEYS.has(k)
+      return [k, recolor(v, brandKey ? hue : hueS, brandKey ? scale : scaleS)]
+    })
   ) as unknown as CompTokens
 
   // 品牌强调位显式钉值,不信任 rehue 的取整:

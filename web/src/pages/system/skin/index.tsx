@@ -182,6 +182,9 @@ export const SkinEditorPage: React.FC = () => {
   const setSkin = useUIStore((s) => s.setSkin)
 
   const [draft, setDraft] = useState<SkinDefinition | null>(null)
+  // 界面基色(中性面的色相/浓度来源)—— 与品牌主色互相独立(derive.ts 双输入模型);
+  // 不进 SkinDefinition(它是编辑器的推导输入,不是皮肤数据)
+  const [surface, setSurface] = useState<string>('#888888')
   const [advanced, setAdvanced] = useState(false)
   // 试穿状态:进入页面记下原皮肤,退出/卸载恢复 —— 草稿 id 是注册进全局表的,
   // 不恢复的话切走之后"当前皮肤"还指着草稿对象
@@ -205,22 +208,34 @@ export const SkinEditorPage: React.FC = () => {
 
   const newFromBrand = (): void => {
     setDraft(
-      suggestSkin({ id: DRAFT_ID, name: t('page.skin.defaultName') }, { appearance: 'light', primary: '#7C3AED' })
+      suggestSkin(
+        { id: DRAFT_ID, name: t('page.skin.defaultName') },
+        { appearance: 'light', primary: '#7C3AED', surface: '#888888' }
+      )
     )
+    setSurface('#888888')
     setTryingOn(false)
   }
 
   const cloneFrom = (id: string): void => {
-    const copy = cloneSkin(getSkin(id))
+    const src = getSkin(id)
+    const copy = cloneSkin(src)
     copy.id = DRAFT_ID
     copy.name = `${copy.name} · ${t('page.skin.cloneSuffix')}`
     setDraft(copy)
+    // 界面基色从被克隆皮肤的画布底色取(是 hex 才能进 picker,否则退中性灰)
+    const bg = src.palette.colorBgLayout.trim()
+    setSurface(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(bg) ? bg : '#888888')
     setTryingOn(false)
   }
 
   const rederive = (): void => {
     if (!draft) return
-    const parts = suggestSkinParts({ appearance: draft.appearance, primary: draft.brand.primary })
+    const parts = suggestSkinParts({
+      appearance: draft.appearance,
+      primary: draft.brand.primary,
+      surface,
+    })
     setDraft((d) => d && { ...d, ...parts })
     message.info(t('page.skin.rederived'))
   }
@@ -228,7 +243,7 @@ export const SkinEditorPage: React.FC = () => {
   const changeAppearance = (appearance: SkinDefinition['appearance']): void => {
     if (!draft) return
     // 明暗一换,全部色值的参考系就变了(浅色参考 museum/深色 black)—— 重算
-    const parts = suggestSkinParts({ appearance, primary: draft.brand.primary })
+    const parts = suggestSkinParts({ appearance, primary: draft.brand.primary, surface })
     setDraft((d) => d && { ...d, appearance, ...parts })
   }
 
@@ -276,10 +291,13 @@ export const SkinEditorPage: React.FC = () => {
   const colorField = (
     label: string,
     value: string,
-    onChange: (v: string) => void
+    onChange: (v: string) => void,
+    labelTip?: string
   ): React.ReactNode => (
     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-      <span style={{ flex: '0 0 190px', fontSize: 12, opacity: 0.75 }}>{label}</span>
+      <span style={{ flex: '0 0 190px', fontSize: 12, opacity: 0.75 }}>
+        {labelTip ? <Tooltip title={labelTip}>{label}</Tooltip> : label}
+      </span>
       {/* 非色值(rgba 串/阴影)也能编辑:ColorPicker 只在能解析成色值时参与 */}
       <Input
         size="small"
@@ -310,15 +328,22 @@ export const SkinEditorPage: React.FC = () => {
           <Space direction="vertical" size={6} style={{ width: '100%' }}>
             {listSkins().map((s) => (
               <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {/* 双色芯片:左半 = 界面底色(皮肤的身份),右半 = 品牌强调色 ——
+                    white/black 的品牌色同为橙,单色芯片会让人以为显示错了 */}
                 <span
                   style={{
+                    display: 'inline-flex',
                     width: 14,
                     height: 14,
                     borderRadius: 4,
-                    background: getSkin(s.id).brand.primary,
+                    overflow: 'hidden',
                     flexShrink: 0,
+                    border: '0.5px solid rgba(0,0,0,0.15)',
                   }}
-                />
+                >
+                  <span style={{ flex: 1, background: getSkin(s.id).palette.colorBgLayout }} />
+                  <span style={{ flex: 1, background: getSkin(s.id).brand.primary }} />
+                </span>
                 <span style={{ flex: 1 }}>{s.name}</span>
                 <Button size="small" type="text" onClick={() => cloneFrom(s.id)}>
                   {t('page.skin.clone')}
@@ -370,13 +395,14 @@ export const SkinEditorPage: React.FC = () => {
                 </Popconfirm>
               </Space>
 
-              {/* 基础模式:主色三态("主色"是品牌强调色,不是底色 —— 见 tip) */}
+              {/* 基础模式:界面色调 + 主色三态(两个独立输入,见各 tip) */}
               <Card
                 type="inner"
                 size="small"
                 title={<Tooltip title={t('page.skin.baseModeTip')}>{t('page.skin.baseMode')}</Tooltip>}
                 style={{ marginBottom: 12 }}
               >
+                {colorField(t('page.skin.surface'), surface, setSurface, t('page.skin.surfaceTip'))}
                 {(['primary', 'hover', 'active'] as const).map((k) =>
                   colorField(t(`page.skin.${k}`), draft.brand[k], (v) =>
                     setDraft((d) => d && { ...d, brand: { ...d.brand, [k]: v } })

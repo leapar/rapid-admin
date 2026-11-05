@@ -72,6 +72,43 @@ describe('suggestSkinParts:浅色皮肤', () => {
   })
 })
 
+describe('suggestSkinParts:双输入(界面基色 ≠ 品牌主色)', () => {
+  // 绿界面 + 橙按钮 —— white/black"中性面与品牌色无关"的生成版
+  const parts = suggestSkinParts({ appearance: 'light', primary: '#f60', surface: '#6b9e78' })
+
+  const hueDist = (a: string, b: string): number => {
+    const ha = hexToHsl(a).h
+    const hb = hexToHsl(b).h
+    return Math.abs((((ha - hb) % 360) + 540) % 360 - 180)
+  }
+
+  it('中性面(画布/文字/边框/侧栏)跟随界面基色(绿色)', () => {
+    expect(hueDist(parts.palette.colorBgLayout, '#6b9e78')).toBeLessThanOrEqual(15)
+    expect(hueDist(parts.comp.siderBg, '#6b9e78')).toBeLessThanOrEqual(15)
+    expect(hueDist(parts.palette.colorBorder, '#6b9e78')).toBeLessThanOrEqual(15)
+  })
+
+  it('强调键(colorLink/选中色)仍跟品牌主色(橙)', () => {
+    expect(hueDist(parts.palette.colorLink, '#f60')).toBeLessThanOrEqual(15)
+    expect(hueDist(parts.comp.menuSelectedColor, '#f60')).toBeLessThanOrEqual(15)
+    expect(hueDist(parts.palette.colorPrimaryBg, '#f60')).toBeLessThanOrEqual(15)
+  })
+
+  it('界面基色选纯灰 → 中性面无彩(white/black 式),强调键不受影响', () => {
+    const gray = suggestSkinParts({ appearance: 'light', primary: '#f60', surface: '#888888' })
+    expect(hexToHsl(gray.palette.colorBgLayout).s).toBeLessThanOrEqual(8)
+    expect(hexToHsl(gray.comp.siderBg).s).toBeLessThanOrEqual(8)
+    expect(gray.palette.colorLink).toBe(gray.brand.primary)
+  })
+
+  it('surface 缺省跟随主色(单输入旧行为不破坏)', () => {
+    const legacy = suggestSkinParts({ appearance: 'light', primary: '#7C3AED' })
+    const withSurface = suggestSkinParts({ appearance: 'light', primary: '#7C3AED', surface: '#7C3AED' })
+    expect(legacy.palette.colorBgLayout).toBe(withSurface.palette.colorBgLayout)
+    expect(legacy.comp.siderBg).toBe(withSurface.comp.siderBg)
+  })
+})
+
 describe('suggestSkinParts:深色皮肤', () => {
   const parts = suggestSkinParts({ appearance: 'dark', primary: '#2F6BFF' })
 
