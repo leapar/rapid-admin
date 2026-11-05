@@ -1373,7 +1373,7 @@ const zhCN = {
     // 字典页 2026-10-17 实装(ManagementTable + inlineToolBar),顶掉了 placeholder 版 ——
     // 所以这一组只有 description,没有 f1..f5 功能清单(别再补回来,那是死键)
     dict: {
-      description: 'å­å¸ç»´æ¤(ä¸å¡æ¹èªç± enum åºæ¯)',
+      description: '字典维护(业务方自由 enum 场景)',
       // 2026-10-25 Module B-5c:字典管理页的写死中文
       // ---- 编辑弹窗 ----
       editTitle: '编辑字典项',
