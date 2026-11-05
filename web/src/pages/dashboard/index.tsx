@@ -150,30 +150,30 @@ const Dashboard: FC = () => {
       file_total: {
         label: t('dashboard.kpi.fileTotal'),
         icon: <FileOutlined />,
-        color: '#2f54eb',
+        color: 'var(--app-primary)',
       },
       file_today: {
         label: t('dashboard.kpi.fileToday'),
         icon: <UploadOutlined />,
-        color: '#52c41a',
+        color: 'var(--app-primary)',
       },
       file_storage_bytes: {
         label: t('dashboard.kpi.fileStorageBytes'),
         icon: <HddOutlined />,
-        color: '#fa8c16',
+        color: 'var(--app-primary)',
         // 后端给的是原始字节数,格式化成 B/KB/MB/GB(与文件列表页同一把尺子)
         formatter: (v: number) => formatNumber.fileSize(v),
       },
       folder_total: {
         label: t('dashboard.kpi.folderTotal'),
         icon: <FolderOutlined />,
-        color: '#13c2c2',
+        color: 'var(--app-primary)',
       },
       // 当前在线(2026-11-03)—— 会话登记簿聚合,纯计数
       user_online: {
         label: t('dashboard.kpi.userOnline'),
         icon: <UserOutlined />,
-        color: '#52c41a',
+        color: 'var(--app-primary)',
       },
     }),
     [t],

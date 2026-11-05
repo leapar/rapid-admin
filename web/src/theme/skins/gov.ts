@@ -19,10 +19,10 @@ const skin: SkinDefinition = {
 
   palette: {
     /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
-    colorBgBase: '#fcfafa',
-    colorBgLayout: '#f7eeee',
-    colorBgContainer: '#fdfcfc',
-    colorBgElevated: '#fdfcfc',
+    colorBgBase: '#faf4f4',
+    colorBgLayout: '#f3e2e2',
+    colorBgContainer: '#fef7f7',
+    colorBgElevated: '#fef7f7',
     colorBgSpotlight: '#2b2b2b',
     colorBgMask: 'rgba(43, 43, 43, 0.45)',
     /* 文字梯度(主 → 四级 + 描述 + 占位) */
@@ -33,8 +33,8 @@ const skin: SkinDefinition = {
     colorTextDescription: '#6b6b6b',
     colorTextPlaceholder: 'rgba(41, 41, 41, 0.35)',
     /* 边框 / 分割线 */
-    colorBorder: '#eadcdc',
-    colorBorderSecondary: '#f0e8e8',
+    colorBorder: '#e6d0d0',
+    colorBorderSecondary: '#f0dfdf',
     colorSplit: 'rgba(41, 41, 41, 0.06)',
     /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#C7000B',
@@ -52,8 +52,8 @@ const skin: SkinDefinition = {
   comp: {
     /* Layout(顶栏 / 侧栏 / 画布 / 触发器) */
     layoutHeaderBg: '#C7000B',
-    siderBg: '#f9f3f3',
-    bodyBg: '#f7eeee',
+    siderBg: '#f6e9e9',
+    bodyBg: '#f3e2e2',
     triggerColor: '#ffffff',
     /* Header 沉浸式配套(顶栏文字 / 次级 / 三级 / 底边线)—— Header.tsx 消费 */
     headerTextColor: '#ffffff',
@@ -62,28 +62,28 @@ const skin: SkinDefinition = {
     headerBorderColor: 'rgba(255, 255, 255, 0.14)',
     /* Menu(侧边菜单) */
     menuItemBg: 'transparent',
-    menuSelectedBg: '#fad6d6',
+    menuSelectedBg: '#f8caca',
     menuSelectedColor: '#C7000B',
-    menuHoverBg: '#f9e9ea',
+    menuHoverBg: '#f7dedf',
     menuHoverColor: '#C7000B',
     menuColor: '#595959',
     menuDarkItemSelectedBg: 'rgba(199, 0, 11, 0.16)',
     menuDarkItemSelectedColor: '#ff616a',
     /* Table(表头 / 边框 / 行 hover / 行选中) */
-    tableHeaderBg: '#f6eeef',
+    tableHeaderBg: '#f5e5e6',
     tableHeaderColor: '#595959',
-    tableBorderColor: '#eadcdc',
-    rowHoverBg: '#f8f4f4',
-    rowSelectedBg: '#fad6d6',
-    rowSelectedHoverBg: '#f6cbcc',
+    tableBorderColor: '#e6d0d0',
+    rowHoverBg: '#f8ecec',
+    rowSelectedBg: '#f8caca',
+    rowSelectedHoverBg: '#f4bfbf',
     /* Button / Input(阴影 / 聚焦光圈) */
     primaryShadow: '0 1px 2px rgba(41, 41, 41, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
     defaultShadow: '0 1px 2px rgba(41, 41, 41, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(199, 0, 11, 0.18)',
     /* Pagination / DatePicker */
-    paginationItemBg: '#fdfcfc',
-    dateCellHoverBg: '#f9e9ea',
-    dateCellRangeBg: '#fad6d6',
+    paginationItemBg: '#fef7f7',
+    dateCellHoverBg: '#f7dedf',
+    dateCellRangeBg: '#f8caca',
     /* Breadcrumb / Tabs / Select */
     breadcrumbItemColor: 'rgba(41, 41, 41, 0.65)',
     breadcrumbLastColor: '#292929',
