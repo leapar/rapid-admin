@@ -27,6 +27,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { theme } from 'antd'
 import { LangRoot } from '@/components/common/LangRoot'
+import { getSkin } from '@/theme/registry'
 
 /** 探针 —— 把主题算出来的 token 吐到 DOM 上(jsdom 里读不到 CSS 变量) */
 function TokenProbe() {
@@ -63,7 +64,12 @@ describe('主题 · link 按钮颜色', () => {
       </LangRoot>,
     )
 
-    expect(screen.getByTestId('colorLinkHover').textContent).toBe('#ff8c3a')
-    expect(screen.getByTestId('colorLinkActive').textContent).toBe('#d35400')
+    // 期望值不再硬编码:皮肤色值调整时这里自动跟随(getSkin('white'))——
+    // 本测试网的是"link 三态必须是品牌色,不能回落 antd 蓝"
+    const { brand } = getSkin('white')
+    expect(screen.getByTestId('colorLinkHover').textContent).toBe(brand.hover)
+    expect(screen.getByTestId('colorLinkActive').textContent).toBe(brand.active)
+    expect(screen.getByTestId('colorLinkHover').textContent).not.toBe('#1677ff')
+    expect(screen.getByTestId('colorLinkActive').textContent).not.toBe('#1677ff')
   })
 })

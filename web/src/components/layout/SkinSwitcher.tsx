@@ -15,13 +15,10 @@ import { useUIStore } from '@/stores/ui'
 import { getSkin, listSkins } from '@/theme/registry'
 import { useI18n } from '@/locales'
 
-/** 各皮肤的色板圆点(与 skins/<id>.ts 的 brand.primary 同源,仅展示用) */
-const SWATCH: Record<string, string> = {
+/** 黑白皮肤的圆点特例色:brand.primary 是品牌橙,但圆点要表达的是外观明暗 */
+const APPEARANCE_DOT: Record<string, string> = {
   white: '#ffffff',
   black: '#1f1f1f',
-  tech: '#2f6bff',
-  gov: '#c7000b',
-  museum: '#8c5a2b',
 }
 
 const SwatchDot: React.FC<{ color: string }> = ({ color }) => (
@@ -30,6 +27,7 @@ const SwatchDot: React.FC<{ color: string }> = ({ color }) => (
       display: 'inline-block',
       width: 14,
       height: 14,
+      marginRight: 8, // 色板圆点与文字的间隔(antd 对自绘 icon 不加 margin)
       borderRadius: '50%',
       background: color,
       border: '1px solid rgba(0,0,0,0.15)',
@@ -50,7 +48,11 @@ export const SkinSwitcher: React.FC = () => {
       s.id === active.id ? (
         <CheckOutlined />
       ) : (
-        <SwatchDot color={SWATCH[s.id] ?? 'transparent'} />
+        // 圆点:黑白皮肤表达外观明暗(特例),品牌皮肤取自身主色
+        // (动态 —— 自定义皮肤注册后自动正确)
+        <SwatchDot
+          color={APPEARANCE_DOT[s.id] ?? getSkin(s.id).brand.primary}
+        />
       ),
     // 皮肤名不进语言包:它是皮肤定义的一部分,不是界面文案
     label: s.name,

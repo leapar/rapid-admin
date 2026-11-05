@@ -1,10 +1,10 @@
 /**
- * museum —— 文博棕金(博物馆 / 文博领域)
+ * museum —— 文博棕金(显式全量定义,逐参数可改)
  *
- * 规格:docs/theming.md §4.1。赭石棕主色 + 宣纸暖灰画布;
- * 中性基底(文字/边框)为暖棕灰系。扁平模型(2026-11-05):浅色外观。
- * 注意:规格里的"深胡桃侧栏"是可选庄重款,浅色下会让浅色菜单文字失去对比,
- * 本版不启用 —— 想要就在 comp 里把 siderBg 与 menuColor/menuHoverBg 成组改。
+ * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
+ * 与基准键集一致(漏一个色调即红);新增 token 键时五套皮肤要同步补。
+ * 颜色取自 2026-11-05 的一轮 antd seed → map 理念重调:
+ * 中性面同一色温、品牌浅底同系衍生 —— 改单个色时保持同明度档位即可。
  */
 import type { SkinDefinition } from '../types'
 
@@ -12,83 +12,88 @@ const skin: SkinDefinition = {
   id: 'museum',
   name: '文博棕金',
   appearance: 'light',
-  brand: {
-    primary: '#8C5A2B',
-    hover: '#A9743D',
-    active: '#6E4520',
-  },
+  /* 品牌三态:hover 亮一档 / active 暗一档(L 轴) */
+  brand: { primary: '#8C5A2B', hover: '#af7136', active: '#694320' },
 
-  // 语义色板(宣纸暖灰系)
   palette: {
-    colorBgBase: '#FFFDF9',
-    colorBgLayout: '#F7F4EF', // 宣纸暖灰
-    colorBgContainer: '#FFFDF9',
-    colorBgElevated: '#FFFDF9',
-    colorBgSpotlight: '#3D2E1F',
-    colorBgMask: 'rgba(61, 46, 31, 0.45)',
-    colorText: '#3D2E1F',
-    colorTextSecondary: '#6B563D',
-    colorTextTertiary: '#A08B70',
-    colorTextQuaternary: '#C4B29A',
-    colorTextDescription: '#7A6549',
-    colorTextPlaceholder: 'rgba(61, 46, 31, 0.35)',
-    colorBorder: '#EBE2D3',
-    colorBorderSecondary: '#F0E9DC',
-    colorSplit: 'rgba(61, 46, 31, 0.06)',
+    /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
+    colorBgBase: '#fbfaf9',
+    colorBgLayout: '#f9f6f3',
+    colorBgContainer: '#ffffff',
+    colorBgElevated: '#ffffff',
+    colorBgSpotlight: '#3b2b1b',
+    colorBgMask: 'rgba(59, 43, 27, 0.45)',
+    /* 文字梯度(主 → 四级 + 描述 + 占位) */
+    colorText: '#36281c',
+    colorTextSecondary: '#705942',
+    colorTextTertiary: '#b3a08f',
+    colorTextQuaternary: '#d0c7be',
+    colorTextDescription: '#836a53',
+    colorTextPlaceholder: 'rgba(54, 40, 28, 0.35)',
+    /* 边框 / 分割线 */
+    colorBorder: '#f1eae4',
+    colorBorderSecondary: '#f5f0eb',
+    colorSplit: 'rgba(54, 40, 28, 0.06)',
+    /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#8C5A2B',
-    primaryTextHover: '#A9743D',
-    primaryTextActive: '#6E4520',
-    colorPrimaryBg: '#F5EBDD', // 浅驼底
-    colorPrimaryBgHover: '#EFE1CB',
-    colorPrimaryBorder: '#DCC3A4',
-    colorPrimaryBorderHover: '#C9A87C',
+    primaryTextHover: '#af7136',
+    primaryTextActive: '#694320',
+    colorPrimaryBg: '#f9f2eb',
+    colorPrimaryBgHover: '#f4e8dc',
+    colorPrimaryBorder: '#edd8c4',
+    colorPrimaryBorderHover: '#e1be9d',
     colorLink: '#8C5A2B',
-    colorLinkHover: '#A9743D',
-    colorLinkActive: '#6E4520',
+    colorLinkHover: '#af7136',
+    colorLinkActive: '#694320',
   },
 
-  // 组件级 token
   comp: {
-    layoutHeaderBg: 'rgba(255, 253, 249, 0.78)',
-    siderBg: '#FFFDF9',
-    bodyBg: '#F7F4EF',
-    triggerColor: '#3D2E1F',
-    menuItemBg: '#FFFDF9',
-    menuSelectedBg: '#F0E4D2',
+    /* Layout(顶栏毛玻璃 / 侧栏 / 画布 / 触发器) */
+    layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
+    siderBg: '#ffffff',
+    bodyBg: '#f9f6f3',
+    triggerColor: '#36281c',
+    /* Menu(侧边菜单) */
+    menuItemBg: '#ffffff',
+    menuSelectedBg: '#f7ede4',
     menuSelectedColor: '#8C5A2B',
-    menuHoverBg: '#F5EBDD',
+    menuHoverBg: '#faf5ef',
     menuHoverColor: '#8C5A2B',
-    menuColor: '#6B563D',
+    menuColor: '#705942',
     menuDarkItemSelectedBg: 'rgba(140, 90, 43, 0.16)',
-    menuDarkItemSelectedColor: '#C89B6E',
-    tableHeaderBg: '#F3EEE4',
-    tableHeaderColor: '#6B563D',
-    tableBorderColor: '#EBE2D3',
-    rowHoverBg: '#F7F3EA',
-    rowSelectedBg: '#F0E4D2',
-    rowSelectedHoverBg: '#EFE1CB',
-    primaryShadow: '0 1px 2px rgba(61, 46, 31, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-    defaultShadow: '0 1px 2px rgba(61, 46, 31, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+    menuDarkItemSelectedColor: '#d6a77a',
+    /* Table(表头 / 边框 / 行 hover / 行选中) */
+    tableHeaderBg: '#f9f6f3',
+    tableHeaderColor: '#705942',
+    tableBorderColor: '#f1eae4',
+    rowHoverBg: '#fbf9f7',
+    rowSelectedBg: '#f7ede4',
+    rowSelectedHoverBg: '#f4e8dc',
+    /* Button / Input(阴影 / 聚焦光圈) */
+    primaryShadow: '0 1px 2px rgba(54, 40, 28, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+    defaultShadow: '0 1px 2px rgba(54, 40, 28, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(140, 90, 43, 0.18)',
-    paginationItemBg: '#FFFDF9',
-    dateCellHoverBg: '#F5EBDD',
-    dateCellRangeBg: '#F5EBDD',
-    breadcrumbItemColor: 'rgba(61, 46, 31, 0.65)',
-    breadcrumbLastColor: '#3D2E1F',
-    breadcrumbSeparatorColor: 'rgba(61, 46, 31, 0.3)',
+    /* Pagination / DatePicker */
+    paginationItemBg: '#ffffff',
+    dateCellHoverBg: '#faf5ef',
+    dateCellRangeBg: '#f7ede4',
+    /* Breadcrumb / Tabs / Select */
+    breadcrumbItemColor: 'rgba(54, 40, 28, 0.65)',
+    breadcrumbLastColor: '#36281c',
+    breadcrumbSeparatorColor: 'rgba(54, 40, 28, 0.3)',
     tabsActiveColor: '#8C5A2B',
     selectOptionSelectedColor: '#8C5A2B',
   },
 
-  // --app-* 品牌系变量(全量 7 个)
+  /* --app-* CSS 变量(applySkinCssVars 注入 <html style>);品牌系 7 键必给 */
   cssVars: {
     '--app-primary': '#8C5A2B',
-    '--app-primary-hover': '#A9743D',
-    '--app-primary-active': '#6E4520',
-    '--app-primary-bg': '#F5EBDD',
-    '--app-primary-bg-hover': '#EFE1CB',
-    '--app-primary-border': '#DCC3A4',
-    '--app-primary-border-hover': '#C9A87C',
+    '--app-primary-hover': '#af7136',
+    '--app-primary-active': '#694320',
+    '--app-primary-bg': '#f9f2eb',
+    '--app-primary-bg-hover': '#f4e8dc',
+    '--app-primary-border': '#edd8c4',
+    '--app-primary-border-hover': '#e1be9d',
   },
 }
 

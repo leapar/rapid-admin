@@ -1,21 +1,17 @@
 /**
- * 皮肤定义类型 —— docs/theming.md §3.1
+ * 皮肤类型 —— docs/theming.md §3.1
  *
- * 一套皮肤 = **一个整体外观**(2026-11-05 用户拍板扁平化):
- * 黑色皮肤就是黑、白色皮肤就是白 —— 皮肤内部不再分 dark/light 两套,
- * 顶栏也没有明暗切换器;想要暗色就选暗色皮肤。
- *
- * 每套皮肤含:明暗属性(决定 antd algorithm 与 <html data-theme>)
- * + 品牌主色三态 + 一套语义色板 + 一套组件级 token + 一套 --app-* CSS 变量。
- *
- * ⚠️ 字段全集以 white.ts / black.ts 为基准 —— 任何皮肤都必须定义完全
- *   相同的 token 键集(skins.complete.test.ts 在守,漏一个色调即红)。
+ * 皮肤 = **整体外观**(含明暗),显式全量定义:skins/<id>.ts 把
+ * palette / comp / cssVars 的每个颜色键逐一写出来(逐参数可改,方便
+ * 拷走改成自己的品牌色)。内置五套的取值是 2026-11-05 按 antd
+ * "seed → map token" 算法理念整体重调过的 —— 中性面同一色温、品牌浅底
+ * 同系衍生,不存在"棕色皮肤配蓝灰 header"这类割裂。
  */
 
 /** 该皮肤的整体明暗:决定 antd algorithm、<html data-theme> 与首帧防闪底色 */
 export type SkinAppearance = 'light' | 'dark'
 
-/** 语义色板(antd 全局 token 的品牌相关子集)—— 原 LangRoot `palette` */
+/** 语义色板(antd 全局 token 的品牌相关子集)—— LangRoot `token` 段 */
 export interface PaletteTokens {
   colorBgBase: string
   colorBgLayout: string
@@ -32,7 +28,7 @@ export interface PaletteTokens {
   colorBorder: string
   colorBorderSecondary: string
   colorSplit: string
-  /** 品牌文字/链接色 —— 暗底上比主色提亮一档(white 默认: #f60 → #ff8c3a) */
+  /** 品牌文字色 —— 暗底上比主色提亮一档(参考 black 皮肤) */
   primaryText: string
   primaryTextHover: string
   primaryTextActive: string
@@ -46,9 +42,9 @@ export interface PaletteTokens {
   colorLinkActive: string
 }
 
-/** 组件级 token 的皮肤相关子集 —— 原 LangRoot `comp` + 原先散在 components 里的硬编码品牌值 */
+/** 组件级 token 的皮肤相关子集 —— LangRoot `components` 段 */
 export interface CompTokens {
-  /* Layout */
+  /* Layout(header 毛玻璃 / 侧栏 / 画布) */
   layoutHeaderBg: string
   siderBg: string
   bodyBg: string
@@ -88,22 +84,18 @@ export interface CompTokens {
   selectOptionSelectedColor: string
 }
 
+/** 完整皮肤定义,LangRoot 只消费这个; skins/<id>.ts 直接写全量 */
 export interface SkinDefinition {
-  /** 内置:'white' | 'black' | 'tech' | 'gov' | 'museum'(旧 'orange' 由 registry 别名到 white) */
   id: string
-  /** 展示名,例:"文博棕金" */
   name: string
-  /** 该皮肤的整体明暗(黑=dark,其余内置=light) */
   appearance: SkinAppearance
-  /** 品牌主色三态:主色 + hover(亮 8–12%)+ active(暗 8–12%) */
+  /** 品牌主色三态:hover 亮一档 / active 暗一档(L 轴) */
   brand: { primary: string; hover: string; active: string }
   palette: PaletteTokens
   comp: CompTokens
   /**
    * --app-* CSS 变量(运行时经 applySkinCssVars 注入 <html style>)。
-   * 品牌系 7 键必给;画布/文字/边框等选给;允许皮肤追加专属变量
-   * (如 tech 的带色阴影)。阴影结构/圆角/字体等皮肤无关项留在
-   * styles/variables.css 作 fallback。
+   * 品牌系 7 键必给;允许皮肤追加专属变量(如 tech 的带色阴影)。
    */
   cssVars: Record<string, string>
 }

@@ -39,22 +39,26 @@ branding:
 登录后顶栏:调色板图标 = 皮肤菜单(五个同级项,带色板圆点,当前项打勾)。
 选择持久化在 localStorage,跨会话保留;旧版本存的 `theme`(明暗轴)不再生效。
 
-### 定义自定义皮肤(三步,约 20 分钟)
+### 定义自定义皮肤(三步,约 15 分钟)
 
 ```bash
 cd web/src/theme/skins
 cp custom.example.ts my-brand.ts
 ```
 
-打开 `my-brand.ts`,**必改 6 个键**(其余模板已派生好):
+打开 `my-brand.ts` —— 皮肤是**显式全量定义**,palette / comp / cssVars 每个
+颜色一个参数,逐个可改。**必改头部几项**:
 
 ```ts
 id: 'my-brand',
 name: '我的品牌',
 appearance: 'light', // 深色外观写 'dark' 并整表换暗色值(参考 black.ts)
-brand: { primary: '#7C3AED', hover: '#9B5CF6', active: '#5B21B6' },
-palette: { colorBgLayout: '#F6F4FA', colorPrimaryBg: '#F1EAFD' /* 画布与浅底 */ },
+brand: { primary: '#7C3AED', hover: '#9864f1', active: '#6115e4' },
 ```
+
+其余色值按需微调:模板按 antd "seed → map token" 算法理念整体调过
+(中性面同一色温、品牌浅底同系衍生),只想换个主色的话**对着内置皮肤同键位
+抄档位**即可 —— 例如把白色皮肤的画布/文字/边框档位抄过来,只换品牌系。
 
 然后在 `web/src/theme/registry.ts` 的 `SKINS` 表挂一行:
 
@@ -65,7 +69,8 @@ const SKINS = { white, black, tech, gov, museum, 'my-brand': myBrand }
 
 选色心法(theming.md §5):hover 亮 8–12% / active 暗 8–12%;浅底(Bg 系)用主色
 ≥10% 透明度或 95% 明度的衍生色;深色皮肤(如 black)的品牌文字比主色提亮一档;
-阴影只换色相不动结构。
+阴影只换色相不动结构。改完跑 `pnpm vitest run src/theme` ——
+`skins.complete.test.ts` 会核对字段全集与同调性。
 
 ### 硬约束
 

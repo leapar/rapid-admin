@@ -1,12 +1,10 @@
 /**
- * white —— 白色皮肤(默认观感)
+ * white —— 白色(默认)(显式全量定义,逐参数可改)
  *
- * 2026-11-05 皮肤扁平化(docs/theming.md):皮肤 = 整体外观,不再内部分
- * dark/light。本皮肤 = 原默认观感的浅色面,值未做任何改动(逐像素一致);
- * 品牌色仍是框架既有默认橙 #f60(换品牌色相属于产品决策,不悄悄改)。
- *
- * 本文件与 black.ts 是**字段全集基准**:任何皮肤都必须定义与此处完全
- * 相同的 token 键集(skins.complete.test.ts 在守,漏一个色调即红)。
+ * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
+ * 与基准键集一致(漏一个色调即红);新增 token 键时五套皮肤要同步补。
+ * 颜色取自 2026-11-05 的一轮 antd seed → map 理念重调:
+ * 中性面同一色温、品牌浅底同系衍生 —— 改单个色时保持同明度档位即可。
  */
 import type { SkinDefinition } from '../types'
 
@@ -14,83 +12,88 @@ const skin: SkinDefinition = {
   id: 'white',
   name: '白色(默认)',
   appearance: 'light',
-  brand: {
-    primary: '#f60',
-    hover: '#ff8c3a',
-    active: '#d35400',
-  },
+  /* 品牌三态:hover 亮一档 / active 暗一档(L 轴) */
+  brand: { primary: '#f60', hover: '#ff822e', active: '#d15400' },
 
-  // 语义色板(浅色;色板与 styles/variables.css 同源,slate 中性调)
   palette: {
+    /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
     colorBgBase: '#fafafa',
-    colorBgLayout: '#f4f6fa',
+    colorBgLayout: '#f6f6f6',
     colorBgContainer: '#ffffff',
     colorBgElevated: '#ffffff',
-    colorBgSpotlight: '#1f2937',
-    colorBgMask: 'rgba(15, 23, 42, 0.45)',
-    colorText: '#1f2937',
-    colorTextSecondary: '#475569',
-    colorTextTertiary: '#94a3b8',
-    colorTextQuaternary: '#cbd5e1',
-    colorTextDescription: '#64748b',
-    colorTextPlaceholder: 'rgba(15, 23, 42, 0.35)',
-    colorBorder: '#eef0f4',
-    colorBorderSecondary: '#f0f2f5',
-    colorSplit: 'rgba(15, 23, 42, 0.06)',
+    colorBgSpotlight: '#2e2b29',
+    colorBgMask: 'rgba(46, 43, 41, 0.45)',
+    /* 文字梯度(主 → 四级 + 描述 + 占位) */
+    colorText: '#292929',
+    colorTextSecondary: '#595959',
+    colorTextTertiary: '#a1a1a1',
+    colorTextQuaternary: '#c7c7c7',
+    colorTextDescription: '#6b6b6b',
+    colorTextPlaceholder: 'rgba(41, 41, 41, 0.35)',
+    /* 边框 / 分割线 */
+    colorBorder: '#ebebeb',
+    colorBorderSecondary: '#f0f0f0',
+    colorSplit: 'rgba(41, 41, 41, 0.06)',
+    /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#f60',
-    primaryTextHover: '#ff8c3a',
-    primaryTextActive: '#d35400',
-    colorPrimaryBg: '#fff5e6',
-    colorPrimaryBgHover: '#ffe7c2',
-    colorPrimaryBorder: '#ffcaa1',
-    colorPrimaryBorderHover: '#ffae6c',
+    primaryTextHover: '#ff822e',
+    primaryTextActive: '#d15400',
+    colorPrimaryBg: '#fff0e5',
+    colorPrimaryBgHover: '#ffe3d1',
+    colorPrimaryBorder: '#ffd1b3',
+    colorPrimaryBorderHover: '#ffb380',
     colorLink: '#f60',
-    colorLinkHover: '#ff8c3a',
-    colorLinkActive: '#d35400',
+    colorLinkHover: '#ff822e',
+    colorLinkActive: '#d15400',
   },
 
-  // 组件级 token(浅色)
   comp: {
+    /* Layout(顶栏毛玻璃 / 侧栏 / 画布 / 触发器) */
     layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
     siderBg: '#ffffff',
-    bodyBg: '#f4f6fa',
-    triggerColor: '#1f2937',
+    bodyBg: '#f6f6f6',
+    triggerColor: '#292929',
+    /* Menu(侧边菜单) */
     menuItemBg: '#ffffff',
-    menuSelectedBg: '#fff5e6',
+    menuSelectedBg: '#ffeadb',
     menuSelectedColor: '#f60',
-    menuHoverBg: '#fff7e8',
+    menuHoverBg: '#fff3eb',
     menuHoverColor: '#f60',
-    menuColor: '#475569',
+    menuColor: '#595959',
     menuDarkItemSelectedBg: 'rgba(255, 102, 0, 0.16)',
-    menuDarkItemSelectedColor: '#ffae6c',
-    tableHeaderBg: '#f7f8fb',
-    tableHeaderColor: '#475569',
-    tableBorderColor: '#eef0f4',
-    rowHoverBg: '#f5f7fa',
-    rowSelectedBg: '#fff5e6',
-    rowSelectedHoverBg: '#ffe7c2',
-    primaryShadow: '0 1px 2px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-    defaultShadow: '0 1px 2px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+    menuDarkItemSelectedColor: '#ffc299',
+    /* Table(表头 / 边框 / 行 hover / 行选中) */
+    tableHeaderBg: '#f6f6f6',
+    tableHeaderColor: '#595959',
+    tableBorderColor: '#ebebeb',
+    rowHoverBg: '#f9f9f9',
+    rowSelectedBg: '#ffeadb',
+    rowSelectedHoverBg: '#ffe3d1',
+    /* Button / Input(阴影 / 聚焦光圈) */
+    primaryShadow: '0 1px 2px rgba(41, 41, 41, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+    defaultShadow: '0 1px 2px rgba(41, 41, 41, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(255, 102, 0, 0.18)',
+    /* Pagination / DatePicker */
     paginationItemBg: '#ffffff',
-    dateCellHoverBg: '#fff7e8',
-    dateCellRangeBg: '#fff5e6',
-    breadcrumbItemColor: 'rgba(15, 23, 42, 0.65)',
-    breadcrumbLastColor: '#1f2937',
-    breadcrumbSeparatorColor: 'rgba(15, 23, 42, 0.3)',
+    dateCellHoverBg: '#fff3eb',
+    dateCellRangeBg: '#ffeadb',
+    /* Breadcrumb / Tabs / Select */
+    breadcrumbItemColor: 'rgba(41, 41, 41, 0.65)',
+    breadcrumbLastColor: '#292929',
+    breadcrumbSeparatorColor: 'rgba(41, 41, 41, 0.3)',
     tabsActiveColor: '#f60',
     selectOptionSelectedColor: '#f60',
   },
 
-  // --app-* 品牌系变量(与 variables.css「品牌色」段同源,全量 7 个)
+  /* --app-* CSS 变量(applySkinCssVars 注入 <html style>);品牌系 7 键必给 */
   cssVars: {
     '--app-primary': '#f60',
-    '--app-primary-hover': '#ff8c3a',
-    '--app-primary-active': '#d35400',
-    '--app-primary-bg': '#fff5e6',
-    '--app-primary-bg-hover': '#ffe7c2',
-    '--app-primary-border': '#ffcaa1',
-    '--app-primary-border-hover': '#ffae6c',
+    '--app-primary-hover': '#ff822e',
+    '--app-primary-active': '#d15400',
+    '--app-primary-bg': '#fff0e5',
+    '--app-primary-bg-hover': '#ffe3d1',
+    '--app-primary-border': '#ffd1b3',
+    '--app-primary-border-hover': '#ffb380',
   },
 }
 

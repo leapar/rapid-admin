@@ -1,13 +1,12 @@
 /**
  * 皮肤注册表 —— docs/theming.md §3.2
  *
- * 内置皮肤在这里挂进 SKINS;皮肤编辑器(docs/theming.md §7,P3)用 registerSkin
- * 运行时合入 —— 内置与编辑器皮肤同表竞争,走同一条 applySkin 渲染路径。
- *
- * 顶栏菜单呈现的是**五个同级外观选项**:白色(默认)/ 黑色 / 科技蓝 /
- * 政务红 / 文博棕金(SkinSwitcher 里的预设清单)。旧默认皮肤 id 'orange'
- * 在 LEGACY_ALIASES 里静默映射到 white —— 老用户 localStorage 里的
- * skin: "orange" 与后端 branding.skin: orange 都继续可用,不 warn。
+ * skins/<id>.ts 是**显式全量定义**(palette / comp / cssVars 逐参数写出,
+ * 方便拷走改成自己的品牌);这里把它们挂进 SKINS。顶栏菜单呈现的是
+ * **五个同级外观选项**:白色(默认)/ 黑色 / 科技蓝 / 政务红 / 文博棕金
+ * (SkinSwitcher)。旧默认皮肤 id 'orange' 在 LEGACY_ALIASES 里静默映射到
+ * white —— 老用户 localStorage 与后端 branding.skin: orange 都继续可用,
+ * 不 warn。
  *
  * ⚠️ 新增品牌色值必须进 skins/,不得直接写进 LangRoot 的 token(AGENTS.md 硬约束 6)。
  */
@@ -25,21 +24,18 @@ const LEGACY_ALIASES: Record<string, string> = {
   orange: 'white',
 }
 
-/** 内置皮肤表(自定义皮肤拷 skins/custom.example.ts 后在这里挂一行) */
-const SKINS: Record<string, SkinDefinition> = {
-  white,
-  black,
-  tech,
-  gov,
-  museum,
-}
+/** 内置皮肤表(声明顺序即切换器展示顺序;自定义皮肤拷 skins/custom.example.ts 后挂一行) */
+const SKINS: Record<string, SkinDefinition> = Object.fromEntries(
+  [white, black, museum, tech, gov].map((s) => [s.id, s])
+)
 
-/** 默认皮肤的直接引用(绕开索引访问的 undefined 推断) */
+/** 默认皮肤直引(绕开索引访问的 undefined 推断) */
 const defaultSkin: SkinDefinition = white
 
-/** 编辑器/插件运行时注册皮肤;id 冲突时覆盖(后注册者赢) */
-export function registerSkin(def: SkinDefinition): void {
-  SKINS[def.id] = def
+/** 插件/编辑器运行时注册皮肤(id 冲突时后注册者赢) */
+export function registerSkin(skin: SkinDefinition): SkinDefinition {
+  SKINS[skin.id] = skin
+  return skin
 }
 
 /** 取皮肤;未知 id 显式降级到默认(warn 不报错 —— theming.md §6 容错降级) */

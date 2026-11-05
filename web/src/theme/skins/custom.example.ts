@@ -1,105 +1,105 @@
 /**
- * custom.example.ts —— 自定义皮肤模板
+ * custom.example.ts —— 自定义皮肤模板(显式全量定义,逐参数可改)
  *
- * 用法(docs/theming.md §5,约 20 分钟):
+ * 用法(约 15 分钟):
  *   1. cp custom.example.ts my-brand.ts
- *   2. 改 id / name / brand 三态 + palette 画布与浅底(其余键保持模板默认就已协调)
+ *   2. 逐参数改色:id / name / brand 三态必改;palette / comp / cssVars
+ *      按需微调(键都有分组注释,对着内置皮肤同键位抄档位最稳)
  *   3. 在 ../registry.ts 的 SKINS 表挂一行 → 顶栏皮肤切换器立即可选
  *
- * 必改 6 键(其余都是模板派生好的):
- *   brand.primary/hover/active + palette.colorBgLayout/colorPrimaryBg
- *
- * 选色心法(theming.md §5,照做就不会丑):
- *   1. hover 亮 8–12%,active 暗 8–12%
- *   2. 一切浅底(Bg 系)用主色 ≥10% 透明度或 95% 明度的衍生色,别手调新色相
- *   3. 深色皮肤(appearance: 'dark')的"品牌文字/链接"比主色提亮一档
- *      (参考 black.ts: #f60 → #ff8c3a)
- *   4. 阴影别动结构,只把 slate 色相换成主色淡晕(参考 tech.ts)
- *   5. 字段全集必须与 white.ts/black.ts 基准一致(skins.complete.test.ts 在守)
+ * ⚠️ 字段全集守卫:skins.complete.test.ts 要求 palette / comp / cssVars
+ * 与基准键集一致(漏一个色调即红);新增 token 键时所有皮肤要同步补。
+ * 这份模板的取值是 2026-11-05 按 antd seed → map 理念重调过的紫色系 ——
+ * 中性面同一色温、品牌浅底同系衍生;改单个色时保持同明度档位即可。
  */
 import type { SkinDefinition } from '../types'
 
 const skin: SkinDefinition = {
-  id: 'my-brand', // ← 唯一 id,别和内置 white/black/museum/tech/gov 撞
+  id: 'my-brand',
   name: '我的品牌',
-  appearance: 'light', // 深色外观就写 'dark' 并整表换暗色值(参考 black.ts)
-  brand: {
-    primary: '#7C3AED',
-    hover: '#9B5CF6',
-    active: '#5B21B6',
-  },
+  appearance: 'light',
+  /* 品牌三态:hover 亮一档 / active 暗一档(L 轴) */
+  brand: { primary: '#7C3AED', hover: '#9864f1', active: '#6115e4' },
 
-  // 语义色板(紫罗兰系)—— 画布与浅底两处标了"必改"
   palette: {
-    colorBgBase: '#FCFBFE',
-    colorBgLayout: '#F6F4FA', // ← 画布底色(必改):主色 95% 明度衍生
+    /* 画布(布局底 / 容器 / 浮层 / 遮罩) */
+    colorBgBase: '#faf9fb',
+    colorBgLayout: '#f5f3f9',
     colorBgContainer: '#ffffff',
     colorBgElevated: '#ffffff',
-    colorBgSpotlight: '#241A38',
-    colorBgMask: 'rgba(36, 26, 56, 0.45)',
-    colorText: '#241A38',
-    colorTextSecondary: '#4A3E63',
-    colorTextTertiary: '#9188A8',
-    colorTextQuaternary: '#C0B9D4',
-    colorTextDescription: '#5E5378',
-    colorTextPlaceholder: 'rgba(36, 26, 56, 0.35)',
-    colorBorder: '#EAE6F4',
-    colorBorderSecondary: '#F0EDF8',
-    colorSplit: 'rgba(36, 26, 56, 0.06)',
+    colorBgSpotlight: '#271d3a',
+    colorBgMask: 'rgba(39, 29, 58, 0.45)',
+    /* 文字梯度(主 → 四级 + 描述 + 占位) */
+    colorText: '#261d35',
+    colorTextSecondary: '#54456e',
+    colorTextTertiary: '#9c90b1',
+    colorTextQuaternary: '#c5bfcf',
+    colorTextDescription: '#655581',
+    colorTextPlaceholder: 'rgba(38, 29, 53, 0.35)',
+    /* 边框 / 分割线 */
+    colorBorder: '#e9e5f1',
+    colorBorderSecondary: '#efebf4',
+    colorSplit: 'rgba(38, 29, 53, 0.06)',
+    /* 品牌强调(文字 / 浅底 / 边框 / 链接) */
     primaryText: '#7C3AED',
-    primaryTextHover: '#9B5CF6',
-    primaryTextActive: '#5B21B6',
-    colorPrimaryBg: '#F1EAFD', // ← 浅底(必改)
-    colorPrimaryBgHover: '#E6D9FB',
-    colorPrimaryBorder: '#CDB4F5',
-    colorPrimaryBorderHover: '#B18EEF',
+    primaryTextHover: '#9864f1',
+    primaryTextActive: '#6115e4',
+    colorPrimaryBg: '#efe8fd',
+    colorPrimaryBgHover: '#e3d5fb',
+    colorPrimaryBorder: '#d0b9f9',
+    colorPrimaryBorderHover: '#b18af4',
     colorLink: '#7C3AED',
-    colorLinkHover: '#9B5CF6',
-    colorLinkActive: '#5B21B6',
+    colorLinkHover: '#9864f1',
+    colorLinkActive: '#6115e4',
   },
 
-  // comp / cssVars 模板已按主色派生好 —— 只微调 menuSelectedBg /
-  // rowSelectedBg / --app-primary-bg 三组就能再贴近品牌气质
   comp: {
+    /* Layout(顶栏毛玻璃 / 侧栏 / 画布 / 触发器) */
     layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
     siderBg: '#ffffff',
-    bodyBg: '#F6F4FA',
-    triggerColor: '#241A38',
+    bodyBg: '#f5f3f9',
+    triggerColor: '#261d35',
+    /* Menu(侧边菜单) */
     menuItemBg: '#ffffff',
-    menuSelectedBg: '#F1EAFD',
+    menuSelectedBg: '#e9defc',
     menuSelectedColor: '#7C3AED',
-    menuHoverBg: '#F5EFFE',
+    menuHoverBg: '#f3ecfd',
     menuHoverColor: '#7C3AED',
-    menuColor: '#4A3E63',
+    menuColor: '#54456e',
     menuDarkItemSelectedBg: 'rgba(124, 58, 237, 0.16)',
-    menuDarkItemSelectedColor: '#B794F6',
-    tableHeaderBg: '#F6F2FC',
-    tableHeaderColor: '#4A3E63',
-    tableBorderColor: '#EAE6F4',
-    rowHoverBg: '#F7F4FD',
-    rowSelectedBg: '#F1EAFD',
-    rowSelectedHoverBg: '#E6D9FB',
-    primaryShadow: '0 1px 2px rgba(36, 26, 56, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-    defaultShadow: '0 1px 2px rgba(36, 26, 56, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+    menuDarkItemSelectedColor: '#d9c6fa',
+    /* Table(表头 / 边框 / 行 hover / 行选中) */
+    tableHeaderBg: '#f5f3f9',
+    tableHeaderColor: '#54456e',
+    tableBorderColor: '#e9e5f1',
+    rowHoverBg: '#f8f7fa',
+    rowSelectedBg: '#e9defc',
+    rowSelectedHoverBg: '#e3d5fb',
+    /* Button / Input(阴影 / 聚焦光圈) */
+    primaryShadow: '0 1px 2px rgba(38, 29, 53, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+    defaultShadow: '0 1px 2px rgba(38, 29, 53, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
     inputActiveShadow: '0 0 0 3px rgba(124, 58, 237, 0.18)',
+    /* Pagination / DatePicker */
     paginationItemBg: '#ffffff',
-    dateCellHoverBg: '#F5EFFE',
-    dateCellRangeBg: '#F1EAFD',
-    breadcrumbItemColor: 'rgba(36, 26, 56, 0.65)',
-    breadcrumbLastColor: '#241A38',
-    breadcrumbSeparatorColor: 'rgba(36, 26, 56, 0.3)',
+    dateCellHoverBg: '#f3ecfd',
+    dateCellRangeBg: '#e9defc',
+    /* Breadcrumb / Tabs / Select */
+    breadcrumbItemColor: 'rgba(38, 29, 53, 0.65)',
+    breadcrumbLastColor: '#261d35',
+    breadcrumbSeparatorColor: 'rgba(38, 29, 53, 0.3)',
     tabsActiveColor: '#7C3AED',
     selectOptionSelectedColor: '#7C3AED',
   },
 
+  /* --app-* CSS 变量(applySkinCssVars 注入 <html style>);品牌系 7 键必给 */
   cssVars: {
     '--app-primary': '#7C3AED',
-    '--app-primary-hover': '#9B5CF6',
-    '--app-primary-active': '#5B21B6',
-    '--app-primary-bg': '#F1EAFD',
-    '--app-primary-bg-hover': '#E6D9FB',
-    '--app-primary-border': '#CDB4F5',
-    '--app-primary-border-hover': '#B18EEF',
+    '--app-primary-hover': '#9864f1',
+    '--app-primary-active': '#6115e4',
+    '--app-primary-bg': '#efe8fd',
+    '--app-primary-bg-hover': '#e3d5fb',
+    '--app-primary-border': '#d0b9f9',
+    '--app-primary-border-hover': '#b18af4',
   },
 }
 
