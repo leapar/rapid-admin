@@ -370,8 +370,13 @@ export const SkinEditorPage: React.FC = () => {
                 </Popconfirm>
               </Space>
 
-              {/* 基础模式:主色三态 */}
-              <Card type="inner" size="small" title={t('page.skin.baseMode')} style={{ marginBottom: 12 }}>
+              {/* 基础模式:主色三态("主色"是品牌强调色,不是底色 —— 见 tip) */}
+              <Card
+                type="inner"
+                size="small"
+                title={<Tooltip title={t('page.skin.baseModeTip')}>{t('page.skin.baseMode')}</Tooltip>}
+                style={{ marginBottom: 12 }}
+              >
                 {(['primary', 'hover', 'active'] as const).map((k) =>
                   colorField(t(`page.skin.${k}`), draft.brand[k], (v) =>
                     setDraft((d) => d && { ...d, brand: { ...d.brand, [k]: v } })

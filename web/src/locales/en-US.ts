@@ -1376,6 +1376,7 @@ const enUS: Locale = {
       hover: 'Hover',
       active: 'Active',
       baseMode: 'Basic mode (brand trio)',
+      baseModeTip: 'Primary = the brand accent (buttons / links / selected states), not the interface background — surfaces come from the light/dark reference frame and can be adjusted per-key in Advanced → Canvas.',
       rederive: 'Rederive all values from primary',
       rederiveTip: 'Recalculates every value from the current primary alone: neutral surfaces (canvas/text/borders) are re-hued against the reference frame (light = museum, dark = black) while keeping their lightness ladder; hover/active are derived at primary lightness ±8. Manual edits in advanced mode are overwritten.',
       rederiveConfirm: 'This regenerates all suggestion values from the current primary and overwrites manual edits made in advanced mode. Continue?',
