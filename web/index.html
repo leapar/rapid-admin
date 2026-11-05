@@ -12,14 +12,18 @@
     <title>后台管理平台</title>
     <script>
       // 首屏防闪白(2026-11-03):data-theme 此前要等 React 挂载后由 LangRoot 设置,
-      // 深色用户每次进来都先闪一屏白。这里在渲染前读 zustand persist 的主题
+      // 深色用户每次进来都先闪一屏白。这里在渲染前读 zustand persist 的皮肤
       // (键名与 src/constants/app.ts STORAGE_KEYS.THEME 一致)提前设上;
       // 顺带给 <html> 一个深色内联底色 —— CSS 变量要等样式表加载才有值,
       // 内联底色负责"样式表到达前"那段窗口(body 铺满视口,CSS 到位后它不可见)。
+      // 2026-11-05 皮肤扁平化:明暗由皮肤的 appearance 决定(内置黑=dark),
+      // 自定义皮肤如需首帧防闪,把 id 加进下面的暗色名单;theme 轴已退役,
+      // 读到旧 theme: dark 算升级路径的兼容。
       try {
-        var t = (JSON.parse(localStorage.getItem('rapid-admin:theme') || '{}').state || {}).theme
-        if (t === 'dark' || t === 'realDark') {
-          document.documentElement.dataset.theme = t
+        var st = JSON.parse(localStorage.getItem('rapid-admin:theme') || '{}').state || {}
+        var dark = st.skin === 'black' || st.theme === 'dark' || st.theme === 'realDark'
+        if (dark) {
+          document.documentElement.dataset.theme = 'dark'
           document.documentElement.style.background = '#1a1a1a'
         }
       } catch (e) {}

@@ -1,7 +1,7 @@
 /**
  * 皮肤应用 —— docs/theming.md §3.2
  *
- * applySkinCssVars:把皮肤里随主题模式的 --app-* 变量内联注入 <html style>,
+ * applySkinCssVars:把皮肤里的 --app-* 变量内联注入 <html style>,
  * 覆盖 variables.css 的同名 fallback —— CSS 变量的**单一来源是皮肤对象**,
  * variables.css 只留首帧(SSR/水合前)兜底,不再承载第二份真值。
  *
@@ -10,10 +10,9 @@
  */
 import type { SkinDefinition } from './types'
 
-export function applySkinCssVars(skin: SkinDefinition, isDark: boolean): void {
-  const vars = isDark ? skin.cssVars.dark : skin.cssVars.light
+export function applySkinCssVars(skin: SkinDefinition): void {
   const rootStyle = document.documentElement.style
-  for (const [name, value] of Object.entries(vars)) {
+  for (const [name, value] of Object.entries(skin.cssVars)) {
     rootStyle.setProperty(name, value)
   }
 }

@@ -22,7 +22,8 @@ system:
 branding:
   app_name: ""            # 平台全名,例:"Acme Admin Console"
   app_title: ""           # 浏览器标签页标题;留空 = 用 app_name
-  skin: ""                # UI 皮肤 id(docs/theming.md):orange / museum / tech / gov
+  skin: ""                # UI 皮肤 id(docs/theming.md):white / black / tech / gov / museum
+                          # (旧值 orange 兼容映射到 white)
                           # 留空 = 用户自己在顶栏选;配了 = 部署级默认(仍可切换)
 
 # ========== Swagger 文档端点(OpenAPI 3.0 + Swagger UI) ==========

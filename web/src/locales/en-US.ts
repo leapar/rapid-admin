@@ -677,9 +677,8 @@ const enUS: Locale = {
   },
   // Theme switch (§2.8 #19)
   theme: {
-    switch: 'Switch theme',
-    light: 'Light',
-    dark: 'Dark',
+    // 2026-11-05 skins flattened: no standalone light/dark axis any more,
+    // ThemeSwitcher retired; skin names come from the registry, not i18n
     skin: 'Switch skin',
   },
   // Route tabs (§2.8)

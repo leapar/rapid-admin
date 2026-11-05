@@ -163,11 +163,12 @@ function syncUserContext(): void {
   } else {
     Sentry.setUser(null)
   }
-  // 加 tag 方便查询
+  // 加 tag 方便查询(2026-11-05 皮肤扁平化:theme 轴退役,改记皮肤 id ——
+  // 皮肤即整体外观,含明暗信息)
   const lang = useUIStore.getState().lang
-  const theme = useUIStore.getState().theme
+  const skin = useUIStore.getState().skin
   Sentry.setTag('app.lang', lang)
-  Sentry.setTag('app.theme', theme)
+  Sentry.setTag('app.theme', skin)
 }
 
 /** 业务层手动上报(代替直接 Sentry.captureException) */

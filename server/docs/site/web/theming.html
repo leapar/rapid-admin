@@ -1063,14 +1063,18 @@
                                 
                                 <h1 id="theming-——-前端-ui-皮肤换肤只写一个文件">theming —— 前端 UI 皮肤(换肤只写一个文件)</h1>
 <blockquote>
-<p>管理端的品牌色相是<strong>皮肤</strong>(skin),与明暗主题(theme)正交:任何皮肤 × 浅色/深色都合法。
+<p><strong>皮肤 = 整体外观</strong>(2026-11-05 扁平化):黑色皮肤就是黑、白色皮肤就是白,
+皮肤内部不分 dark/light 两套,顶栏也没有明暗切换器。
 换肤 = 写一个声明式 ts 文件,或在部署配置里配一行 <code>branding.skin</code>。
 完整设计文档(架构取舍 / 皮肤编辑器规划)见仓库根 <code>docs/theming.md</code>,本章只讲怎么用。</p>
 </blockquote>
 <h2 id="功能">功能</h2>
 <ul>
-<li><strong>四套内置皮肤</strong>:<code>orange</code>(品牌橙,默认)/ <code>museum</code>(文博棕金)/ <code>tech</code>(科技蓝)/ <code>gov</code>(政务红)</li>
-<li><strong>两轴正交</strong>:皮肤(品牌色相)× 明暗主题各自独立切换、各自持久化(localStorage)</li>
+<li><strong>五个同级内置皮肤</strong>:白色(默认)/ 黑色 / 科技蓝 / 政务红 / 文博棕金
+—— 每套皮肤一套色板 + 一个 <code>appearance</code>(light/dark,决定 antd 算法与
+<code>&lt;html data-theme&gt;</code>),点谁切谁</li>
+<li><strong>字段全集基准</strong>:任何皮肤都必须定义与 <code>white.ts</code>/<code>black.ts</code> 完全相同的
+token 键集(<code>skins.complete.test.ts</code> 在守,漏一个色调即红)</li>
 <li><strong>部署级下发</strong>:后端 <code>branding.skin</code> 配置 → <code>GET /public/config</code> 下发 → 部署级默认皮肤,
 改 yaml 即全生效,不用改前端</li>
 <li><strong>自定义皮肤</strong>:拷模板改色值,升级框架不冲突</li>
@@ -1080,18 +1084,18 @@
 <pre><code class="lang-yaml"><span class="hljs-attr">branding:</span>
 <span class="hljs-attr">  app_name:</span> <span class="hljs-string">""</span>
 <span class="hljs-attr">  app_title:</span> <span class="hljs-string">""</span>
-<span class="hljs-attr">  skin:</span> <span class="hljs-string">""</span>   <span class="hljs-comment"># orange / museum / tech / gov;留空 = 用户自己在顶栏选</span>
-             <span class="hljs-comment"># 配了 = 部署级默认(用户仍可在顶栏切换)</span>
+<span class="hljs-attr">  skin:</span> <span class="hljs-string">""</span>   <span class="hljs-comment"># white / black / tech / gov / museum(旧 orange 兼容映射到 white)</span>
+             <span class="hljs-comment"># 留空 = 用户自己在顶栏选;配了 = 部署级默认(用户仍可在顶栏切换)</span>
 </code></pre>
 <ul>
-<li>配了<strong>未知 id 不报错</strong>:前端 <code>getSkin</code> 显式降级默认橙并打 console.warn(容错降级)。</li>
+<li>配了<strong>未知 id 不报错</strong>:前端 <code>getSkin</code> 显式降级默认白并打 console.warn(容错降级)。</li>
 <li><code>skin</code> 走 <code>GET /rapid-admin/v1/public/config</code> 的白名单字段(匿名可读 ——
 皮肤和品牌名一样印在登录页上,不是秘密)。</li>
 </ul>
 <h2 id="使用方法">使用方法</h2>
 <h3 id="顶栏切换">顶栏切换</h3>
-<p>登录后顶栏:调色板图标 = 皮肤切换(品牌色相),太阳/月亮 = 明暗切换。
-选择持久化在 localStorage,跨会话保留。</p>
+<p>登录后顶栏:调色板图标 = 皮肤菜单(五个同级项,带色板圆点,当前项打勾)。
+选择持久化在 localStorage,跨会话保留;旧版本存的 <code>theme</code>(明暗轴)不再生效。</p>
 <h3 id="定义自定义皮肤三步约-20-分钟">定义自定义皮肤(三步,约 20 分钟)</h3>
 <pre><code class="lang-bash"><span class="hljs-built_in">cd</span> web/src/theme/skins
 cp custom.example.ts my-brand.ts
@@ -1099,15 +1103,17 @@ cp custom.example.ts my-brand.ts
 <p>打开 <code>my-brand.ts</code>,<strong>必改 6 个键</strong>(其余模板已派生好):</p>
 <pre><code class="lang-ts">id: <span class="hljs-string">'my-brand'</span>,
 name: <span class="hljs-string">'我的品牌'</span>,
+appearance: <span class="hljs-string">'light'</span>, <span class="hljs-comment">// 深色外观写 'dark' 并整表换暗色值(参考 black.ts)</span>
 brand: { primary: <span class="hljs-string">'#7C3AED'</span>, hover: <span class="hljs-string">'#9B5CF6'</span>, active: <span class="hljs-string">'#5B21B6'</span> },
-palette: { light: { colorBgLayout: <span class="hljs-string">'#F6F4FA'</span>, colorPrimaryBg: <span class="hljs-string">'#F1EAFD'</span> }, dark: { <span class="hljs-comment">/* 同梯度暗色 */</span> } },
+palette: { colorBgLayout: <span class="hljs-string">'#F6F4FA'</span>, colorPrimaryBg: <span class="hljs-string">'#F1EAFD'</span> <span class="hljs-comment">/* 画布与浅底 */</span> },
 </code></pre>
 <p>然后在 <code>web/src/theme/registry.ts</code> 的 <code>SKINS</code> 表挂一行:</p>
 <pre><code class="lang-ts"><span class="hljs-keyword">import</span> myBrand from <span class="hljs-string">'./skins/my-brand'</span>
-<span class="hljs-keyword">const</span> SKINS = { orange, museum, tech, gov, <span class="hljs-string">'my-brand'</span>: myBrand }
+<span class="hljs-keyword">const</span> SKINS = { white, black, tech, gov, museum, <span class="hljs-string">'my-brand'</span>: myBrand }
 </code></pre>
 <p>选色心法(theming.md §5):hover 亮 8–12% / active 暗 8–12%;浅底(Bg 系)用主色
-≥10% 透明度或 95% 明度的衍生色;深色模式品牌文字比主色提亮一档;阴影只换色相不动结构。</p>
+≥10% 透明度或 95% 明度的衍生色;深色皮肤(如 black)的品牌文字比主色提亮一档;
+阴影只换色相不动结构。</p>
 <h3 id="硬约束">硬约束</h3>
 <p><strong>新增品牌色值必须进 <code>web/src/theme/skins/</code>,不得直接写进 <code>LangRoot</code> 的 token</strong> ——
 色值的单一来源是皮肤对象;<code>variables.css</code> 里的 <code>--app-primary-*</code> 只是首帧 fallback,
@@ -1155,7 +1161,7 @@ palette: { light: { colorBgLayout: <span class="hljs-string">'#F6F4FA'</span>, c
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"theming(UI 皮肤)","level":"11.1","depth":1,"next":{"title":"包速查表","level":"12.1","depth":1,"path":"reference/packages.md","ref":"reference/packages.md","articles":[]},"previous":{"title":"框架手册","level":"10.2","depth":1,"path":"api-docs/manual.md","ref":"api-docs/manual.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"web/theming.md","mtime":"2026-11-05T04:35:21.655Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-05T04:56:45.019Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"theming(UI 皮肤)","level":"11.1","depth":1,"next":{"title":"包速查表","level":"12.1","depth":1,"path":"reference/packages.md","ref":"reference/packages.md","articles":[]},"previous":{"title":"框架手册","level":"10.2","depth":1,"path":"api-docs/manual.md","ref":"api-docs/manual.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"web/theming.md","mtime":"2026-11-05T05:31:16.120Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-05T05:32:20.328Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

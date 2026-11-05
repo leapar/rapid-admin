@@ -12,7 +12,9 @@
  *
  * 它管三件事:
  *   1. Antd locale(响应 useUIStore.lang)
- *   2. Antd theme algorithm + 品牌 token(响应 useUIStore.theme)
+ *   2. Antd theme algorithm + 品牌 token(响应 useUIStore.skin;
+ *      2026-11-05 皮肤扁平化 —— 皮肤即整体外观,明暗由 skin.appearance 决定,
+ *      不再有独立的 theme 轴)
  *   3. 浏览器标题 + <html lang> + <html data-theme>
  *
  * 2026-11-05 皮肤抽取(docs/theming.md P0):palette / comp / 品牌三态与
@@ -39,7 +41,6 @@ import { applySkinCssVars } from '@/theme/apply'
 /** LangRoot 包裹层 —— 响应 useUIStore.lang 切换 Antd locale + dayjs locale,响应 theme 切换 algorithm + data-theme */
 export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const lang = useUIStore((s) => s.lang)
-  const curTheme = useUIStore((s) => s.theme)
   // 平台名(后端 branding 配置下发,开源通用化)。空串 = 没配 → 落回语言包。
   const appTitle = usePublicConfigStore((s) => s.appTitle)
   const { t } = useI18n()
@@ -68,24 +69,22 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
     document.title = appTitle || t('common.appTitle')
     document.documentElement.lang = lang
   }, [lang, t, appTitle])
-  React.useEffect(() => {
-    // 把 theme 同步到 <html data-theme="...">,CSS variables 跟着切
-    document.documentElement.dataset.theme = curTheme
-  }, [curTheme])
-  // 主题 → Antd algorithm(§2.8 #19)
-  const isDark = curTheme === 'dark' || curTheme === 'realDark'
-  const algorithm = isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
-
-  // 皮肤(品牌色相轴,docs/theming.md):registry 取用,未知 id 降级默认橙。
-  // --app-* 品牌变量随皮肤+明暗注入 <html>(CSS 变量单源,见 theme/apply.ts)
+  // 皮肤 = 整体外观(2026-11-05 扁平化):registry 取用,未知 id 降级默认白。
+  // appearance 决定 algorithm 与 <html data-theme>(CSS 语义段跟着切);
+  // --app-* 变量由皮肤单套注入(CSS 变量单源,见 theme/apply.ts)
   const skin = getSkin(useUIStore((s) => s.skin))
   React.useEffect(() => {
-    applySkinCssVars(skin, isDark)
-  }, [skin, isDark])
+    document.documentElement.dataset.theme = skin.appearance
+  }, [skin.appearance])
+  const algorithm =
+    skin.appearance === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm
+  React.useEffect(() => {
+    applySkinCssVars(skin)
+  }, [skin])
 
-  // 深浅两套语义色板 / 组件级差异 —— 值在皮肤对象里(types.ts 键名一一对应)
-  const palette = isDark ? skin.palette.dark : skin.palette.light
-  const comp = isDark ? skin.comp.dark : skin.comp.light
+  // 语义色板 / 组件级差异 —— 值在皮肤对象里(types.ts 键名一一对应)
+  const palette = skin.palette
+  const comp = skin.comp
 
   return (
     <ConfigProvider

@@ -35,7 +35,6 @@ import { getBaseURL } from '@/api/baseURL'
 import { gitbookDocsUrl } from './helpMenu'
 import IdentitySwitcher from './IdentitySwitcher'
 import { InboxBell } from './InboxBell'
-import ThemeSwitcher from './ThemeSwitcher'
 import SkinSwitcher from './SkinSwitcher'
 import LanguageSwitcher from './LanguageSwitcher'
 
@@ -166,7 +165,6 @@ export const Header: React.FC = () => {
       <Space size="middle">
         <LanguageSwitcher />
         <SkinSwitcher />
-        <ThemeSwitcher />
         <Tooltip title={document.fullscreenElement ? t('header.exitFullscreen') : t('header.fullscreen')}>
           <Button
             type="text"
