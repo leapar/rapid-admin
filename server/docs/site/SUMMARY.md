@@ -5,6 +5,7 @@
 ## 开始
 
 * [快速开始](getting-started/README.md)
+* [AI 接入(vibe coding)](getting-started/ai-coding.md) — agent 入口文件 / 生成物清单 / 守卫红了怎么读
 * [配置体系](getting-started/configuration.md)
 * [框架约定](getting-started/conventions.md)
 

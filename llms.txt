@@ -10,6 +10,8 @@
 
 - [快速开始](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/README.md)
 
+- [AI 接入(vibe coding)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/ai-coding.md): agent 入口文件 / 生成物清单 / 守卫红了怎么读
+
 - [配置体系](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/configuration.md)
 
 - [框架约定](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/getting-started/conventions.md)
