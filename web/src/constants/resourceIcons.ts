@@ -39,6 +39,7 @@ import {
   ApartmentOutlined,
   ApiOutlined,
   AuditOutlined,
+  BgColorsOutlined,
   BankOutlined,
   BarChartOutlined,
   BookOutlined,
@@ -169,6 +170,8 @@ export const RESOURCE_ICON_MAP: Record<string, AntdIcon> = {
   // 用 TableOutlined 而不是 AppstoreOutlined:两个域在侧边栏里
   // 长得一样就分不出来了。
   table: TableOutlined,
+  // 皮肤管理(2026-11-05 P3 编辑器)—— 后端 menu.system.skin 的 Icon 字段填 'skin'
+  skin: BgColorsOutlined,
 
   // ── 下拉可选的富余图标(2026-11-02 · 图标选择器扩容)────────────────
   //

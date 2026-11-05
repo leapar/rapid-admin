@@ -157,6 +157,20 @@ export const routes = [
         ),
       },
       {
+        // 皮肤管理(2026-11-05 P3 编辑器 MVP,theming.md §7)。
+        // super_admin 独占(与 /system/config 同款起步,theming.md §7.3 权限);
+        // 本期无后端保存(导出 TS/JSON 走 theming.md §5 的落文件流程)。
+        //
+        // ⚠️ path 必须与后端 seed 的 menu.system.skin.Path 对上
+        //   (menu-route-parity.test.ts 在守)。
+        path: 'system/skin',
+        element: (
+          <RoutePermissionGuard anyOf={[RoleCode.SUPER_ADMIN]}>
+            {lazyLoad(() => import('@/pages/system/skin'))}
+          </RoutePermissionGuard>
+        ),
+      },
+      {
         // M115 短信模板审核状态。
         //
         // ⚠️ **path 必须与后端 seed 的 menu.system.smsTemplate.Path 对上**

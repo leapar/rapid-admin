@@ -303,6 +303,12 @@ func menuList() []MenuDef {
 		//   (见 web/src/router/routes.tsx)。
 		{Code: "menu.system.dyn", Name: "业务表单设计器", Path: "/system/dyn", Icon: "table", Sort: 19, ParentCode: "menu.system"},
 
+		// 皮肤管理(P3 编辑器 MVP,2026-11-05)。Sort 20 接在设计器后面 ——
+		//   ⚠️ **Path 必须和 web/src/router/routes.tsx 的 path 对上**(system/skin),
+		//   不一致的症状是「菜单点了跳 404」(menu-route-parity.test.ts 在守)。
+		//   ⚠️ **Icon 'skin' 必须在 web/src/constants/resourceIcons.ts 登记**(已登记 BgColorsOutlined)。
+		{Code: "menu.system.skin", Name: "皮肤管理", Path: "/system/skin", Icon: "skin", Sort: 20, ParentCode: "menu.system"},
+
 		// 文件(M82 前端页)。Sort 35 排在「房源」和「数字资产」中间:
 		// 它是后面几个业务域都要用的底座(传附件/存封面),但自己不是业务域。
 		// ⚠️ **Path 必须和 web/src/router/routes.tsx 里的 path 对上** ——
