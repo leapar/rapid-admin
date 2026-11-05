@@ -536,17 +536,17 @@ h4 {
  *       (login 页 admin / 密码框那个浅蓝灰)。用户问"为什么有背景"——
  *       因为这是浏览器行为, 不是 antd / 业务代码加的。
  *
- * 覆盖: -webkit-box-shadow inset 把"假背景"挡掉(30px > input 默认 padding)
+ * 覆盖: -webkit-box-shadow: none —— **不**用 inset 涂背景(2026-11-05 用户改):
+ *       旧方案涂 --app-surface-bg-strong,但那是**侧栏**色 —— 沉浸式皮肤
+ *       (gov/museum/tech)下自动填充的输入框被涂成侧栏深调,与卡片面对不上。
+ *       现在只靠下面的 transition 5000s trick(让浏览器"以为"在过渡,
+ *       5000s 内不会重新应用 autofill 背景),输入框自己的底色透出来,
+ *       任何皮肤都正确。
  *       -webkit-text-fill-color inherit 保留文字颜色
- *       transition 5000s 是经典 trick: 让浏览器"以为"在过渡, 5000s 内
- *       不会重新应用 autofill 背景
  *
  * 适用范围: 所有 input / textarea(全局生效, 不止 login)
  *   - login / forgot-password 表单
  *   - 系统配置 / 个人信息 / 修改密码 等编辑表单
- *
- * §2.8 #19 暗色: box-shadow 用 --app-surface-bg-strong(暗色下是 #262626),
- * 否则会变成白底"光斑"穿透暗色表单
  * ========================================================================== */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -556,7 +556,7 @@ textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus,
 textarea:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px var(--app-surface-bg-strong) inset !important;
+  -webkit-box-shadow: none !important;
   -webkit-text-fill-color: inherit !important;
   transition: background-color 5000s ease-in-out 0s;
   caret-color: inherit;
@@ -566,7 +566,7 @@ textarea:-webkit-autofill:active {
  * ⚠️ 文字颜色必须**显式写白**,不能用 `inherit` —— Chrome 对 autofill 输入框
  *   会强制自己的前景色,`inherit` 实测压不住(继承来的值也被浏览器改写),
  *   结果黑字配深底直接隐形。
- * 背景与浅色同用 var(--app-surface-bg-strong)(暗色下 = #262626,跟输入框常态一致)。
+ * 背景同浅色:不涂 box-shadow(见上),靠 5000s transition 让暗色输入框自己的底透出来。
  * 选择器多一层 `:root[data-theme='dark']` 祖先 → 特异度压过上面那条通用规则。 */
 :root[data-theme='dark'] input:-webkit-autofill,
 :root[data-theme='dark'] input:-webkit-autofill:hover,
@@ -576,7 +576,7 @@ textarea:-webkit-autofill:active {
 :root[data-theme='dark'] textarea:-webkit-autofill:hover,
 :root[data-theme='dark'] textarea:-webkit-autofill:focus,
 :root[data-theme='dark'] textarea:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px var(--app-surface-bg-strong) inset !important;
+  -webkit-box-shadow: none !important;
   -webkit-text-fill-color: #e8e8e8 !important;
   caret-color: #e8e8e8;
 }
