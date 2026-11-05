@@ -14,6 +14,13 @@
  *   1. Antd locale(响应 useUIStore.lang)
  *   2. Antd theme algorithm + 品牌 token(响应 useUIStore.theme)
  *   3. 浏览器标题 + <html lang> + <html data-theme>
+ *
+ * 2026-11-05 皮肤抽取(docs/theming.md P0):palette / comp / 品牌三态与
+ * --app-* 品牌变量全部搬进 src/theme/skins/,本组件改为**消费**皮肤对象 ——
+ * 这里不再出现任何具体色值。
+ *
+ * ⚠️ **新增品牌色值必须进 web/src/theme/skins/,不得直接写进本文件的 token**
+ *   (AGENTS.md 硬约束 6;skin 相关键见 theme/types.ts 的 PaletteTokens / CompTokens)。
  */
 import React from 'react'
 import { ConfigProvider, App as AntdApp, theme } from 'antd'
@@ -26,6 +33,8 @@ import 'dayjs/locale/en'
 import { useUIStore } from '@/stores/ui'
 import { usePublicConfigStore } from '@/stores/publicConfig'
 import { useI18n, ensureLocale } from '@/locales'
+import { getSkin } from '@/theme/registry'
+import { applySkinCssVars } from '@/theme/apply'
 
 /** LangRoot 包裹层 —— 响应 useUIStore.lang 切换 Antd locale + dayjs locale,响应 theme 切换 algorithm + data-theme */
 export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -67,145 +76,27 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const isDark = curTheme === 'dark' || curTheme === 'realDark'
   const algorithm = isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
 
-  // ============================================================
-  // 深浅两套语义色板(2026-11-03 深色模式补全)
-  //
-  // ⚠️ 为什么必须显式给两套:token 里的**显式值优先级高于** darkAlgorithm
-  //   的推导值 —— 之前 colorBgContainer '#ffffff' / Table.headerBg '#f7f8fb'
-  //   这些写死浅色,切了 darkAlgorithm 表面/文字/边框照样浅色。
-  //
-  // 色板与 styles/variables.css 的暗色段同源(中性黑 + 品牌橙):
-  //   画布 #101010 / 表面 #212121 / 浮层 #313131 / 实边框 #404040
-  //   文字 #e8e8e8 → #bfbfbf → #8c8c8c → #666666
-  //   品牌橙本体跨主题不变;暗底上的"品牌文字/链接"提亮一档到 #ff8c3a 系;
-  //   品牌浅底改半透明橙(实色浅橙底在深色下刺眼)。
-  // ============================================================
-  const palette = isDark
-    ? {
-        // 中性黑系(2026-11-03 用户拍板):画布 #1a1a1a / 表面 #262626 /
-        // 浮层 #333333 / 实边框与 tooltip 底 #404040
-        colorBgBase: '#1a1a1a',
-        colorBgLayout: '#1a1a1a',
-        colorBgContainer: '#262626',
-        colorBgElevated: '#333333',
-        colorBgSpotlight: '#404040',
-        colorBgMask: 'rgba(0, 0, 0, 0.65)',
-        colorText: '#e8e8e8',
-        colorTextSecondary: '#bfbfbf',
-        colorTextTertiary: '#8c8c8c',
-        colorTextQuaternary: '#666666',
-        colorTextDescription: '#8c8c8c',
-        colorTextPlaceholder: 'rgba(232, 232, 232, 0.3)',
-        colorBorder: '#404040',
-        colorBorderSecondary: '#333333',
-        colorSplit: 'rgba(255, 255, 255, 0.08)',
-        primaryText: '#ff8c3a',
-        primaryTextHover: '#ffa35c',
-        primaryTextActive: '#ffc08a',
-        colorPrimaryBg: 'rgba(255, 102, 0, 0.12)',
-        colorPrimaryBgHover: 'rgba(255, 102, 0, 0.2)',
-        colorPrimaryBorder: 'rgba(255, 102, 0, 0.32)',
-        colorPrimaryBorderHover: 'rgba(255, 102, 0, 0.5)',
-        colorLink: '#ff8c3a',
-        colorLinkHover: '#ffa35c',
-        colorLinkActive: '#ffc08a',
-      }
-    : {
-        colorBgBase: '#fafafa',
-        colorBgLayout: '#f4f6fa',
-        colorBgContainer: '#ffffff',
-        colorBgElevated: '#ffffff',
-        colorBgSpotlight: '#1f2937',
-        colorBgMask: 'rgba(15, 23, 42, 0.45)',
-        colorText: '#1f2937',
-        colorTextSecondary: '#475569',
-        colorTextTertiary: '#94a3b8',
-        colorTextQuaternary: '#cbd5e1',
-        colorTextDescription: '#64748b',
-        colorTextPlaceholder: 'rgba(15, 23, 42, 0.35)',
-        colorBorder: '#eef0f4',
-        colorBorderSecondary: '#f0f2f5',
-        colorSplit: 'rgba(15, 23, 42, 0.06)',
-        primaryText: '#f60',
-        primaryTextHover: '#ff8c3a',
-        primaryTextActive: '#d35400',
-        colorPrimaryBg: '#fff5e6',
-        colorPrimaryBgHover: '#ffe7c2',
-        colorPrimaryBorder: '#ffcaa1',
-        colorPrimaryBorderHover: '#ffae6c',
-        colorLink: '#f60',
-        colorLinkHover: '#ff8c3a',
-        colorLinkActive: '#d35400',
-      }
+  // 皮肤(品牌色相轴,docs/theming.md):registry 取用,未知 id 降级默认橙。
+  // --app-* 品牌变量随皮肤+明暗注入 <html>(CSS 变量单源,见 theme/apply.ts)
+  const skin = getSkin(useUIStore((s) => s.skin))
+  React.useEffect(() => {
+    applySkinCssVars(skin, isDark)
+  }, [skin, isDark])
 
-  // 组件级深浅差异(与 palette 同理:不写死,跟 isDark 走)
-  const comp = isDark
-    ? {
-        layoutHeaderBg: 'rgba(26, 26, 26, 0.78)',
-        siderBg: '#262626',
-        bodyBg: '#1a1a1a',
-        triggerColor: '#e8e8e8',
-        menuItemBg: 'transparent',
-        menuSelectedBg: 'rgba(255, 102, 0, 0.16)',
-        menuSelectedColor: '#ffae6c',
-        menuHoverBg: 'rgba(255, 255, 255, 0.06)',
-        menuHoverColor: '#ffae6c',
-        menuColor: '#bfbfbf',
-        tableHeaderBg: 'rgba(255, 255, 255, 0.05)',
-        tableHeaderColor: '#bfbfbf',
-        tableBorderColor: 'rgba(255, 255, 255, 0.1)',
-        rowHoverBg: 'rgba(255, 255, 255, 0.04)',
-        rowSelectedBg: 'rgba(255, 102, 0, 0.12)',
-        rowSelectedHoverBg: 'rgba(255, 102, 0, 0.2)',
-        primaryShadow: '0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
-        defaultShadow: '0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06)',
-        inputActiveShadow: '0 0 0 3px rgba(255, 102, 0, 0.25)',
-        paginationItemBg: 'transparent',
-        dateCellHoverBg: 'rgba(255, 102, 0, 0.12)',
-        dateCellRangeBg: 'rgba(255, 102, 0, 0.2)',
-        breadcrumbItemColor: 'rgba(232, 232, 232, 0.65)',
-        breadcrumbLastColor: '#e8e8e8',
-        breadcrumbSeparatorColor: 'rgba(232, 232, 232, 0.3)',
-      }
-    : {
-        layoutHeaderBg: 'rgba(255, 255, 255, 0.78)',
-        siderBg: '#ffffff',
-        bodyBg: '#f4f6fa',
-        triggerColor: '#1f2937',
-        menuItemBg: '#ffffff',
-        menuSelectedBg: '#fff5e6',
-        menuSelectedColor: '#f60',
-        menuHoverBg: '#fff7e8',
-        menuHoverColor: '#f60',
-        menuColor: '#475569',
-        tableHeaderBg: '#f7f8fb',
-        tableHeaderColor: '#475569',
-        tableBorderColor: '#eef0f4',
-        rowHoverBg: '#f5f7fa',
-        rowSelectedBg: '#fff5e6',
-        rowSelectedHoverBg: '#ffe7c2',
-        primaryShadow:
-          '0 1px 2px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-        defaultShadow:
-          '0 1px 2px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
-        inputActiveShadow: '0 0 0 3px rgba(255, 102, 0, 0.18)',
-        paginationItemBg: '#ffffff',
-        dateCellHoverBg: '#fff7e8',
-        dateCellRangeBg: '#fff5e6',
-        breadcrumbItemColor: 'rgba(15, 23, 42, 0.65)',
-        breadcrumbLastColor: '#1f2937',
-        breadcrumbSeparatorColor: 'rgba(15, 23, 42, 0.3)',
-      }
+  // 深浅两套语义色板 / 组件级差异 —— 值在皮肤对象里(types.ts 键名一一对应)
+  const palette = isDark ? skin.palette.dark : skin.palette.light
+  const comp = isDark ? skin.comp.dark : skin.comp.light
+
   return (
     <ConfigProvider
       locale={lang === 'en-US' ? enUS : zhCN}
       theme={{
         algorithm,
         token: {
-          // === 品牌色 (橙) ===
-          colorPrimary: '#f60',
-          colorPrimaryHover: '#ff8c3a',
-          colorPrimaryActive: '#d35400',
+          // === 品牌色三态(来自皮肤对象,docs/theming.md)===
+          colorPrimary: skin.brand.primary,
+          colorPrimaryHover: skin.brand.hover,
+          colorPrimaryActive: skin.brand.active,
           colorPrimaryBg: palette.colorPrimaryBg,
           colorPrimaryBgHover: palette.colorPrimaryBgHover,
           colorPrimaryBorder: palette.colorPrimaryBorder,
@@ -326,8 +217,8 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
             subMenuItemBorderRadius: 8,
             darkItemBg: 'transparent',
             darkItemColor: 'rgba(255, 255, 255, 0.7)',
-            darkItemSelectedBg: 'rgba(255, 102, 0, 0.16)',
-            darkItemSelectedColor: '#ffae6c',
+            darkItemSelectedBg: comp.menuDarkItemSelectedBg,
+            darkItemSelectedColor: comp.menuDarkItemSelectedColor,
             darkItemHoverBg: 'rgba(255, 255, 255, 0.04)',
             darkSubMenuItemBg: '#0a0a0d',
             darkPopupBg: '#1c1c22',
@@ -421,7 +312,7 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
           // === Tooltip: 深浅互换的"反色"底, L3 浮 ===
           Tooltip: {
             borderRadius: 8,
-            colorBgSpotlight: isDark ? '#404040' : '#1f2937',
+            colorBgSpotlight: palette.colorBgSpotlight,
             colorTextLightSolid: '#ffffff',
           },
           // === Dropdown: L3 浮, 圆角 12 ===
@@ -463,10 +354,10 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
             cardBg: palette.colorBgContainer,
             cardHeight: 36,
             horizontalMargin: '0 0 12px 0',
-            itemActiveColor: '#f60',
-            itemSelectedColor: '#f60',
-            itemHoverColor: '#f60',
-            inkBarColor: '#f60',
+            itemActiveColor: comp.tabsActiveColor,
+            itemSelectedColor: comp.tabsActiveColor,
+            itemHoverColor: comp.tabsActiveColor,
+            inkBarColor: comp.tabsActiveColor,
             titleFontSize: 12,
           },
           // === Select: 同 Input ===
@@ -474,7 +365,7 @@ export const LangRoot: React.FC<{ children: React.ReactNode }> = ({ children }) 
             borderRadius: 10,
             controlHeight: 36,
             optionSelectedBg: palette.colorPrimaryBg,
-            optionSelectedColor: '#f60',
+            optionSelectedColor: comp.selectOptionSelectedColor,
           },
           // === DatePicker: 同 Input ===
           DatePicker: {

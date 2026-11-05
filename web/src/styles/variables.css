@@ -63,7 +63,11 @@
   --app-hover-bg: rgba(15, 23, 42, 0.02);
   --app-hover-bg-strong: rgba(15, 23, 42, 0.04);
 
-  /* ===== 品牌色 (橙) ===== */
+  /* ===== 品牌色 (橙) =====
+   * 单源在皮肤对象 web/src/theme/skins/orange.ts —— 运行时 applySkinCssVars
+   * 会把当前皮肤+明暗的值内联注入 <html style> 覆盖这里;
+   * 本段保留为首帧水合前的 fallback。改色请改皮肤,别改这里(AGENTS.md 约束 6)。
+   */
   --app-primary: #f60;
   --app-primary-hover: #ff8c3a;
   --app-primary-active: #d35400;

@@ -16,10 +16,14 @@ import { ensureLocale } from '@/locales/registry'
 
 type Theme = 'light' | 'dark' | 'realDark'
 type Lang = 'zh-CN' | 'en-US'
+/** 皮肤 id(registry.getSkin 未知 id 显式降级 orange,见 web/src/theme/registry.ts) */
+type Skin = string
 
 interface UIState {
   sidebarCollapsed: boolean
   theme: Theme
+  /** 皮肤(品牌色相轴,与明暗 theme 轴独立 —— docs/theming.md) */
+  skin: Skin
   lang: Lang
   /** 全局 loading 任务计数(>0 显示 loading bar) */
   loadingCount: number
@@ -27,6 +31,7 @@ interface UIState {
   toggleSidebar: () => void
   setSidebar: (collapsed: boolean) => void
   setTheme: (t: Theme) => void
+  setSkin: (s: Skin) => void
   setLang: (l: Lang) => void
 
   /** loading 计数(允许多任务并存) */
@@ -39,12 +44,14 @@ export const useUIStore = create<UIState>()(
     (set, get) => ({
       sidebarCollapsed: false,
       theme: 'light',
+      skin: 'orange',
       lang: 'zh-CN',
       loadingCount: 0,
 
       toggleSidebar: () => set({ sidebarCollapsed: !get().sidebarCollapsed }),
       setSidebar: (collapsed) => set({ sidebarCollapsed: collapsed }),
       setTheme: (t) => set({ theme: t }),
+      setSkin: (s) => set({ skin: s }),
       setLang: (l) => {
         set({ lang: l })
         void ensureLocale(l).catch(() => undefined)
@@ -59,6 +66,7 @@ export const useUIStore = create<UIState>()(
       partialize: (s) => ({
         sidebarCollapsed: s.sidebarCollapsed,
         theme: s.theme,
+        skin: s.skin,
         lang: s.lang,
       }),
     }
