@@ -87,6 +87,10 @@
 * [swaggerx(接口文档)](api-docs/swaggerx.md) — Swagger UI + 自动生成的 OpenAPI 3.0 spec
 * [框架手册](api-docs/manual.md) — 这一本手册怎么构建 / 内嵌 / 访问(`/docs`)
 
+## 前端
+
+* [theming(UI 皮肤)](web/theming.md) — 四套内置皮肤 + 自定义换肤(一个文件)+ branding.skin 部署级下发
+
 ## 参考
 
 * [包速查表](reference/packages.md) — 58 个 Go 包一句话索引

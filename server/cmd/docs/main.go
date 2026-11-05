@@ -121,6 +121,14 @@ func build(root string, force bool) error {
 		return fmt.Errorf("构建结束但没找到 site/index.html —— 构建没成功")
 	}
 
+	// AI 可读面(纯 markdown 版手册 + llms.txt 索引)—— ai-coding.md §5.6
+	if err := copyMarkdownSources(root, site); err != nil {
+		return fmt.Errorf("拷贝手册 markdown 源失败: %w", err)
+	}
+	if err := writeSiteLlmsTxt(root, site); err != nil {
+		return fmt.Errorf("生成 site/llms.txt 失败: %w", err)
+	}
+
 	// ⚠️ 指纹在构建**之后**算 —— site/ 不参与指纹,两者等价;
 	// 放在后面是为了让"构建过程改了源"这种情况也能被如实记下来。
 	hash, err := docsbuild.SourceHash(root)

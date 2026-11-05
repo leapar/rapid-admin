@@ -11,6 +11,9 @@
 4. 章节里提到的 internal/pkg/<包> 目录真实存在;
 5. 章节里提到的 examples/<示例> 目录真实存在。
 
+site/ 是构建产物(2026-11-05 起含源 .md 的纯文本副本与 llms.txt,
+见 cmd/docs/aiiface.go),不参与"孤儿页"检查。
+
 用法:
     python scripts/check_docs_links.py
 退出码 0 = 全部通过,1 = 有问题(逐条打印)。
@@ -36,7 +39,7 @@ PKG_REF = re.compile(r"`internal/pkg/([a-z0-9_]+)`")
 EX_REF = re.compile(r"`examples/([a-z0-9_]+)`")
 
 
-SKIP_DIRS = {"node_modules", "_book"}
+SKIP_DIRS = {"node_modules", "_book", "site"}
 
 
 def collect_md() -> set[Path]:

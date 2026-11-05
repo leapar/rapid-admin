@@ -1,0 +1,80 @@
+# Rapid Admin 框架手册
+
+> 通用后台管理框架(Go + Hertz + GORM + Casbin)的框架手册 —— 全部框架模块的功能 / 配置 / 使用方法,每模块配一个可运行的示例。
+
+本文件是 LLM 索引;链接指向各章节的纯 Markdown 版本,与 HTML 版同源同步。
+
+- [首页](README.md)
+## 开始
+- [快速开始](getting-started/README.md)
+- [配置体系](getting-started/configuration.md)
+- [框架约定](getting-started/conventions.md)
+## 基础设施
+- [logger(日志)](infrastructure/logger.md): 多 Core 装配:控制台 + info/warn/error/audit/access 分文件
+- [errcode(业务错误码)](infrastructure/errcode.md): 分类、HTTP 映射、错误对象
+- [response(统一响应体)](infrastructure/response.md): 成功 / 失败 / 分页三种形状
+- [validatorx(参数校验)](infrastructure/validatorx.md): 统一参数校验:自定义规则 + 中文错误
+- [pagination(分页)](infrastructure/pagination.md): 分页参数解析与上限保护
+- [jsonid(字符串 ID)](infrastructure/jsonid.md): 以字符串形式上 wire 的主键(雪花 ID 不能用数字)
+- [sonyflake(分布式 ID)](infrastructure/sonyflake.md): 分布式 ID 生成 + worker id 分配
+- [timeutil(时间工具)](infrastructure/timeutil.md): 统一东八区的时间工具
+- [buildinfo(构建信息)](infrastructure/buildinfo.md): 编译期构建信息注入
+- [syncx(并发原语)](infrastructure/syncx.md): 单飞 / 优雅关停 / 计数信号量 / worker pool
+- [randomx(安全随机)](infrastructure/randomx.md): 安全随机 token 生成
+- [retryx(重试)](infrastructure/retryx.md): 指数退避重试
+- [uainfo(UA 解析)](infrastructure/uainfo.md): 解析 User-Agent,取出浏览器与操作系统
+- [metricsx(指标)](infrastructure/metricsx.md): Prometheus 指标 + `/metrics` handler
+- [otelx(链路追踪)](infrastructure/otelx.md): OpenTelemetry TracerProvider 初始化
+- [apiverx(版本协商)](infrastructure/apiverx.md): API 版本协商
+- [grayx(灰度发布)](infrastructure/grayx.md): 灰度发布 header 透传
+## 存储与缓存
+- [cachex(两级缓存)](storage/cachex.md): 两级缓存(L1 本地 LRU + L2 Redis)+ 三防
+- [kvstore(计数与窗口)](storage/kvstore.md): 计数 + 滑动窗口:Redis / 内存两种实现
+- [searchidx(盲索引搜索)](storage/searchidx.md): 加密字段的全文搜索(盲索引)
+- [media(音视频处理)](storage/media.md): 音视频处理:ffprobe 探测与 ffmpeg 转码
+- [oss(对象存储)](storage/oss.md): 对象存储统一抽象:本地磁盘 / 阿里云 OSS
+## 安全与合规
+- [auth(登录鉴权)](security/auth.md): JWT 签发 / 解析 / 吊销 + 强制下线
+- [authz(资源鉴权)](security/authz.md): 资源级鉴权原语:principal / grant
+- [casbinx(策略引擎)](security/casbinx.md): Casbin 初始化 + 策略行格式
+- [crypto(字段加密)](security/crypto.md): 字段级加密(AES-256-GCM)+ 盲索引
+- [kms(密钥管理)](security/kms.md): 密钥管理服务抽象层 + 轮转
+- [desensitize(数据脱敏)](security/desensitize.md): 请求体 / 查询串脱敏
+- [signx(接口签名)](security/signx.md): HMAC 接口签名 + 防重放
+- [idempotentx(幂等键)](security/idempotentx.md): 幂等键:防重复提交
+- [ratelimitx(限流)](security/ratelimitx.md): 进程内限流原语
+- [loginlock(登录锁定)](security/loginlock.md): 登录失败计数 + 账号锁定
+- [anomalylogin(异常登录检测)](security/anomalylogin.md): 异常登录检测
+- [mfa(登录二次验证)](security/mfa.md): 密码 + 短信码双因子:两步登录 / 自助开关 / 管理员恢复
+- [scope(数据范围)](security/scope.md): 数据范围(行级权限):规则 → 作用域 → WHERE
+- [fieldpolicy(字段可见性)](security/fieldpolicy.md): 字段级可见性(列级权限):三态模式 + 逐字段叠加 + 响应出口脱敏
+## 审计
+- [piiaudit(PII 审计)](audit/piiaudit.md): PII 访问审计:谁在什么时候看了手机号
+- [cryptaudit(密钥审计)](audit/cryptaudit.md): 密钥使用审计:哪个 key 被用过
+- [smsaudit(短信审计)](audit/smsaudit.md): 短信发送审计
+## 消息与通知
+- [inbox(站内信)](messaging/inbox.md): 站内信 + 通知中心:未读数 / 幂等 / 防 IDOR
+- [notifyx(通知分发)](messaging/notifyx.md): 多通道通知分发
+- [push(推送通道)](messaging/push.md): 服务端事件推送通道(SSE 的传输层地基)
+- [pushx(推送下发)](messaging/pushx.md): App 推送:抽象 Provider + 阿里云 EMNS
+- [permnotify(权限广播)](messaging/permnotify.md): 权限失效广播:改权限后让前端重拉
+- [msn(短信通道)](messaging/msn.md): 运行时可切换的短信 sender
+- [smslimit(短信限流)](messaging/smslimit.md): 短信发送限流:冷却 / 1 分钟 / 1 天三道闸
+- [smstpl(短信模板)](messaging/smstpl.md): 短信模板审核流 + 发送前守卫
+- [emailx(邮件)](messaging/emailx.md): 邮件下发:阿里云 DirectMail
+## 调度与可观测
+- [cronx(定时任务)](scheduling/cronx.md): 定时任务调度:代码注册 + DB 覆盖 + 两层去重
+- [jobs(内置任务)](scheduling/jobs.md): 平台内置定时任务:框架任务注册 + 执行记录清理
+- [slowquery(慢 SQL 报警)](scheduling/slowquery.md): 慢 SQL 报警:两种接入方式 + Prometheus 指标
+## 业务扩展
+- [dynx(动态业务集合)](business/dyn.md): 用户自己设计业务表,菜单/接口/权限/页面全自动
+- [approvalx(通用审批)](business/approval.md): 通用审批系统使用教程:一张单子的旅程(状态机)/ 或签会签详解(D5:逐级审批必须会签)/ 内置三条案例模板(请假/报销/采购,默认停用)+ 按角色配置的建模板教程 / 引擎内部逻辑(提交快照、会签数票、事务纪律、站内信与巡检)
+## 接口文档
+- [swaggerx(接口文档)](api-docs/swaggerx.md): Swagger UI + 自动生成的 OpenAPI 3.0 spec
+- [框架手册](api-docs/manual.md): 这一本手册怎么构建 / 内嵌 / 访问(`/docs`)
+## 前端
+- [theming(UI 皮肤)](web/theming.md): 四套内置皮肤 + 自定义换肤(一个文件)+ branding.skin 部署级下发
+## 参考
+- [包速查表](reference/packages.md): 58 个 Go 包一句话索引
+- [示例目录](reference/examples.md): 52 个可运行示例怎么用
+- [配置项全表](reference/config-index.md): yaml 配置项 → 框架模块对照
