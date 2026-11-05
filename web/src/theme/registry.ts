@@ -35,7 +35,24 @@ const defaultSkin: SkinDefinition = white
 /** 插件/编辑器运行时注册皮肤(id 冲突时后注册者赢) */
 export function registerSkin(skin: SkinDefinition): SkinDefinition {
   SKINS[skin.id] = skin
+  registryListeners.forEach((fn) => fn())
   return skin
+}
+
+/* ---- 注册表变更广播 ----
+ * store 里的 skin 只是 id:同名 id 下**替换对象**(编辑器试穿热更新的路径)
+ * 不会让 LangRoot 重渲染 —— 它订阅的是 store 的 id,不是 registry 的对象。
+ * 注册者在这里广播,消费方(LangRoot)订阅后强制重算 getSkin,
+ * 试穿中的草稿才能"编辑即生效"。(2026-11-05 编辑器 MVP 补) */
+type RegistryListener = () => void
+const registryListeners = new Set<RegistryListener>()
+
+/** 订阅注册表变更;返回退订函数(React effect cleanup 直接用) */
+export function onRegistryChange(fn: RegistryListener): () => void {
+  registryListeners.add(fn)
+  return () => {
+    registryListeners.delete(fn)
+  }
 }
 
 /** 取皮肤;未知 id 显式降级到默认(warn 不报错 —— theming.md §6 容错降级) */
