@@ -34,32 +34,6 @@ const lazyLoad = (loader: () => Promise<{ default: ComponentType }>) => {
   )
 }
 
-/* ====================== 页面占位 ====================== */
-
-// 登录
-const Login = lazy(() => import('@/pages/login'))
-
-// Dashboard
-const Dashboard = lazy(() => import('@/pages/dashboard'))
-
-// 系统管理
-const UserList = lazy(() => import('@/pages/system/user'))
-const RoleList = lazy(() => import('@/pages/system/role'))
-const PermissionList = lazy(() => import('@/pages/system/permission'))
-const DepartmentList = lazy(() => import('@/pages/system/department'))
-const ConfigList = lazy(() => import('@/pages/system/config'))
-const ConfigAudit = lazy(() => import('@/pages/system/config/audit'))
-
-// 审计
-const AuditOperation = lazy(() => import('@/pages/audit/operation'))
-const AuditDataChange = lazy(() => import('@/pages/audit/data-change'))
-const AuditLogin = lazy(() => import('@/pages/audit/login'))
-
-// 错误页
-const Forbidden = lazy(() => import('@/pages/error/403'))
-const NotFound = lazy(() => import('@/pages/error/404'))
-const ServerError = lazy(() => import('@/pages/error/500'))
-
 /* ====================== 路由配置 ====================== */
 
 export const routes = [
