@@ -3,6 +3,11 @@
 > 这是一份**框架级**手册 —— 讲的是"这个框架提供了哪些模块、每个模块怎么配、怎么用",
 > 不讲业务。你把自己的业务模块接上来,就是你的后台。
 
+## 开源地址
+
+本项目已开源: **[github.com/leapar/rapid-admin](https://github.com/leapar/rapid-admin)** ——
+包含 Go 后端、React 管理端、JS SDK 与这本手册的完整源码,欢迎 Star / Issue / PR。
+
 ## 这份手册是什么
 
 `server/` 下的后台 API 是一套**通用后台管理框架**:鉴权、权限、缓存、审计、通知、
