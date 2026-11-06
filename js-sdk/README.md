@@ -150,7 +150,39 @@ JSON 信封,SDK 按 Content-Type 区分,**不让一段 JSON 冒充 mp3 存下去
 `synthesize` 拿到的是 Blob(浏览器)/ 带 type 的 Blob(Node 18+);
 `voice` 传登记册的 **voice_id**,或本地登记册行的纯数字 id(后端会换算)。
 
-## 查询参数(getList)
+## 语音识别(client.asr)
+
+`client.asr` 返回 `AsrService` —— 一句话识别 + 实时识别(权限码在角色配置页勾选):
+
+| 方法 | 接口 | 权限码 |
+| --- | --- | --- |
+| `recognize(audio, options?)` | `POST /biz/asr/recognize`(multipart) | `asr:recognize` |
+| `openStream(options?)` | `WS /biz/asr/stream` | `asr:stream` |
+| `startMic(options?)` | `WS /biz/asr/stream` + 麦克风采集 | `asr:stream` |
+
+```ts
+// 1. 一句话识别:整段短音频(<60s)→ 纯文本
+const text = await client.asr.recognize(audioBlob, { format: 'wav' })
+
+// 2. 实时识别(自带音频源,如系统音频流):
+const session = client.asr.openStream({ format: 'pcm', sampleRate: 16000 })
+session.onSentence = s => console.log(s.end ? '终稿' : '中间', s.text)
+session.onFailed = msg => console.error(msg)
+session.send(pcmChunk)   // Binary 帧,pcm 16bit 小端
+session.finish()         // 说完了
+session.close()
+
+// 3. 麦克风识别(getUserMedia → AudioWorklet → 16k PCM,一条龙):
+//    内部做了回声消除/噪声抑制、48k→16k 线性插值重采样、断线报错,
+//    集成方只管两个动作 —— 按下开始、松开拿结果:
+const mic = await client.asr.startMic({ onSentence: s => render(s) })
+const text = await mic.stop()   // 停采集 + finish + 等终稿(超时 5s 兜底)
+```
+
+⚠️ 实时识别的 **api_key 不出服务端**,浏览器只见收窄后的"发音频 / 收句子"协议;
+`startMic` 必须在用户手势里调(浏览器自动播放策略),非 https 部署没有
+`navigator.mediaDevices`,会显式报错。自带连接层的高级用法可用
+`client.asr.streamURL()` 拿握手地址(token 走 `?access_token=`)。
 
 | 参数 | 说明 |
 | --- | --- |
@@ -193,6 +225,6 @@ try {
 
 ```bash
 npm install
-npm test        # vitest,44 条用例(sha256 与 node:crypto 逐长度对照)
+npm test        # vitest,61 条用例
 npm run build   # ESM(dist/esm)+ CJS(dist/cjs)双产物
 ```

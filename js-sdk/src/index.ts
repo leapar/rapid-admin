@@ -1,5 +1,6 @@
 export { DynClient } from './Client'
 export { AuthStore } from './AuthStore'
+export { AsrService, AsrStreamSession, AsrMicSession } from './AsrService'
 export { ClientResponseError } from './ClientResponseError'
 export { RecordService, buildListQuery } from './RecordService'
 export { VoiceService } from './VoiceService'
@@ -17,6 +18,12 @@ export type {
   SchemaField,
   SendOptions,
 } from './types'
+export type {
+  AsrMicOptions,
+  AsrRecognizeOptions,
+  AsrSentence,
+  AsrStreamOptions,
+} from './AsrService'
 export type {
   SynthesizeOptions,
   SynthesizeStreamOptions,

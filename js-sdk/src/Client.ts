@@ -15,6 +15,7 @@
  * 管理后台里「API 接入」弹窗印的 curl 用的 baseURL 就是这一个。
  */
 import { AuthStore } from './AuthStore'
+import { AsrService } from './AsrService'
 import { ClientResponseError } from './ClientResponseError'
 import { RecordService } from './RecordService'
 import { VoiceService } from './VoiceService'
@@ -77,6 +78,15 @@ export class DynClient {
   }
   private voiceService?: VoiceService
 
+  /** 语音识别服务:一句话识别 + 实时识别(WS / 麦克风),见 AsrService */
+  get asr(): AsrService {
+    if (!this.asrService) {
+      this.asrService = new AsrService(this)
+    }
+    return this.asrService
+  }
+  private asrService?: AsrService
+
   /**
    * 发请求:拼 URL / 挂 token / 解信封,失败抛 ClientResponseError
    *
@@ -129,7 +139,9 @@ export class DynClient {
     if (this.authStore.token) {
       headers.Authorization = `Bearer ${this.authStore.token}`
     }
-    if (options.body !== undefined) {
+    // FormData(multipart 上传,如 ASR 一句话识别的音频)——
+    // ⚠️ Content-Type 必须留给浏览器自己设(要带 boundary),不能手动写
+    if (options.body !== undefined && !isFormData(options.body)) {
       headers['Content-Type'] = 'application/json'
     }
     Object.assign(headers, options.headers)
@@ -138,7 +150,12 @@ export class DynClient {
       method,
       headers,
       signal: options.signal,
-      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+      body:
+        options.body !== undefined
+          ? isFormData(options.body)
+            ? (options.body as FormData)
+            : JSON.stringify(options.body)
+          : undefined,
     }
     const modified = this.beforeSend?.(url, init)
     if (modified) {
@@ -262,6 +279,10 @@ function asEnvelope(body: unknown): Envelope | null {
     return null
   }
   return body as Envelope
+}
+
+function isFormData(body: unknown): boolean {
+  return typeof FormData !== 'undefined' && body instanceof FormData
 }
 
 function fallbackMessage(status: number, text: string): string {
