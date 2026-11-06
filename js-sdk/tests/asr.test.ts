@@ -116,6 +116,8 @@ describe('asr.streamURL / openStream(实时识别)', () => {
     ws.emit('{"event":"finished"}')
     expect(finished).toEqual([1])
     expect(session.done).toBe(true)
+    // ⚠️ 终态即断 —— 客户端不关,服务端读侧 goroutine 就一直悬着
+    expect(ws.readyState).toBe(FakeWebSocket.CLOSED)
 
     const session2 = client.asr.openStream({
       wsFactory: () => new FakeWebSocket() as unknown as WebSocket,

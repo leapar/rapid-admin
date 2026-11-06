@@ -1663,6 +1663,7 @@ const enUS: Locale = {
       tabVoices: 'Voices',
       tabClones: 'Clone records',
       tabSynth: 'Text to speech',
+      errorMsg: 'Failure reason',
       // ---- Add / edit voice ----
       addVoice: 'Add voice',
       nameRequired: 'Please enter a name',

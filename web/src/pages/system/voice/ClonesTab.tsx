@@ -101,7 +101,7 @@ const ClonesTab: FC<{ active: boolean }> = ({ active }) => {
     { title: t('common.status'), dataIndex: 'status', width: 100, render: statusTag },
     { title: t('field.targetModel'), dataIndex: 'target_model', width: 170, render: (v: string) => v || '-' },
     {
-      title: t('field.description'),
+      title: t('page.voice.errorMsg'),
       dataIndex: 'error_msg',
       width: 260,
       ellipsis: true,

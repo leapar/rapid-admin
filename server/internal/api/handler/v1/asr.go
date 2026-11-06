@@ -12,6 +12,8 @@ package v1
 import (
 	"context"
 	"encoding/json"
+	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -25,14 +27,43 @@ import (
 	"rapid-admin/internal/service"
 )
 
-// asrUpgrader Hertz 侧 WS 升级器(复用包级单例,升级器本身无会话状态)
-var asrUpgrader = websocket.HertzUpgrader{}
-
 // AsrHandler 语音识别
-type AsrHandler struct{ *handler.BaseHandler }
+type AsrHandler struct {
+	*handler.BaseHandler
+	// corsOrigins WS 握手的 Origin 白名单(与 CORS 中间件同一份配置 ——
+	// WebSocket 没过 CORS 中间件,hertz-contrib 升级器的默认 CheckOrigin
+	// 只认"Origin host == 请求 Host",vite 代理 / 前后端分域部署全部 403)
+	corsOrigins []string
+	// upgrader WS 升级器,CheckOrigin 与 CORS 白名单同一套口径
+	upgrader websocket.HertzUpgrader
+}
 
-func NewAsrHandler(r *service.Registry) *AsrHandler {
-	return &AsrHandler{BaseHandler: handler.New(r)}
+func NewAsrHandler(r *service.Registry, corsOrigins []string) *AsrHandler {
+	return &AsrHandler{
+		BaseHandler: handler.New(r),
+		corsOrigins: corsOrigins,
+		// CheckOrigin 与 CORS 白名单同一套口径。⚠️ **不能省**:hertz-contrib
+		// 的默认 CheckOrigin 只认"Origin host == 请求 Host",vite 代理
+		// (changeOrigin 改写 Host 不改写 Origin)和前后端分域部署全部握手 403
+		// —— 且错误只落到"连接失败",用户明明有权限,排障方向全错。
+		upgrader: websocket.HertzUpgrader{
+			CheckOrigin: func(c *app.RequestContext) bool {
+				origin := string(c.GetHeader("Origin"))
+				if origin == "" {
+					return true // 非浏览器客户端(无 Origin 头)
+				}
+				if u, err := url.Parse(origin); err == nil && u.Host == string(c.Host()) {
+					return true // 同源
+				}
+				for _, a := range corsOrigins {
+					if a == "*" || a == origin {
+						return true
+					}
+				}
+				return false
+			},
+		},
+	}
 }
 
 // RecognizeOnce POST /rapid-admin/v1/biz/asr/recognize (multipart/form-data)
@@ -51,7 +82,7 @@ func (h *AsrHandler) RecognizeOnce(ctx context.Context, c *app.RequestContext) {
 	}
 	p := asrx.RecognizeParams{
 		Format:     asrAudioFormat(string(c.FormValue("format")), fileHeader.Filename),
-		SampleRate: int(h.MustUint(c, "sampleRate", 16000)),
+		SampleRate: asrFormUint(c, "sampleRate", 16000),
 	}
 	if lh := string(c.FormValue("languageHints")); lh != "" {
 		p.LanguageHints = strings.Split(lh, ",")
@@ -71,11 +102,13 @@ func (h *AsrHandler) RecognizeOnce(ctx context.Context, c *app.RequestContext) {
 	h.OK(c, map[string]string{"text": text})
 }
 
-// asrAudioFormat 格式归一:显式指定优先;否则按扩展名猜;猜不出 = pcm
+// asrAudioFormat 格式归一:显式指定优先;否则按扩展名猜(大小写都认,
+// Windows 导出的 Recording.WAV 很常见);猜不出 = pcm
 func asrAudioFormat(explicit, filename string) string {
 	if v := strings.ToLower(strings.TrimSpace(explicit)); v != "" {
 		return v
 	}
+	filename = strings.ToLower(filename)
 	switch {
 	case strings.HasSuffix(filename, ".wav"):
 		return "wav"
@@ -92,6 +125,20 @@ func asrAudioFormat(explicit, filename string) string {
 	default:
 		return "pcm"
 	}
+}
+
+// asrFormUint multipart 表单字段取整数(multipart POST 里 c.Query 永远是空,
+// 走 MustUint 会把客户端传的 sampleRate 静默吞成默认值)
+func asrFormUint(c *app.RequestContext, key string, def uint64) int {
+	v := strings.TrimSpace(string(c.FormValue(key)))
+	if v == "" {
+		return int(def)
+	}
+	n, err := strconv.ParseUint(v, 10, 64)
+	if err != nil {
+		return int(def)
+	}
+	return int(n)
 }
 
 // ---- 实时识别(WS 代理)----
@@ -156,7 +203,7 @@ func (h *AsrHandler) Stream(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	if err := asrUpgrader.Upgrade(c, func(conn *websocket.Conn) {
+	if err := h.upgrader.Upgrade(c, func(conn *websocket.Conn) {
 		runAsrRelay(ctx, conn, sess)
 	}); err != nil {
 		sess.Close()
@@ -199,6 +246,10 @@ func runAsrRelay(ctx context.Context, conn *websocket.Conn, sess *asrx.Session) 
 				}
 				b, _ := json.Marshal(msg)
 				_ = conn.WriteMessage(websocket.TextMessage, b)
+				// ⚠️ **终态帧之后客户端没有合法指令了** —— 服务端主动关连接:
+				// 读侧 ReadMessage 随之报错退出,不留悬空的转发循环
+				// (不发 close 握手的残废客户端也兜住)。
+				_ = conn.Close()
 				return
 			case <-ctx.Done():
 				return

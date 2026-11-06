@@ -227,7 +227,7 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 	// 语音能力(音色克隆 + TTS 音色登记册/合成)
 	voiceH := v1.NewVoiceCloneHandler(svc)
 	ttsH := v1.NewTtsHandler(svc)
-	asrH := v1.NewAsrHandler(svc)
+	asrH := v1.NewAsrHandler(svc, cfg.Cors.AllowOrigins)
 	captchaMw := middleware.RateLimit("public_captcha", 10, time.Minute, "ip")
 
 	// ===== /rapid-admin/v1/public 公开 =====
@@ -451,9 +451,8 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 	//   头,组级 Auth() 会先 401(SSEAuth 的三级兜底根本没机会跑,
 	//   根因见上方 /events 的长注释)。
 	// ⚠️ **不走 rbac 闭包**(挂豁免清单见 consistency.go rbacExemptRoutes):
-	//   替代鉴权 = SSEAuth(完整三道吊销闸)+ handler 内 super_admin 短路
-	//   (识别是花钱的外呼,与克隆同档;菜单/权限码轮次再把 asr:stream
-	//   配进 casbin 矩阵,届时 handler 内的短路换成正式断言)。
+	//   替代鉴权 = SSEAuth(完整三道吊销闸)+ handler 内 CanAccess("asr","stream")
+	//   —— 与 dynGuard / SSE topic 判定同一套 decideAccess;asr:stream 码只绑超管线。
 	asrStream := h.Group("/rapid-admin/v1/biz/asr/stream",
 		middleware.SSEAuth(),
 		middleware.Audit(),

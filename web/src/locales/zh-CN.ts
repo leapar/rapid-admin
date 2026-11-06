@@ -1660,6 +1660,7 @@ const zhCN = {
       tabVoices: '音色列表',
       tabClones: '克隆记录',
       tabSynth: '文本合成',
+      errorMsg: '失败原因',
       // ---- 添加 / 编辑音色 ----
       addVoice: '添加音色',
       nameRequired: '请输入名称',

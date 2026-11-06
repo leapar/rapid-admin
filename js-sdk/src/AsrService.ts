@@ -121,9 +121,11 @@ export class AsrStreamSession {
       } else if (msg.event === 'finished') {
         this._done = true
         this.onFinish?.()
+        this.close() // ⚠️ 终态即断:服务器在等 read 侧收尾,客户端不关 = 连接泄漏
       } else if (msg.event === 'failed') {
         this._done = true
         this.onFailed?.(msg.message ?? '识别失败')
+        this.close()
       }
     }
     ws.onclose = () => {
@@ -198,15 +200,10 @@ export class AsrMicSession {
   }
 
   /** 接上麦克风轨道开始采集(由 AsrService.startMic 调,集成方不用碰) */
-  async start(track: MediaStreamTrack): Promise<void> {
+  async start(track: MediaStreamTrack, ctx: AudioContext, targetRate: number): Promise<void> {
     this.track = track
-    const AC: typeof AudioContext | undefined =
-      globalThis.AudioContext ?? (globalThis as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
-    if (!AC) throw new Error('AsrMicSession: 当前环境没有 AudioContext')
-    if (!globalThis.AudioWorkletNode) throw new Error('AsrMicSession: 当前环境不支持 AudioWorklet')
-
-    const ctx = new AC()
     this.ctx = ctx
+    this.targetRate = targetRate
     if (ctx.state === 'suspended') {
       await ctx.resume() // 浏览器自动播放策略:用户手势外的 context 是挂起的
     }
@@ -226,13 +223,12 @@ export class AsrMicSession {
   private onAudio(f32: Float32Array): void {
     if (this.stopped || !this.ctx) return
     const pcm = float32ToInt16(f32)
-    // 采集率高于 16k(一般 48k)→ 重采样到 16k;本身 ≤16k → 原样发,
-    // 握手时的 sample_rate 与之对齐(见 startMic 里的 target 计算)
+    // 采集率高于目标(一般 48k → 16k)→ 线性插值重采样;本身 ≤目标 → 原样发
+    // (target 与握手 sample_rate 同源,见 startMic —— 两边必须一致)
     const rate = this.ctx.sampleRate
-    const target = this.sessionSampleRate
     let data: number[]
-    if (rate > target) {
-      const r = resample(pcm, rate, target, this.resampleOffset)
+    if (rate > this.targetRate) {
+      const r = resample(pcm, rate, this.targetRate, this.resampleOffset)
       this.resampleOffset = r.offset
       data = r.data
     } else {
@@ -243,8 +239,8 @@ export class AsrMicSession {
     }
   }
 
-  /** 握手用的采样率(startMic 里算好塞进 sessionOptions) */
-  sessionSampleRate = 16000
+  /** 握手用的采样率(startMic 里算好传进来) */
+  private targetRate = 16000
 
   /**
    * 停止采集 + finish + 等终稿,返回全文。
@@ -273,6 +269,8 @@ export class AsrMicSession {
     while (!this.session.done && Date.now() < deadline) {
       await sleep(50)
     }
+    // 等不到终态(超时)也必须关 —— 不留悬空连接
+    this.session.close()
     return this.session.finalText
   }
 
@@ -355,24 +353,27 @@ export class AsrService {
     const stream = await md.getUserMedia({
       audio: options.audio ?? { echoCancellation: true, noiseSuppression: true },
     })
-    const session = this.openStream(options)
-    const mic = new AsrMicSession(session)
-    if (options.onSentence) session.onSentence = options.onSentence
-    if (options.onFinish) session.onFinish = options.onFinish
-    if (options.onFailed) session.onFailed = options.onFailed
+    let session: AsrStreamSession | undefined
+    let probe: AudioContext | undefined
     try {
-      // 采样率握手前定死:采集 context ≤16k 就按它的来,否则统一 16k
-      const probe = new AudioContext()
+      // ⚠️ **先探采样率,再开会话** —— 握手 query 里的 sample_rate 必须
+      // 和实际发的 PCM 采样率一致,开完会话再探就晚了(顺序反了 = 服务端
+      // 按 16k 解 8k 的流,出来全是乱码)。采集 context ≤16k 按它的来,否则 16k。
+      probe = new AudioContext()
       const target = options.sampleRate ?? (probe.sampleRate <= 16000 ? probe.sampleRate : 16000)
-      await probe.close()
-      mic.sessionSampleRate = target
-      await mic.start(stream.getAudioTracks()[0])
+      session = this.openStream({ ...options, sampleRate: target })
+      const mic = new AsrMicSession(session)
+      if (options.onSentence) session.onSentence = options.onSentence
+      if (options.onFinish) session.onFinish = options.onFinish
+      if (options.onFailed) session.onFailed = options.onFailed
+      await mic.start(stream.getAudioTracks()[0], probe, target)
+      return mic
     } catch (err) {
       stream.getTracks().forEach((t) => t.stop())
-      session.close()
+      session?.close()
+      await probe?.close().catch(() => {})
       throw err
     }
-    return mic
   }
 }
 

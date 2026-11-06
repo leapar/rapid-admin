@@ -173,7 +173,10 @@ func effectiveVoiceCfg(ctx context.Context, base config.VoiceConfig, resolve fun
 }
 
 func (s *voiceCloneService) client(ctx context.Context) (*voicex.Client, error) {
-	cfg := effectiveVoiceCfg(ctx, s.cfg, s.resolve)
+	return voiceClientFrom(effectiveVoiceCfg(ctx, s.cfg, s.resolve))
+}
+
+func voiceClientFrom(cfg config.VoiceConfig) (*voicex.Client, error) {
 	return voicex.New(voicex.Config{
 		APIKey:         cfg.APIKey,
 		WorkspaceID:    cfg.WorkspaceID,
@@ -184,7 +187,10 @@ func (s *voiceCloneService) client(ctx context.Context) (*voicex.Client, error) 
 }
 
 func (s *voiceCloneService) targetModel(ctx context.Context) string {
-	cfg := effectiveVoiceCfg(ctx, s.cfg, s.resolve)
+	return defaultTargetModel(effectiveVoiceCfg(ctx, s.cfg, s.resolve))
+}
+
+func defaultTargetModel(cfg config.VoiceConfig) string {
 	if m := strings.TrimSpace(cfg.DefaultTargetModel); m != "" {
 		return m
 	}
@@ -242,8 +248,11 @@ func (s *voiceCloneService) CreateFromAudio(ctx context.Context, caller *Caller,
 	if audio == nil || audio.Size == 0 {
 		return nil, errcode.New(errcode.BadRequest, "请上传参考音频")
 	}
+	// ⚠️ 生效配置只解析一次 —— 下面的 targetModel 和克隆 client 共用同一份
+	// (一个请求打两遍 sys_config 纯属浪费;面板覆盖语义不变)
+	effCfg := effectiveVoiceCfg(ctx, s.cfg, s.resolve)
 	if req.TargetModel == "" {
-		req.TargetModel = s.targetModel(ctx)
+		req.TargetModel = defaultTargetModel(effCfg)
 	}
 	if req.Prefix == "" {
 		req.Prefix = "voice"
@@ -274,7 +283,7 @@ func (s *voiceCloneService) CreateFromAudio(ctx context.Context, caller *Caller,
 	}
 
 	// 3. 调 DashScope 克隆
-	client, err := s.client(ctx)
+	client, err := voiceClientFrom(effCfg)
 	if err != nil {
 		return nil, err
 	}
@@ -294,8 +303,8 @@ func (s *voiceCloneService) CreateFromAudio(ctx context.Context, caller *Caller,
 		Sort:        req.Sort,
 		Description: req.Description,
 		Recommend:   req.Recommend,
-		CreatedBy: caller.UserID,
-		UpdatedBy: caller.UserID,
+		CreatedBy:   caller.UserID,
+		UpdatedBy:   caller.UserID,
 	}
 	m.ID = sonyflake.Next()
 	if err != nil {
