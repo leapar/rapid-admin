@@ -39,7 +39,7 @@ curl -s http://127.0.0.1:8888/readyz        # 预期:code 0,依赖探活通过
 | 端点 | 说明 |
 |---|---|
 | `http://127.0.0.1:8888/swagger/index.html` | API 文档(OpenAPI 3.0 全量接口 + RBAC 权限码) |
-| `http://127.0.0.1:8888/docs/index.html` | 内嵌手册(57 页,不需要 node) |
+| `http://127.0.0.1:8888/docs/index.html` | 内嵌手册(70 页,不需要 node) |
 
 ## 2. 打第一个真实接口
 
@@ -79,7 +79,7 @@ go run ./examples/cachex        # 例:两级缓存。预期:打印命中/未命�
 go run ./examples/idempotentx   # 例:幂等键。预期:重复请求第二次被拦
 ```
 
-52 个模块清单与每模块一句话:[docs/ai/module-list.md](module-list.md);
+53 个模块清单与每模块一句话:[docs/ai/module-list.md](module-list.md);
 手册对应章节:`server/docs/reference/packages.md`(包速查表)。
 
 ## 5. 完成定义

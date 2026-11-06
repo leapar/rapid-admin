@@ -1,6 +1,6 @@
 # 示例目录
 
-> `server/examples/` 下 **53 个最小可运行示例**,一个框架模块一个。
+> `server/examples/` 下 **58 个最小可运行示例**,一个框架模块一个。
 > 别人拿到 `pkg/cachex` 要自己读 200 行源码、拼出正确的初始化顺序、猜哪些参数
 > 不配会静默降级 —— 示例是开源框架降低上手成本最有效的一件工具。
 
@@ -25,7 +25,7 @@ for d in examples/*/; do n=$(basename "$d"); go run "./examples/$n" >/dev/null |
 
 ```
 examples/
-├── README.md              # 索引表(53 个包 → 这个示例演示什么)
+├── README.md              # 索引表(58 个包 → 这个示例演示什么)
 ├── doc.go                 # 目录级说明
 ├── examples_test.go       # 漂移网(4 条测试)
 └── <包名>/main.go         # 一包一个目录,package main + func main()

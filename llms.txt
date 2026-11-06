@@ -102,6 +102,8 @@
 
 - [smsaudit(短信审计)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/audit/smsaudit.md): 短信发送审计
 
+- [auditx(数据变更审计)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/audit/auditx.md): 白名单表 GORM 变更审计:同事务 before/after 快照落 sys_data_change_log
+
 ## 手册 · 消息与通知
 
 - [inbox(站内信)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/inbox.md): 站内信 + 通知中心:未读数 / 幂等 / 防 IDOR
@@ -122,6 +124,8 @@
 
 - [emailx(邮件)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/emailx.md): 邮件下发:阿里云 DirectMail
 
+- [eventx(事件总线)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/messaging/eventx.md): 领域事件总线 + 事务性 outbox + 消费侧幂等
+
 ## 手册 · 调度与可观测
 
 - [cronx(定时任务)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/cronx.md): 定时任务调度:代码注册 + DB 覆盖 + 两层去重
@@ -129,6 +133,8 @@
 - [jobs(内置任务)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/jobs.md): 平台内置定时任务:框架任务注册 + 执行记录清理
 
 - [slowquery(慢 SQL 报警)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/slowquery.md): 慢 SQL 报警:两种接入方式 + Prometheus 指标
+
+- [sysmetrics(资源采样)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/sysmetrics.md): CPU / 内存 / 磁盘一次采样:工作台服务器监控卡片数据源
 
 ## 手册 · 语音与媒体
 
@@ -139,6 +145,8 @@
 ## 手册 · 业务扩展
 
 - [dynx(动态业务集合)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/business/dyn.md): 用户自己设计业务表,菜单/接口/权限/页面全自动
+
+- [dynfilter(筛选表达式)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/business/dynfilter.md): 记录筛选表达式 → 参数化 SQL(结构性防注入)
 
 - [approvalx(通用审批)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/business/approval.md): 通用审批系统使用教程:一张单子的旅程(状态机)/ 或签会签详解(D5:逐级审批必须会签)/ 内置三条案例模板(请假/报销/采购,默认停用)+ 按角色配置的建模板教程 / 引擎内部逻辑(提交快照、会签数票、事务纪律、站内信与巡检)
 
@@ -154,9 +162,9 @@
 
 ## 手册 · 参考
 
-- [包速查表](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/packages.md): 58 个 Go 包一句话索引
+- [包速查表](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/packages.md): 64 个 Go 包一句话索引
 
-- [示例目录](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/examples.md): 52 个可运行示例怎么用
+- [示例目录](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/examples.md): 58 个可运行示例怎么用
 
 - [配置项全表](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/reference/config-index.md): yaml 配置项 → 框架模块对照
 

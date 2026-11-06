@@ -59,6 +59,7 @@
 * [piiaudit(PII 审计)](audit/piiaudit.md) — PII 访问审计:谁在什么时候看了手机号
 * [cryptaudit(密钥审计)](audit/cryptaudit.md) — 密钥使用审计:哪个 key 被用过
 * [smsaudit(短信审计)](audit/smsaudit.md) — 短信发送审计
+* [auditx(数据变更审计)](audit/auditx.md) — 白名单表 GORM 变更审计:同事务 before/after 快照落 sys_data_change_log
 
 ## 消息与通知
 
@@ -71,12 +72,14 @@
 * [smslimit(短信限流)](messaging/smslimit.md) — 短信发送限流:冷却 / 1 分钟 / 1 天三道闸
 * [smstpl(短信模板)](messaging/smstpl.md) — 短信模板审核流 + 发送前守卫
 * [emailx(邮件)](messaging/emailx.md) — 邮件下发:阿里云 DirectMail
+* [eventx(事件总线)](messaging/eventx.md) — 领域事件总线 + 事务性 outbox + 消费侧幂等
 
 ## 调度与可观测
 
 * [cronx(定时任务)](scheduling/cronx.md) — 定时任务调度:代码注册 + DB 覆盖 + 两层去重
 * [jobs(内置任务)](scheduling/jobs.md) — 平台内置定时任务:框架任务注册 + 执行记录清理
 * [slowquery(慢 SQL 报警)](scheduling/slowquery.md) — 慢 SQL 报警:两种接入方式 + Prometheus 指标
+* [sysmetrics(资源采样)](scheduling/sysmetrics.md) — CPU / 内存 / 磁盘一次采样:工作台服务器监控卡片数据源
 
 ## 语音与媒体
 
@@ -86,6 +89,7 @@
 ## 业务扩展
 
 * [dynx(动态业务集合)](business/dyn.md) — 用户自己设计业务表,菜单/接口/权限/页面全自动
+* [dynfilter(筛选表达式)](business/dynfilter.md) — 记录筛选表达式 → 参数化 SQL(结构性防注入)
 * [approvalx(通用审批)](business/approval.md) — 通用审批系统使用教程:一张单子的旅程(状态机)/ 或签会签详解(D5:逐级审批必须会签)/ 内置三条案例模板(请假/报销/采购,默认停用)+ 按角色配置的建模板教程 / 引擎内部逻辑(提交快照、会签数票、事务纪律、站内信与巡检)
 
 ## 接口文档
@@ -99,6 +103,6 @@
 
 ## 参考
 
-* [包速查表](reference/packages.md) — 58 个 Go 包一句话索引
-* [示例目录](reference/examples.md) — 52 个可运行示例怎么用
+* [包速查表](reference/packages.md) — 64 个 Go 包一句话索引
+* [示例目录](reference/examples.md) — 58 个可运行示例怎么用
 * [配置项全表](reference/config-index.md) — yaml 配置项 → 框架模块对照

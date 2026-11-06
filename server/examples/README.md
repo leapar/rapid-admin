@@ -70,6 +70,7 @@ go run ./examples/cachex
 | 包 | 示例演示什么 |
 |---|---|
 | [dynx](dynx/main.go) | 动态业务集合的字段类型注册表(DDL 类型 / 值归一化 / 反归一化) |
+| [dynfilter](dynfilter/main.go) | 筛选表达式 → 参数化 SQL(白名单字段 + 值全占位符) |
 
 ### 安全与合规
 
@@ -96,6 +97,7 @@ go run ./examples/cachex
 | [piiaudit](piiaudit/main.go) | PII 访问审计(等保 P0:"谁在什么时候看了手机号") |
 | [cryptaudit](cryptaudit/main.go) | 密钥使用审计(哪个 key 解不开) |
 | [smsaudit](smsaudit/main.go) | 短信发送审计(装饰器接入) |
+| [auditx](auditx/main.go) | 数据变更审计(白名单表 GORM 回调 + 显式 RecordChange) |
 
 ### 消息与通知
 
@@ -110,6 +112,7 @@ go run ./examples/cachex
 | [smslimit](smslimit/main.go) | 短信发送限流(冷却 / 1 分钟 / 1 天三道闸) |
 | [smstpl](smstpl/main.go) | 短信模板审核流 |
 | [emailx](emailx/main.go) | 邮件下发 |
+| [eventx](eventx/main.go) | 领域事件总线(订阅 / 发布 / 异步 / 取消订阅) |
 
 ### 调度与可观测
 
@@ -118,12 +121,14 @@ go run ./examples/cachex
 | [cronx](cronx/main.go) | 定时任务调度(代码注册 + DB 覆盖 + 两层去重) |
 | [jobs](jobs/main.go) | 平台内置定时任务(框架任务注册 + 执行记录清理) |
 | [slowquery](slowquery/main.go) | 慢 SQL 报警(两种接入方式 + 指标) |
+| [sysmetrics](sysmetrics/main.go) | 服务器资源采样(CPU 按核 / 内存 / 磁盘) |
 
 ### 语音与媒体
 
 | 包 | 示例演示什么 |
 |---|---|
 | [voicex](voicex/main.go) | 百炼克隆 + 双通道 TTS 合成(凭据校验 / https 闸门 / Edge 参数归一) |
+| [asrx](asrx/main.go) | 实时语音识别(WS 会话逐句收结果)+ 一句话识别 |
 
 ### 接口文档
 

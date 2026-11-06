@@ -67,7 +67,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `piiaudit` | PII 访问审计(等保 P0):谁在什么时候看了完整手机号 | [piiaudit](../audit/piiaudit.md) |
 | `cryptaudit` | 密钥使用审计:哪个 key 被用过 / 解不开 | [cryptaudit](../audit/cryptaudit.md) |
 | `smsaudit` | 短信发送审计:发了什么、谁发的、哪次请求 | [smsaudit](../audit/smsaudit.md) |
-| `auditx` | 数据变更审计(sys_data_change_log)自动写入器:表级钩子记 diff | — |
+| `auditx` | 数据变更审计(sys_data_change_log)自动写入器:表级钩子记 diff | [auditx](../audit/auditx.md) |
 
 ## 消息与通知(10)
 
@@ -82,7 +82,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `smslimit` | 短信发送限流:冷却 / 1 分钟 / 1 天三道闸 | [smslimit](../messaging/smslimit.md) |
 | `smstpl` | 短信模板审核流 + 发送前守卫 | [smstpl](../messaging/smstpl.md) |
 | `emailx` | 邮件下发:阿里云 DirectMail | [emailx](../messaging/emailx.md) |
-| `eventx` | 领域事件总线 + 事务性 outbox + 消费侧幂等(Deduper) | — |
+| `eventx` | 领域事件总线 + 事务性 outbox + 消费侧幂等(Deduper) | [eventx](../messaging/eventx.md) |
 
 ## 调度与可观测(4)
 
@@ -91,7 +91,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `cronx` | 定时任务调度:代码注册 + DB 覆盖 + 两层去重 | [cronx](../scheduling/cronx.md) |
 | `jobs` | 平台内置定时任务:框架任务注册 + 执行记录清理 | [jobs](../scheduling/jobs.md) |
 | `slowquery` | 慢 SQL 报警:包装 GORM logger + Prometheus 指标 | [slowquery](../scheduling/slowquery.md) |
-| `sysmetrics` | 服务器资源采样(CPU / 内存 / 磁盘),供系统监控面板 | — |
+| `sysmetrics` | 服务器资源采样(CPU / 内存 / 磁盘),供系统监控面板 | [sysmetrics](../scheduling/sysmetrics.md) |
 
 ## 语音与媒体(2)
 
@@ -105,7 +105,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | 包 | 一句话 | 章节 |
 |---|---|---|
 | `dynx` | 动态业务集合的字段类型注册表(DDL 类型 + 归一化 + 反归一化)+ 命名规则 + 动作清单 | [dynx](../business/dyn.md) |
-| `dynfilter` | 动态记录筛选表达式 → 参数化 SQL(对标 PocketBase fexpr 的安全子集) | — |
+| `dynfilter` | 动态记录筛选表达式 → 参数化 SQL(对标 PocketBase fexpr 的安全子集) | [dynfilter](../business/dynfilter.md) |
 
 ## 接口文档(1)
 
