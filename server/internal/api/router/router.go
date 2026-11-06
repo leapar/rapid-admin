@@ -227,6 +227,7 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 	// 语音能力(音色克隆 + TTS 音色登记册/合成)
 	voiceH := v1.NewVoiceCloneHandler(svc)
 	ttsH := v1.NewTtsHandler(svc)
+	asrH := v1.NewAsrHandler(svc)
 	captchaMw := middleware.RateLimit("public_captcha", 10, time.Minute, "ip")
 
 	// ===== /rapid-admin/v1/public 公开 =====
@@ -444,6 +445,21 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 		sse.GET("", eventH.Stream)
 	}
 
+	// 实时语音识别 WS 通道 —— 与 /events 同款形态(单独成组 + SSEAuth)
+	//
+	// ⚠️ **不能挂进受保护组** —— 浏览器 WebSocket 握手带不了 Authorization
+	//   头,组级 Auth() 会先 401(SSEAuth 的三级兜底根本没机会跑,
+	//   根因见上方 /events 的长注释)。
+	// ⚠️ **不走 rbac 闭包**(挂豁免清单见 consistency.go rbacExemptRoutes):
+	//   替代鉴权 = SSEAuth(完整三道吊销闸)+ handler 内 super_admin 短路
+	//   (识别是花钱的外呼,与克隆同档;菜单/权限码轮次再把 asr:stream
+	//   配进 casbin 矩阵,届时 handler 内的短路换成正式断言)。
+	asrStream := h.Group("/rapid-admin/v1/biz/asr/stream",
+		middleware.SSEAuth(),
+		middleware.Audit(),
+	)
+	asrStream.GET("", asrH.Stream)
+
 	// ===== /rapid-admin/v1/system 系统管理 =====
 	sys := api.Group("/system")
 	{
@@ -614,6 +630,11 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 		biz.DELETE("/tts/voices/:id", rbac("tts_voice", "delete"), ttsH.VoiceDelete)
 		biz.POST("/tts/voices/batch-delete", rbac("tts_voice", "delete"), ttsH.VoiceBatchDelete)
 
+		// 语音识别 —— 一句话(短音频,同步)。
+		// 实时 WS(/biz/asr/stream)在下面单独成组:浏览器 WebSocket 握手
+		// 带不了 Authorization 头,组级 Auth() 会先 401(同 /events 的教训)。
+		biz.POST("/asr/recognize", brkUpload, tUpload15s, rbac("asr", "recognize"), asrH.RecognizeOnce)
+
 		// §1.9 #11+#12 P1 —— 站内信 + 通知中心(框架占位,业务可在 main 注入 InboxNotifier)
 		biz.GET("/inbox/messages", rbac("inbox", "list"), inboxH.List)
 		biz.GET("/inbox/unread-count", rbac("inbox", "read"), inboxH.UnreadCount)
@@ -766,7 +787,7 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 		// 看板
 		pl.GET("/dashboard", rbac("dashboard", "read"), dashboardH.GetOverview)
 		pl.GET("/dashboard/trend", rbac("dashboard", "read"), dashboardH.GetTrend)
-						pl.GET("/dashboard/login-heatmap", rbac("dashboard", "read"), dashboardH.GetLoginHeatmap)
+		pl.GET("/dashboard/login-heatmap", rbac("dashboard", "read"), dashboardH.GetLoginHeatmap)
 		// 服务器资源监控 —— 权限窄一档:dashboard:server 只绑平台运营线
 		//   (super_admin 直通),服务器内部信息不广发给所有登录角色
 		pl.GET("/dashboard/server-metrics", rbac("dashboard", "server"), dashboardH.GetServerMetrics)

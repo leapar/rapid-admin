@@ -81,6 +81,7 @@
 ## 语音与媒体
 
 * [voicex(语音克隆与合成)](voice/voicex.md) — DashScope 音色克隆 + TTS 文本合成(整段 / 流式两套形态,不用 WebSocket)
+* [asrx(实时语音识别)](voice/asrx.md) — 百炼 Paraformer WS 实时识别 + 一句话识别(与 voicex 共用凭据)
 
 ## 业务扩展
 

@@ -9,11 +9,11 @@ import (
 
 // Registry 所有 service 的集中访问点(handler 通过这个取)
 type Registry struct {
-	Auth     AuthService
-	User     UserService
-	Role     RoleService
-	Audit    AuditService
-	Config   ConfigCenterService
+	Auth   AuthService
+	User   UserService
+	Role   RoleService
+	Audit  AuditService
+	Config ConfigCenterService
 	// File / Folder / Upload 是 M80 的文件系统三件套。
 	//
 	// ⚠️ **Upload 不再是"发个 OSS 凭证"的占位 service** —— M76 之前它是,
@@ -31,6 +31,8 @@ type Registry struct {
 	VoiceClone VoiceCloneService
 	// TtsVoice TTS 音色登记册 + 文本合成(语音能力,voicex)
 	TtsVoice TtsVoiceService
+	// Asr 语音识别(语音能力,asrx:一句话 + 实时会话)
+	Asr AsrService
 	// §1.9 #11+#12 P1 —— 站内信 + 通知中心
 	Inbox InboxService
 	// Job 定时任务管理(M68)。与其它 service 不同,它只读 cronx 的内存态:

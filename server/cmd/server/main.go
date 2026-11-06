@@ -765,6 +765,8 @@ func main() {
 	}
 	voiceCloneSvc := service.NewVoiceCloneService(db, fileProv, cfg.Voice, voiceKeyPrefix, voiceCfgResolve)
 	ttsVoiceSvc := service.NewTtsVoiceService(db, fileProv, cfg.Voice, voiceKeyPrefix, voiceCfgResolve)
+	// 识别(asrx)与克隆/合成共用同一份生效配置 —— 面板改 api_key 同样即生效
+	asrSvc := service.NewAsrService(cfg.Voice, voiceCfgResolve)
 
 	// 6.8 文件系统自愈(M140)
 	//
@@ -956,6 +958,7 @@ func main() {
 		// 语音能力(voicex)—— 音色克隆台账 + TTS 音色登记册/合成
 		VoiceClone: voiceCloneSvc,
 		TtsVoice:   ttsVoiceSvc,
+		Asr:        asrSvc,
 	}
 
 	// 7.2 异常登录检测启动自检(M128)

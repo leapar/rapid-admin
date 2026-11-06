@@ -28,10 +28,10 @@ import (
 // 线程模型:仅在 Register() 内由主线程写入,CheckResourceConsistency() 由 main 协程在
 // 路由注册完后、h.Spin() 前读;无并发。
 var (
-	rbacTrackingMu    sync.Mutex
-	rbacCodeSet       = make(map[string]struct{}) // unique code → 已用
-	rbacCallCount     int                          // rbac() 调用次数(含重复 code)
-	rbacCallSites     = make(map[string][]string)  // code → 调用次数(便于报告)
+	rbacTrackingMu sync.Mutex
+	rbacCodeSet    = make(map[string]struct{}) // unique code → 已用
+	rbacCallCount  int                         // rbac() 调用次数(含重复 code)
+	rbacCallSites  = make(map[string][]string) // code → 调用次数(便于报告)
 )
 
 // resetRBACTracking 每次 Register 入口重置 — 防止单测多次 Register 累积脏数据
@@ -133,84 +133,95 @@ func CheckResourceConsistency(h *server.Hertz, db *gorm.DB) error {
 	}
 
 	// rbacExemptRoutes —— 受保护路径但**故意不挂 rbac()** 的路由(唯一合法出口)
-//
-// 收窄判据,两条都要满足才允许加进来:
-//  1. 该路由已有等价的鉴权手段(SSEAuth / 自定义中间件 / handler 内判),不是裸奔;
-//  2. "有没有某个资源权限"对它没有业务含义 —— 强行绑一个 code 只会制造
-//     运营看不懂、也排障困难的角色配置。
-//
-// 判据 2 的**第三种情形**(2026-11-01 M151 补):权限码**在请求期才确定**。
-// 典型是动态业务集合 —— 资源码 `dyn:<集合编码>:<动作>` 里的集合编码来自
-// URL 路径参数,注册期不存在 ⇒ rbac() 闭包(编译期常量)钉不出来。
-// 这时"钉一个固定码"正是判据 2 要防的那种运营看不懂的粗粒度闸门,
-// 而真正的权限码(逐集合那套)是**存在**的、只是没法在注册期写死。
-// ⇒ 这种路由进豁免清单,但必须在条目里写清"替代鉴权方式"。
-//
-// 每加一条必须写清替代鉴权方式。往这张表里塞路由 == 主动放弃该接口的权限校验,
-// 检查会同步校验路径有效性(路由改名/删除时报错),防止豁免静默失效或变成死条目。
-var rbacExemptRoutes = []string{
-	// GET /rapid-admin/v1/events —— 通用事件推送 SSE 通道(权限实时刷新的加强版)
 	//
-	//	替代鉴权:middleware.SSEAuth()(解析 JWT + 查 token 黑名单 + 注入 Caller,
-	//	          见 internal/api/middleware/sseauth.go);不能用普通 Auth(),
-	//	          因为 EventSource 无法自定义 Header,只能走 ?access_token= / Cookie。
-	//	          ⚠️ 三级兜底里的 Cookie 那一级目前是**不可达**的:全仓前后端都没有
-	//	          任何一处 SetCookie / document.cookie,Cookie 永远不存在,
-	//	          实际只有 ?access_token= 这一条路走得通(前端见 useEventStream.ts)。
-	//	为何不需要 rbac 闭包:一条长连接不该占着鉴权链(鉴权语义是"每次请求",
-	//	          SSE 是"一次鉴权、长期持有")。⚠️ 但权限**不是不判** ——
-	//	          handler 内部用 middleware.CanAccess 逐 topic 判定订阅范围,
-	//	          见 handler/v1/event.go subscribableTopics:
-	//	          定时任务要 job:read、审批要 approval:read,
-	//	          客户端不能自选 topic(请求里传了也不读)。
-	//	          "有没有某个资源权限"对这条路由本身没有意义,所以不绑单一 code。
-	"/rapid-admin/v1/events",
+	// 收窄判据,两条都要满足才允许加进来:
+	//  1. 该路由已有等价的鉴权手段(SSEAuth / 自定义中间件 / handler 内判),不是裸奔;
+	//  2. "有没有某个资源权限"对它没有业务含义 —— 强行绑一个 code 只会制造
+	//     运营看不懂、也排障困难的角色配置。
+	//
+	// 判据 2 的**第三种情形**(2026-11-01 M151 补):权限码**在请求期才确定**。
+	// 典型是动态业务集合 —— 资源码 `dyn:<集合编码>:<动作>` 里的集合编码来自
+	// URL 路径参数,注册期不存在 ⇒ rbac() 闭包(编译期常量)钉不出来。
+	// 这时"钉一个固定码"正是判据 2 要防的那种运营看不懂的粗粒度闸门,
+	// 而真正的权限码(逐集合那套)是**存在**的、只是没法在注册期写死。
+	// ⇒ 这种路由进豁免清单,但必须在条目里写清"替代鉴权方式"。
+	//
+	// 每加一条必须写清替代鉴权方式。往这张表里塞路由 == 主动放弃该接口的权限校验,
+	// 检查会同步校验路径有效性(路由改名/删除时报错),防止豁免静默失效或变成死条目。
+	var rbacExemptRoutes = []string{
+		// GET /rapid-admin/v1/events —— 通用事件推送 SSE 通道(权限实时刷新的加强版)
+		//
+		//	替代鉴权:middleware.SSEAuth()(解析 JWT + 查 token 黑名单 + 注入 Caller,
+		//	          见 internal/api/middleware/sseauth.go);不能用普通 Auth(),
+		//	          因为 EventSource 无法自定义 Header,只能走 ?access_token= / Cookie。
+		//	          ⚠️ 三级兜底里的 Cookie 那一级目前是**不可达**的:全仓前后端都没有
+		//	          任何一处 SetCookie / document.cookie,Cookie 永远不存在,
+		//	          实际只有 ?access_token= 这一条路走得通(前端见 useEventStream.ts)。
+		//	为何不需要 rbac 闭包:一条长连接不该占着鉴权链(鉴权语义是"每次请求",
+		//	          SSE 是"一次鉴权、长期持有")。⚠️ 但权限**不是不判** ——
+		//	          handler 内部用 middleware.CanAccess 逐 topic 判定订阅范围,
+		//	          见 handler/v1/event.go subscribableTopics:
+		//	          定时任务要 job:read、审批要 approval:read,
+		//	          客户端不能自选 topic(请求里传了也不读)。
+		//	          "有没有某个资源权限"对这条路由本身没有意义,所以不绑单一 code。
+		"/rapid-admin/v1/events",
 
-	// ---- 动态业务集合的数据面(M151)----
-	//
-	//	GET    /rapid-admin/v1/biz/dyn/:collection/schema
-	//	GET    /rapid-admin/v1/biz/dyn/:collection/records
-	//	GET    /rapid-admin/v1/biz/dyn/:collection/records/:id
-	//	POST   /rapid-admin/v1/biz/dyn/:collection/records
-	//	PATCH  /rapid-admin/v1/biz/dyn/:collection/records/:id
-	//	DELETE /rapid-admin/v1/biz/dyn/:collection/records/:id
-	//
-	//	替代鉴权:handler 内 middleware.CanAccess(资源码 `dyn:<集合编码>:<动作>`)
-	//	          —— 集合编码来自 **URL 路径参数**,注册期不存在 ⇒ rbac() 闭包
-	//	          (编译期常量)钉不出"每个集合一条码"。
-	//	          见 handler/v1/dyn.go 的 dynGuard。
-	//
-	//	⚠️ **这里是"判据 2"的第三种情形**(前两种是"没有等价的资源权限含义"
-	//	和"长连接不该占着鉴权链"):权限码**逐集合不同**。
-	//	钉一个固定码(如 `dyn:record:list`)会变成运营看不懂的粗粒度闸门 ——
-	//	管理员得同时配"通用动态记录"和"某个业务表"两套码,少配一套就 403,
-	//	而且报错说的码跟他在角色配置页看到的对不上。
-	//	⇒ 真正的权限码就是 `dyn:<集合编码>:<动作>`,一个集合一套,
-	//	在「权限资源」页里看得见、勾得动。
-	//
-	//	⚠️ **豁免的是"计数",不是"鉴权"** —— 这 6 条路由照样过 Auth / Principal /
-	//	CSRF / Audit,权限由 handler 判(见上)。豁免的只是"受保护路由数 ==
-	//	rbac() 调用次数"这条计数:它们没有 rbac() 调用,计进去就对不上。
-	//	⇒ 将来往 /biz/dyn/** 下加第 7 条路由却忘了改这张表 ⇒ 启动失败(响亮)。
-	//
-	//	2026-11-03 扩到 11 条(行级批量 + 导入导出):export / batch-delete /
-	//	batch-update / import / records/:id/restore —— 鉴权方式不变(handler 内
-	//	dynGuard 按集合码判 `dyn:<码>:<动作>`),只是路径多了 5 条。
-	//
-	//	2026-11-03 再扩到 12 条:records/:id/approval(送审)——
-	//	权限沿用 dyn:<码>:update,不加新码。
-	"/rapid-admin/v1/biz/dyn/:collection/schema",
-	"/rapid-admin/v1/biz/dyn/:collection/records",
-	"/rapid-admin/v1/biz/dyn/:collection/records/:id",
-	"/rapid-admin/v1/biz/dyn/:collection/records/:id/restore",
-	"/rapid-admin/v1/biz/dyn/:collection/records/:id/approval",
-	"/rapid-admin/v1/biz/dyn/:collection/records/export",
-	"/rapid-admin/v1/biz/dyn/:collection/records/batch-delete",
-	"/rapid-admin/v1/biz/dyn/:collection/records/batch-update",
-	"/rapid-admin/v1/biz/dyn/:collection/records/import",
-}
+		// ---- 实时语音识别 WS 通道(2026-11-06)----
+		//
+		//	GET /rapid-admin/v1/biz/asr/stream
+		//
+		//	替代鉴权:middleware.SSEAuth()(Authorization / ?access_token= / cookie
+		//	          三级兜底,完整三道吊销闸)+ handler 内 super_admin 短路
+		//	          —— 识别是花钱的外呼,与克隆同档;浏览器 WebSocket 握手带不了
+		//	          Authorization 头,普通 Auth() 会先 401(同 /events 的教训)。
+		//	不能用 rbac():长连接不该占鉴权链;asr:stream 码等菜单/矩阵轮次再配。
+		"/rapid-admin/v1/biz/asr/stream",
 
-// 检查 (2):/rapid-admin/v1/* 受保护路由数 == rbac() 调用次数
+		// ---- 动态业务集合的数据面(M151)----
+		//
+		//	GET    /rapid-admin/v1/biz/dyn/:collection/schema
+		//	GET    /rapid-admin/v1/biz/dyn/:collection/records
+		//	GET    /rapid-admin/v1/biz/dyn/:collection/records/:id
+		//	POST   /rapid-admin/v1/biz/dyn/:collection/records
+		//	PATCH  /rapid-admin/v1/biz/dyn/:collection/records/:id
+		//	DELETE /rapid-admin/v1/biz/dyn/:collection/records/:id
+		//
+		//	替代鉴权:handler 内 middleware.CanAccess(资源码 `dyn:<集合编码>:<动作>`)
+		//	          —— 集合编码来自 **URL 路径参数**,注册期不存在 ⇒ rbac() 闭包
+		//	          (编译期常量)钉不出"每个集合一条码"。
+		//	          见 handler/v1/dyn.go 的 dynGuard。
+		//
+		//	⚠️ **这里是"判据 2"的第三种情形**(前两种是"没有等价的资源权限含义"
+		//	和"长连接不该占着鉴权链"):权限码**逐集合不同**。
+		//	钉一个固定码(如 `dyn:record:list`)会变成运营看不懂的粗粒度闸门 ——
+		//	管理员得同时配"通用动态记录"和"某个业务表"两套码,少配一套就 403,
+		//	而且报错说的码跟他在角色配置页看到的对不上。
+		//	⇒ 真正的权限码就是 `dyn:<集合编码>:<动作>`,一个集合一套,
+		//	在「权限资源」页里看得见、勾得动。
+		//
+		//	⚠️ **豁免的是"计数",不是"鉴权"** —— 这 6 条路由照样过 Auth / Principal /
+		//	CSRF / Audit,权限由 handler 判(见上)。豁免的只是"受保护路由数 ==
+		//	rbac() 调用次数"这条计数:它们没有 rbac() 调用,计进去就对不上。
+		//	⇒ 将来往 /biz/dyn/** 下加第 7 条路由却忘了改这张表 ⇒ 启动失败(响亮)。
+		//
+		//	2026-11-03 扩到 11 条(行级批量 + 导入导出):export / batch-delete /
+		//	batch-update / import / records/:id/restore —— 鉴权方式不变(handler 内
+		//	dynGuard 按集合码判 `dyn:<码>:<动作>`),只是路径多了 5 条。
+		//
+		//	2026-11-03 再扩到 12 条:records/:id/approval(送审)——
+		//	权限沿用 dyn:<码>:update,不加新码。
+		"/rapid-admin/v1/biz/dyn/:collection/schema",
+		"/rapid-admin/v1/biz/dyn/:collection/records",
+		"/rapid-admin/v1/biz/dyn/:collection/records/:id",
+		"/rapid-admin/v1/biz/dyn/:collection/records/:id/restore",
+		"/rapid-admin/v1/biz/dyn/:collection/records/:id/approval",
+		"/rapid-admin/v1/biz/dyn/:collection/records/export",
+		"/rapid-admin/v1/biz/dyn/:collection/records/batch-delete",
+		"/rapid-admin/v1/biz/dyn/:collection/records/batch-update",
+		"/rapid-admin/v1/biz/dyn/:collection/records/import",
+	}
+
+	// 检查 (2):/rapid-admin/v1/* 受保护路由数 == rbac() 调用次数
 	routes := h.Routes()
 	var protectedCount int
 	publicPrefixes := []string{"/healthz", "/readyz", "/rapid-admin/v1/public"}

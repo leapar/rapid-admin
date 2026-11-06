@@ -31,6 +31,12 @@ type VoiceConfig struct {
 	// SynthTimeoutSeconds 合成单次 HTTP 超时秒数,默认 60
 	SynthTimeoutSeconds int `mapstructure:"synth_timeout_seconds"`
 
+	// AsrModel 实时语音识别模型(asrx),空 = paraformer-realtime-v2。
+	// 识别与克隆/合成共用同一把 api_key / workspace_id(百炼同一账号体系)。
+	AsrModel string `mapstructure:"asr_model"`
+	// AsrTimeoutSeconds 识别整次任务兜底超时秒数,空/0 = 300
+	AsrTimeoutSeconds int `mapstructure:"asr_timeout_seconds"`
+
 	// Edge 微软 Edge 朗读(免凭据)合成客户端配置。全部可空。
 	//
 	// ⚠️ **与 synth_url 的纪律相反** —— Edge 无需凭据,空配置也装配;
