@@ -843,6 +843,13 @@ func Run(db *gorm.DB, casbinModelPath, superAdminPassword string) error {
 		return fmt.Errorf("seed approval case templates: %w", err)
 	}
 
+	// 11. 内置 TTS 音色 seed(voicex 语音能力)
+	//     百炼 CosyVoice + Edge 朗读的出厂音色,只补缺不覆盖 ——
+	//     运营在登记册里的改名/排序不会被重跑 migrate 打回去
+	if err := SeedBuiltinTtsVoices(db); err != nil {
+		return fmt.Errorf("seed builtin tts voices: %w", err)
+	}
+
 	fmt.Println("[seed] done")
 	return nil
 }

@@ -55,6 +55,8 @@ func newConsistencyTestDB(t *testing.T) *gorm.DB {
 		&model.SysApprovalTemplate{},
 		&model.SysApprovalStage{},
 		&model.SysApprovalAssigneeRule{},
+		// 语音能力:内置音色 seed 落 sys_tts_voice
+		&model.SysTtsVoice{},
 	))
 	seed.SetDriver("sqlite")
 	// ⚠️ **M146a 起 sqlite 也要真的同步 casbin 策略**,所以模型文件路径**不能空**

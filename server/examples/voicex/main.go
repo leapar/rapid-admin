@@ -16,6 +16,8 @@
 //     不配 = 不装配,NewSynthesizer 显式报错
 //   - **响应是 JSON = 合成失败**:网关失败时可能回 200 + {"code","msg"},
 //     Once() 先嗅探再当音频返回,不让一段 JSON 冒充 mp3 存下去
+//   - **Edge TTS 免凭据**:内部 WS 对接微软,对外与 Synthesizer 同构
+//     (Once / OnceStream);CosyVoice 之外的第二条合成通道
 //
 // ## 跑法
 //
@@ -80,14 +82,26 @@ func main() {
 	_, err = synth.Once(voicex.SynthParams{Text: "", Voice: "cosyvoice-v3-plus-xxx"})
 	fmt.Println("缺 text:", firstLine(err))
 
-	// ── 五、两种远端音色的 ID 归一 ─────────────────────────────────
+	// ── 五、Edge 客户端:免凭据,参数归一与校验 ─────────────────────
 	fmt.Println()
-	fmt.Println("=== RemoteVoice.LocalID():两种返回形态归一 ===")
-	fmt.Println("CosyVoice(voice_id 字段):",
-		voicex.RemoteVoice{VoiceID: "cosyvoice-v3-plus-abc123"}.LocalID())
-	fmt.Println("Qwen-TTS(voice 字段):",
-		voicex.RemoteVoice{Voice: "qwen-tts-xyz"}.LocalID())
-	fmt.Println("状态常量:", voicex.StatusDeploying, "/", voicex.StatusOK, "/", voicex.StatusUndeployed)
+	fmt.Println("=== Edge TTS(免凭据,参数校验与归一)===")
+	edge := voicex.NewEdgeClient(voicex.EdgeConfig{})
+	fmt.Println("edge client 构造成功(零配置,默认音色晓晓)")
+
+	_, err = edge.Once(voicex.EdgeSynthParams{Text: "你好", Volume: "louder"})
+	fmt.Println("非法 volume:", firstLine(err))
+
+	_, err = edge.Once(voicex.EdgeSynthParams{Text: "你好", Rate: "fast"})
+	fmt.Println("非法 rate:", firstLine(err))
+
+	fmt.Println("音色短名归一:", voicex.NormalizeEdgeVoice("zh-CN-XiaoxiaoNeural"))
+	fmt.Println("带地区变体归一:", voicex.NormalizeEdgeVoice("zh-CN-liaoning-XiaobeiNeural"))
+	fmt.Println("默认音色:", voicex.DefaultEdgeVoice)
+
+	// ── 六、CosyVoice 状态常量 ─────────────────────────────────────
+	fmt.Println()
+	fmt.Println("=== CosyVoice 状态常量 ===")
+	fmt.Println("状态:", voicex.StatusDeploying, "/", voicex.StatusOK, "/", voicex.StatusUndeployed)
 }
 
 // firstLine 错误消息第一行(错误里可能带上游 body,示例输出保持单行)

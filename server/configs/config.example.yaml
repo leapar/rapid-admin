@@ -448,20 +448,26 @@ file:
                                #   吃满一个核 —— 这个数就是"最多同时烧几个核"
 
 # ========== 语音能力(voicex:音色克隆 + 文本合成) ==========
-#   - 克隆:参考音频(https 公网 URL)→ 百炼注册音色,拿回 voice_id
-#   - 合成:POST JSON 到 synth_url 指向的 TTS 网关,拿回音频字节
+#   - 克隆:参考音频(https 公网 URL)→ 百炼 CosyVoice 注册音色,拿回 voice_id
+#   - 合成:POST JSON 到 synth_url 指向的 TTS 网关(百炼),或走 Edge 朗读(免凭据)
 #   ⚠️ **api_key / workspace_id 未配 = 克隆接口显式报错**(不是静默降级)——
 #     克隆是花钱的外呼,失败必须可见。
-#   ⚠️ **synth_url 未配 = 文本合成不装配**(合成接口报"未配置")。
+#   ⚠️ **synth_url 未配 = 百炼文本合成不装配**(合成接口报"未配置");
+#     Edge 通道无凭据依赖,请求 provider=edge 时始终可用。
 voice:
   api_key: ${VOICE_BAILIAN_API_KEY}
   workspace_id: ""            # 百炼业务空间 ID(拼进端点域名)
   region: cn-beijing          # 端点地域
-  default_model: voice-enrollment       # 配 qwen-voice-enrollment 走 Qwen-TTS 克隆
+  default_model: voice-enrollment       # CosyVoice 音色注册(仅此一种)
   default_target_model: cosyvoice-v3-plus
   timeout_seconds: 120        # 克隆接口单次 HTTP 超时(审核链路偏慢)
   synth_url: ""               # 文本合成端点,如 https://tts.example.com/ai/tts/once
   synth_timeout_seconds: 60
+  edge:                       # 微软 Edge 朗读(免费;内部 WS,对外仍是 HTTP 流式接口)
+    token: ""                 # 主握手 Ocp-Apim-Subscription-Key(可空,空则走 Bing 公共通道)
+    wss_url: ""               # 备用握手端点(可空 = 内置 Bing 默认;自建代理时指过来)
+    read_timeout_seconds: 30  # 单次 read 超时(Edge 卡死检测)
+    total_timeout_seconds: 180
 
 # ========== 字段级加密 & 盲索引 ==========
 #   - field_key:  AES-256-GCM 密钥,必须 32 字节。**base64(标准 / 无 padding)

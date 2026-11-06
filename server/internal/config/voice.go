@@ -17,8 +17,8 @@ type VoiceConfig struct {
 	WorkspaceID string `mapstructure:"workspace_id"`
 	// Region 默认 cn-beijing
 	Region string `mapstructure:"region"`
-	// DefaultModel 音色克隆默认 model,默认 voice-enrollment;
-	// 配 qwen-voice-enrollment 时 CreateVoiceFromURL 实际走 Qwen-TTS 路径
+	// DefaultModel 音色克隆默认 model,默认 voice-enrollment(CosyVoice 专用,
+	// 本框架刻意只接 CosyVoice,不接 Qwen-TTS/Qwen-Audio)
 	DefaultModel string `mapstructure:"default_model"`
 	// DefaultTargetModel 克隆目标音色模型,默认 cosyvoice-v3-plus
 	DefaultTargetModel string `mapstructure:"default_target_model"`
@@ -30,4 +30,23 @@ type VoiceConfig struct {
 	SynthURL string `mapstructure:"synth_url"`
 	// SynthTimeoutSeconds 合成单次 HTTP 超时秒数,默认 60
 	SynthTimeoutSeconds int `mapstructure:"synth_timeout_seconds"`
+
+	// Edge 微软 Edge 朗读(免凭据)合成客户端配置。全部可空。
+	//
+	// ⚠️ **与 synth_url 的纪律相反** —— Edge 无需凭据,空配置也装配;
+	// 只有请求里 provider=edge 时才会真正外呼微软。
+	Edge VoiceEdgeConfig `mapstructure:"edge"`
+}
+
+// VoiceEdgeConfig Edge TTS 配置(全部可空)
+type VoiceEdgeConfig struct {
+	// Token 主握手(api.msedgeservices.com)的 Ocp-Apim-Subscription-Key。
+	// 空 = 跳过主握手,直接走 Bing 公共 TrustedClientToken 备用通道。
+	Token string `mapstructure:"token"`
+	// WssURL 备用握手端点(空 = 内置 Bing 默认)。自建 edge 代理时指过来。
+	WssURL string `mapstructure:"wss_url"`
+	// ReadTimeoutSeconds 单次 read 超时秒数(Edge 端卡死检测),默认 30
+	ReadTimeoutSeconds int `mapstructure:"read_timeout_seconds"`
+	// TotalTimeoutSeconds 整次合成兜底超时秒数,默认 180
+	TotalTimeoutSeconds int `mapstructure:"total_timeout_seconds"`
 }

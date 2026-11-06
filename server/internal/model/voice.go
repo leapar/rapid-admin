@@ -4,7 +4,7 @@
 //   - sys_voice_clone 是"动作台账" —— 每一行是一次克隆(或失败尝试),
 //     带 DashScope 的状态机(DEPLOYING/OK/UNDEPLOYED/FAILED)
 //   - sys_tts_voice 是"可用音色登记册" —— 既含克隆出来的,也含平台内置音色
-//     (cosyvoice / qwen-tts / aliyun 各自的内置音色都登记在这),
+//     (百炼 cosyvoice 与 edge 朗读的出厂音色由 seed 自动登记),
 //     TTS 合成接口查的是这张表
 package model
 

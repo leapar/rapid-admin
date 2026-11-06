@@ -94,7 +94,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
-| `voicex` | DashScope 音色克隆 + TTS 合成(整段 / 流式,不用 WebSocket) | [voicex](../voice/voicex.md) |
+| `voicex` | 百炼 CosyVoice 音色克隆 + 双通道 TTS(百炼网关 / Edge 朗读,整段 / 流式) | [voicex](../voice/voicex.md) |
 
 ## 业务扩展(1)
 

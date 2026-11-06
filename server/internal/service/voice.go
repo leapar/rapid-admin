@@ -108,6 +108,12 @@ type TtsConvertRequest struct {
 	// ⚠️ 只有端点支持时才生效 —— 参数原样透传给 synth 网关
 	// (JSON 字段 format,老网关不认识就忽略,回它默认的 mp3)。
 	Format string `json:"format"`
+	// Provider 合成后端:"bailian"(默认,走 voice.synth_url)或 "edge"
+	// (微软 Edge 朗读,免凭据)。voice 是本地登记册 id 时以登记册的
+	// tts_type 为准;Edge 仅输出 mp3,format=wav 会被显式拒绝。
+	Provider string `json:"provider"`
+	// Pitch 音高("+0Hz" = 不变)。仅 Edge 生效。
+	Pitch string `json:"pitch"`
 }
 
 // TtsVoiceService TTS 音色登记册 + 文本合成
@@ -489,6 +495,32 @@ func (s *ttsVoiceService) synthesizer() (*voicex.Synthesizer, error) {
 	})
 }
 
+// edgeClient Edge 合成客户端(免凭据,构造恒成功)。
+// 每次取新的?不 —— 内部只有时钟偏差一把锁,单例复用即可。
+func (s *ttsVoiceService) edgeClient() *voicex.EdgeClient {
+	e := s.cfg.Edge
+	return voicex.NewEdgeClient(voicex.EdgeConfig{
+		Token:               e.Token,
+		WssURL:              e.WssURL,
+		ReadTimeoutSeconds:  e.ReadTimeoutSeconds,
+		TotalTimeoutSeconds: e.TotalTimeoutSeconds,
+	})
+}
+
+// provider 归一:显式 provider > 登记册 tts_type > 默认 bailian。
+// "edge" 之外的一律当 bailian(拼错平台名会落到百炼并得到 synth_url 的
+// 显式错误,不会静默换通道)。
+func ttsProvider(req, record string) string {
+	v := strings.TrimSpace(req)
+	if v == "" {
+		v = strings.TrimSpace(record)
+	}
+	if strings.EqualFold(v, "edge") {
+		return "edge"
+	}
+	return "bailian"
+}
+
 func (s *ttsVoiceService) normPage(page, size int) (int, int) {
 	if page <= 0 {
 		page = 1
@@ -667,18 +699,28 @@ func (s *ttsVoiceService) List(ctx context.Context, q TtsVoiceListQuery) (*model
 func (s *ttsVoiceService) createDemo(id uint64, voiceID, ttsType string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
-	synth, err := s.synthesizer()
-	if err != nil {
-		logger.L().Warn("voice: 试听音频未合成(synth_url 未配置)", zap.Uint64("id", id))
-		return
+	var (
+		audio []byte
+		err   error
+	)
+	if ttsProvider("", ttsType) == "edge" {
+		audio, err = s.edgeClient().Once(voicex.EdgeSynthParams{Text: demoTtsText, Voice: voiceID})
+	} else {
+		var synth *voicex.Synthesizer
+		if synth, err = s.synthesizer(); err == nil {
+			audio, err = synth.Once(voicex.SynthParams{
+				Text:  demoTtsText,
+				Voice: voiceID,
+				TTS:   ttsType,
+			})
+		}
 	}
-	audio, err := synth.Once(voicex.SynthParams{
-		Text:  demoTtsText,
-		Voice: voiceID,
-		TTS:   ttsType,
-	})
 	if err != nil {
-		logger.L().Warn("voice: 试听音频合成失败", zap.Uint64("id", id), zap.Error(err))
+		if strings.Contains(err.Error(), "synth_url 未配置") {
+			logger.L().Warn("voice: 试听音频未合成(synth_url 未配置)", zap.Uint64("id", id))
+		} else {
+			logger.L().Warn("voice: 试听音频合成失败", zap.Uint64("id", id), zap.Error(err))
+		}
 		return
 	}
 	key := fmt.Sprintf("%s/tts-demo/%s.mp3", s.keyPrefix, sonyflake.NextString())
@@ -696,6 +738,19 @@ func (s *ttsVoiceService) Convert(ctx context.Context, req TtsConvertRequest) ([
 	if err := s.resolveVoice(ctx, &req); err != nil {
 		return nil, "", err
 	}
+	if ttsProvider(req.Provider, req.TTS) == "edge" {
+		audio, err := s.edgeClient().Once(voicex.EdgeSynthParams{
+			Text:   req.Text,
+			Voice:  req.Voice,
+			Volume: req.Volume,
+			Rate:   req.Rate,
+			Pitch:  req.Pitch,
+		})
+		if err != nil {
+			return nil, "", errcode.New(errcode.Internal, "文本合成失败").WithDetail(err.Error())
+		}
+		return s.putAudio(ctx, audio, req.Dir)
+	}
 	synth, err := s.synthesizer()
 	if err != nil {
 		return nil, "", errcode.New(errcode.Internal, "文本合成未配置").WithDetail(err.Error())
@@ -711,14 +766,7 @@ func (s *ttsVoiceService) Convert(ctx context.Context, req TtsConvertRequest) ([
 	if err != nil {
 		return nil, "", errcode.New(errcode.Internal, "文本合成失败").WithDetail(err.Error())
 	}
-	if strings.TrimSpace(req.Dir) == "" {
-		return audio, "", nil
-	}
-	key := fmt.Sprintf("%s/%s/%s.mp3", s.keyPrefix, strings.Trim(req.Dir, "/"), sonyflake.NextString())
-	if _, err := s.prov.Put(ctx, key, bytes.NewReader(audio), "audio/mpeg"); err != nil {
-		return nil, "", errcode.New(errcode.Internal, "合成结果上传失败").WithDetail(err.Error())
-	}
-	return nil, key, nil
+	return s.putAudio(ctx, audio, req.Dir)
 }
 
 func (s *ttsVoiceService) ConvertStream(ctx context.Context, req TtsConvertRequest) (*voicex.SynthStream, error) {
@@ -727,6 +775,18 @@ func (s *ttsVoiceService) ConvertStream(ctx context.Context, req TtsConvertReque
 	}
 	if err := s.resolveVoice(ctx, &req); err != nil {
 		return nil, err
+	}
+	if ttsProvider(req.Provider, req.TTS) == "edge" {
+		if strings.Contains(strings.ToLower(req.Format), "wav") {
+			return nil, errcode.New(errcode.BadRequest, "edge tts 仅输出 mp3,不支持 format=wav")
+		}
+		return s.edgeClient().OnceStream(voicex.EdgeSynthParams{
+			Text:   req.Text,
+			Voice:  req.Voice,
+			Volume: req.Volume,
+			Rate:   req.Rate,
+			Pitch:  req.Pitch,
+		})
 	}
 	synth, err := s.synthesizer()
 	if err != nil {
@@ -740,6 +800,18 @@ func (s *ttsVoiceService) ConvertStream(ctx context.Context, req TtsConvertReque
 		Rate:   req.Rate,
 		Format: req.Format,
 	})
+}
+
+// putAudio Dir 非空 → 落 OSS 返回 key;空 → 音频原样返回(handler 直接回给前端)
+func (s *ttsVoiceService) putAudio(ctx context.Context, audio []byte, dir string) ([]byte, string, error) {
+	if strings.TrimSpace(dir) == "" {
+		return audio, "", nil
+	}
+	key := fmt.Sprintf("%s/%s/%s.mp3", s.keyPrefix, strings.Trim(dir, "/"), sonyflake.NextString())
+	if _, err := s.prov.Put(ctx, key, bytes.NewReader(audio), "audio/mpeg"); err != nil {
+		return nil, "", errcode.New(errcode.Internal, "合成结果上传失败").WithDetail(err.Error())
+	}
+	return nil, key, nil
 }
 
 // resolveVoice 校验 text + voice 归一(本地登记册 id → 远端 voice_id),

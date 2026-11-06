@@ -1081,19 +1081,20 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="voicex-——-语音克隆与合成dashscope-音色--tts">voicex —— 语音克隆与合成(DashScope 音色 + TTS)</h1>
+                                <h1 id="voicex-——-语音克隆与合成百炼-cosyvoice--edge-朗读">voicex —— 语音克隆与合成(百炼 CosyVoice + Edge 朗读)</h1>
 <blockquote>
-<p>两件事,共用一份百炼凭据:<strong>音色克隆</strong>(把一段参考音频注册成可复用音色)
+<p>两件事:<strong>音色克隆</strong>(把一段参考音频注册成可复用音色,百炼 CosyVoice)
 和 <strong>文本合成</strong>(文字 → 音频,整段 / 流式两套形态)。
-合成本体不在包里 —— 走可配置的合成端点,换后端不用改代码。</p>
+合成有两条通道:<strong>百炼</strong>(走可配置的合成端点)与 <strong>Edge 朗读</strong>(微软,免凭据)。</p>
 </blockquote>
 <h2 id="功能">功能</h2>
 <ul>
-<li><strong>DashScope 音色克隆客户端</strong>:单端点 + model/action 切换
+<li><strong>DashScope 音色克隆客户端</strong>:单端点 + action 切换
 (<code>POST https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/services/audio/tts/customization</code>),
-覆盖 create / list / query / update / delete 全套动作,
-CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVoice.LocalID()</code>)</li>
-<li><strong>文本合成客户端</strong>:POST JSON <code>{text, voice, tts, volume, rate, format}</code> 到
+覆盖 create / list / query / update / delete 全套动作。
+⚠️ <strong>只接 CosyVoice</strong>(<code>voice-enrollment</code>)—— Qwen-TTS / Qwen-Audio 的
+action / model / 字段形态都不一样,且产品上不用,刻意没移植</li>
+<li><strong>文本合成 · 百炼通道</strong>:POST JSON <code>{text, voice, tts, volume, rate, format}</code> 到
 <code>voice.synth_url</code> 指向的 TTS 网关,<strong>不用 WebSocket</strong> —— 单个 HTTP 请求,
 两套响应形态按需挑:<ul>
 <li><strong>整段</strong>(<code>Once</code>):合成完一次性回完整 wav/mp3 字节 —— 下载 / 存档用</li>
@@ -1101,7 +1102,20 @@ CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVo
 前端 <code>fetch</code> + <code>ReadableStream</code> 边收边播,首包即首音频帧</li>
 </ul>
 </li>
-<li><strong>"响应是 JSON"= 失败</strong> 的嗅探:部分网关失败时回 200 + <code>{"code","msg"}</code>,
+<li><strong>文本合成 · Edge 通道</strong>(<code>EdgeClient</code>):微软 Edge 朗读,<strong>免凭据</strong>。
+协议本身只有 WebSocket 一条通道,那是<strong>对接上游的实现细节</strong> ——
+对外暴露的仍是 <code>Once</code> / <code>OnceStream</code>,与百炼通道同构,前端不感知 WS:<ul>
+<li>主握手 <code>api.msedgeservices.com</code>(配 <code>voice.edge.token</code>)+
+备用握手 Bing 公共 TrustedClientToken,主备自动切换</li>
+<li>Sec-MS-GEC 风控参数本地计算,403 时按响应 Date 头自动校时</li>
+<li>两层超时防 hang:单次 read 30s + 整次任务 180s 兜底强拆</li>
+<li>输出固定 mp3(24kHz 48kbit mono),<code>format=wav</code> 显式拒绝</li>
+</ul>
+</li>
+<li><strong>内置音色目录</strong>:百炼 CosyVoice 官方音色(v2 / v3-flash 全量)+ Edge 常用
+Neural 音色,seed 首启批量登记进 <code>sys_tts_voice</code>(<strong>只补缺不覆盖</strong>,
+运营改过名/排序的行不会被重跑 migrate 打回去)</li>
+<li><strong>"响应是 JSON"= 失败</strong> 的嗅探(百炼通道):部分网关失败时回 200 + <code>{"code","msg"}</code>,
 客户端按 Content-Type + 首字节两级嗅探,不让一段 JSON 冒充 mp3 存下去</li>
 <li><strong>业务层配套</strong>(<code>internal/service/voice.go</code>,不在本包):
 <code>sys_voice_clone</code> 克隆台账 + <code>sys_tts_voice</code> 音色登记册 + <code>/biz/voice-clones</code>、
@@ -1110,7 +1124,8 @@ CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVo
 <p><strong>不解决什么</strong>:</p>
 <ul>
 <li>不做 ASR(语音识别)—— 源项目里 ASR 只有配置透传,没有本地代码;</li>
-<li>不内置合成后端 —— <code>synth_url</code> 为空 = 合成不装配,调用拿到显式报错;</li>
+<li>百炼不内置合成后端 —— <code>synth_url</code> 为空 = 百炼合成不装配,调用拿到显式报错
+(Edge 通道无凭据依赖,不受此限);</li>
 <li>不管凭据轮转 —— api_key 就在 yaml 里,和 OSS / SMTP 同一套纪律。</li>
 </ul>
 <h2 id="配置">配置</h2>
@@ -1119,11 +1134,16 @@ CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVo
 <span class="hljs-attr">  api_key:</span> ${VOICE_BAILIAN_API_KEY}
 <span class="hljs-attr">  workspace_id:</span> <span class="hljs-string">""</span>            <span class="hljs-comment"># 百炼业务空间 ID(拼进端点域名)</span>
 <span class="hljs-attr">  region:</span> cn-beijing          <span class="hljs-comment"># 端点地域</span>
-<span class="hljs-attr">  default_model:</span> voice-enrollment       <span class="hljs-comment"># 配 qwen-voice-enrollment 走 Qwen-TTS 克隆</span>
+<span class="hljs-attr">  default_model:</span> voice-enrollment       <span class="hljs-comment"># CosyVoice 音色注册(仅此一种)</span>
 <span class="hljs-attr">  default_target_model:</span> cosyvoice-v3-plus
 <span class="hljs-attr">  timeout_seconds:</span> <span class="hljs-number">120</span>        <span class="hljs-comment"># 克隆接口单次 HTTP 超时(审核链路偏慢)</span>
-<span class="hljs-attr">  synth_url:</span> <span class="hljs-string">""</span>               <span class="hljs-comment"># 文本合成端点,如 https://tts.example.com/ai/tts/once</span>
+<span class="hljs-attr">  synth_url:</span> <span class="hljs-string">""</span>               <span class="hljs-comment"># 百炼文本合成端点,如 https://tts.example.com/ai/tts/once</span>
 <span class="hljs-attr">  synth_timeout_seconds:</span> <span class="hljs-number">60</span>
+<span class="hljs-attr">  edge:</span>                       <span class="hljs-comment"># Edge 朗读(免凭据,全可空)</span>
+<span class="hljs-attr">    token:</span> <span class="hljs-string">""</span>                 <span class="hljs-comment"># 主握手 Ocp-Apim-Subscription-Key(空则走 Bing 公共通道)</span>
+<span class="hljs-attr">    wss_url:</span> <span class="hljs-string">""</span>               <span class="hljs-comment"># 备用握手端点(空 = 内置 Bing 默认;自建代理时指过来)</span>
+<span class="hljs-attr">    read_timeout_seconds:</span> <span class="hljs-number">30</span>
+<span class="hljs-attr">    total_timeout_seconds:</span> <span class="hljs-number">180</span>
 </code></pre>
 <table>
 <thead>
@@ -1157,7 +1177,7 @@ CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVo
 <td><code>voice.default_model</code></td>
 <td>string</td>
 <td><code>voice-enrollment</code></td>
-<td>克隆 model;配 <code>qwen-voice-enrollment</code> 时 <code>CreateVoiceFromURL</code> 走 Qwen-TTS 路径</td>
+<td>克隆 model(CosyVoice 专用)</td>
 </tr>
 <tr>
 <td><code>voice.default_target_model</code></td>
@@ -1175,13 +1195,37 @@ CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVo
 <td><code>voice.synth_url</code></td>
 <td>string</td>
 <td>空</td>
-<td>TTS 网关端点。<strong>空 = 合成不装配</strong>(调用显式报错,与 email.provider 空串同一纪律)</td>
+<td>百炼 TTS 网关端点。<strong>空 = 百炼合成不装配</strong>(调用显式报错,与 email.provider 空串同一纪律)</td>
 </tr>
 <tr>
 <td><code>voice.synth_timeout_seconds</code></td>
 <td>int(秒)</td>
 <td><code>60</code></td>
-<td>合成单次 HTTP 超时</td>
+<td>百炼合成单次 HTTP 超时</td>
+</tr>
+<tr>
+<td><code>voice.edge.token</code></td>
+<td>string</td>
+<td>空</td>
+<td>Edge 主握手订阅密钥(可空,空则走 Bing 公共通道,零凭据可用)</td>
+</tr>
+<tr>
+<td><code>voice.edge.wss_url</code></td>
+<td>string</td>
+<td>空</td>
+<td>Edge 备用握手端点(空 = 内置 Bing 默认)</td>
+</tr>
+<tr>
+<td><code>voice.edge.read_timeout_seconds</code></td>
+<td>int(秒)</td>
+<td><code>30</code></td>
+<td>Edge 单次 read 超时(卡死检测)</td>
+</tr>
+<tr>
+<td><code>voice.edge.total_timeout_seconds</code></td>
+<td>int(秒)</td>
+<td><code>180</code></td>
+<td>Edge 整次合成兜底超时</td>
 </tr>
 </tbody>
 </table>
@@ -1238,12 +1282,12 @@ CosyVoice(Qwen-Audio-TTS)与 Qwen-TTS 两种返回形态都归一(<code>RemoteVo
 <tr>
 <td><code>POST /biz/tts/convert</code></td>
 <td><code>tts:convert</code></td>
-<td>文本合成:<code>stream=false</code> 整段 / <code>stream=true</code> 流式;<code>dir</code> 非空落 OSS</td>
+<td>文本合成:<code>stream=false</code> 整段 / <code>stream=true</code> 流式;<code>dir</code> 非空落 OSS;<code>provider</code> 选 <code>bailian</code>(默认)/ <code>edge</code></td>
 </tr>
 <tr>
 <td><code>GET /biz/tts/voices</code> · <code>POST</code> · <code>PATCH/:id</code> · <code>DELETE/:id</code> · <code>POST batch-delete</code></td>
 <td><code>tts_voice:*</code></td>
-<td>音色登记册 CRUD(创建/更新后异步合成试听音频)</td>
+<td>音色登记册 CRUD(创建/更新后异步合成试听音频;<code>tts_type=edge</code> 的行走 Edge 通道合成试听)</td>
 </tr>
 </tbody>
 </table>
@@ -1262,7 +1306,7 @@ voiceID, err := client.CreateVoiceFromURL(<span class="hljs-string">"cosyvoice-v
 <span class="hljs-comment">// 查状态:DEPLOYING → OK / UNDEPLOYED</span>
 info, err := client.QueryVoice(voiceID)
 
-<span class="hljs-comment">// 整段合成</span>
+<span class="hljs-comment">// 整段合成(百炼通道)</span>
 synth, _ := voicex.NewSynthesizer(voicex.SynthConfig{Endpoint: cfg.Voice.SynthURL})
 audio, err := synth.Once(voicex.SynthParams{Text: <span class="hljs-string">"你好"</span>, Voice: voiceID, Format: <span class="hljs-string">"wav"</span>})
 
@@ -1270,7 +1314,22 @@ audio, err := synth.Once(voicex.SynthParams{Text: <span class="hljs-string">"你
 stream, err := synth.OnceStream(voicex.SynthParams{Text: <span class="hljs-string">"你好"</span>, Voice: voiceID})
 <span class="hljs-keyword">defer</span> stream.Body.Close()
 io.Copy(w, stream.Body)
+
+<span class="hljs-comment">// Edge 通道(免凭据,同一套 Once / OnceStream 形态)</span>
+edge := voicex.NewEdgeClient(voicex.EdgeConfig{})
+audio, err = edge.Once(voicex.EdgeSynthParams{Text: <span class="hljs-string">"你好"</span>, Voice: <span class="hljs-string">"zh-CN-XiaoxiaoNeural"</span>})
 </code></pre>
+<h3 id="内置音色从哪来">内置音色从哪来</h3>
+<p><code>go run ./cmd/migrate</code> 时 seed 自动把内置音色登记进 <code>sys_tts_voice</code>:</p>
+<ul>
+<li><strong>bailian</strong>:CosyVoice 官方内置(v2 / v3-flash 全量,<code>voice_id</code> 即官方 voiceId,
+model 记在 description);Name 用 voiceId 占位,运营可改</li>
+<li><strong>edge</strong>:常用 Neural 音色(晓晓/云希/方言/粤语/英语/日语/韩语等),
+<code>voice_id</code> 是短名(<code>zh-CN-XiaoxiaoNeural</code>),合成时 <code>NormalizeEdgeVoice</code>
+自动展开成协议全名</li>
+</ul>
+<p>幂等纪律:按 <code>(tts_type, voice_id)</code> 判存在(Unscoped,软删行也算),
+<strong>只补缺不覆盖</strong> —— 运营的改名/排序不会被重跑 migrate 打回去。</p>
 <h3 id="参考音频的公网-url-从哪来">参考音频的公网 URL 从哪来</h3>
 <p>克隆要求 <strong>https:// 公网可访问</strong> 的音频 URL。业务层的做法:参考音频先经
 <code>oss.Provider.Put</code> 进对象存储,再 <code>SignDownloadURL</code> 签直链 ——
@@ -1279,12 +1338,16 @@ io.Copy(w, stream.Body)
 local / 无 https 部署下克隆会在 DashScope 侧失败,错误落进台账的 <code>error_msg</code>。</p>
 <h2 id="关键纪律">关键纪律</h2>
 <ul>
-<li><strong>凭据缺一不可</strong>:<code>voicex.New</code> 对 api_key / workspace_id 逐个显式报错 ——
+<li><strong>凭据缺一不可</strong>(克隆):<code>voicex.New</code> 对 api_key / workspace_id 逐个显式报错 ——
 半可用的客户端会把"没配"拖到第一次调用才炸;</li>
 <li><strong>https 闸门在客户端这边</strong>:<code>http://</code> 或相对路径的参考音频不发请求直接拒,
 不用等远端 403 再猜;</li>
-<li><strong>合成端点失败必须可见</strong>:200 + JSON 的"假成功"被两级嗅探拦下
-(Content-Type → 首字节),否则一段 JSON 存成 .mp3,播放器只会报"文件损坏"。</li>
+<li><strong>合成端点失败必须可见</strong>(百炼通道):200 + JSON 的"假成功"被两级嗅探拦下
+(Content-Type → 首字节),否则一段 JSON 存成 .mp3,播放器只会报"文件损坏";</li>
+<li><strong>Edge 空 audio 也是失败</strong>:握手被风控但连接没断时,WS 会"正常"收 0 字节 ——
+<code>Once</code> 对 0 字节显式报错,不把空 mp3 当成功交出去;</li>
+<li><strong>只接 CosyVoice</strong>:Qwen-TTS / Qwen-Audio 相关的 action / model / 字段
+刻意没移植,别因为" DashScope 有的都接"而加回来。</li>
 </ul>
 
                                 
@@ -1329,7 +1392,7 @@ local / 无 https 部署下克隆会在 DashScope 侧失败,错误落进台账�
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"voicex(语音克隆与合成)","level":"9.1","depth":1,"next":{"title":"dynx(动态业务集合)","level":"10.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"slowquery(慢 SQL 报警)","level":"8.3","depth":1,"path":"scheduling/slowquery.md","ref":"scheduling/slowquery.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"voice/voicex.md","mtime":"2026-11-06T05:20:54.163Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T05:32:14.311Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"voicex(语音克隆与合成)","level":"9.1","depth":1,"next":{"title":"dynx(动态业务集合)","level":"10.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"slowquery(慢 SQL 报警)","level":"8.3","depth":1,"path":"scheduling/slowquery.md","ref":"scheduling/slowquery.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"voice/voicex.md","mtime":"2026-11-06T05:55:47.357Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T05:56:05.758Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

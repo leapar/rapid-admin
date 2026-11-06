@@ -48,6 +48,8 @@ func newSeedTestDB(t *testing.T) *gorm.DB {
 		&model.SysApprovalTemplate{},
 		&model.SysApprovalStage{},
 		&model.SysApprovalAssigneeRule{},
+		// 语音能力:内置音色 seed 落 sys_tts_voice
+		&model.SysTtsVoice{},
 	))
 	return db
 }
