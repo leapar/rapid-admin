@@ -123,7 +123,7 @@ go run ./examples/cachex
 
 | 包 | 示例演示什么 |
 |---|---|
-| [voicex](voicex/main.go) | DashScope 音色克隆 + TTS 合成(凭据校验 / https 闸门 / ID 归一) |
+| [voicex](voicex/main.go) | 百炼克隆 + 双通道 TTS 合成(凭据校验 / https 闸门 / Edge 参数归一) |
 
 ### 接口文档
 
