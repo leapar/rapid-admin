@@ -124,6 +124,32 @@ await client.authWithPassword('ops', '明文密码')
 | `batchDelete(ids)` | `POST /biz/dyn/:code/records/batch-delete` | `dyn:<code>:batch_delete` |
 | `batchUpdate(ids, field, value)` | `POST /biz/dyn/:code/records/batch-update` | `dyn:<code>:batch_update` |
 
+## 语音(client.voices)
+
+`client.voices` 返回 `VoiceService` —— 音色列表 + 文本合成(权限码在角色配置页勾选):
+
+| 方法 | 接口 | 权限码 |
+| --- | --- | --- |
+| `list(options?)` | `GET /biz/tts/voices` | `tts_voice:list` |
+| `synthesize(options)` | `POST /biz/tts/convert`(stream=false) | `tts:convert` |
+| `synthesizeStream(options)` | `POST /biz/tts/convert`(stream=true) | `tts:convert` |
+
+```ts
+// 音色列表(seed 内置 + 克隆出来的都在这张登记册里)
+const page = await client.voices.list({ page: 1, size: 50, tts_type: 'edge' })
+
+// 整段合成:回完整音频 Blob(下载 / 存档用)
+const blob = await client.voices.synthesize({ text: '你好', voice: 'zh-CN-XiaoxiaoNeural' })
+
+// 流式合成:回 ReadableStream<Uint8Array>(边合成边收,首包即首音频帧)
+const stream = await client.voices.synthesizeStream({ text: '你好', voice: '1' })
+```
+
+⚠️ **convert 的成功响应不是统一信封** —— 后端直接回裸音频字节;失败时回
+JSON 信封,SDK 按 Content-Type 区分,**不让一段 JSON 冒充 mp3 存下去**。
+`synthesize` 拿到的是 Blob(浏览器)/ 带 type 的 Blob(Node 18+);
+`voice` 传登记册的 **voice_id**,或本地登记册行的纯数字 id(后端会换算)。
+
 ## 查询参数(getList)
 
 | 参数 | 说明 |

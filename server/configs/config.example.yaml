@@ -463,10 +463,18 @@ voice:
   timeout_seconds: 120        # 克隆接口单次 HTTP 超时(审核链路偏慢)
   synth_url: ""               # 文本合成端点,如 https://tts.example.com/ai/tts/once
   synth_timeout_seconds: 60
-  edge:                       # 微软 Edge 朗读(免费;内部 WS,对外仍是 HTTP 流式接口)
-    token: ""                 # 主握手 Ocp-Apim-Subscription-Key(可空,空则走 Bing 公共通道)
-    wss_url: ""               # 备用握手端点(可空 = 内置 Bing 默认;自建代理时指过来)
-    read_timeout_seconds: 30  # 单次 read 超时(Edge 卡死检测)
+  # 微软 Edge 朗读(免费;内部走 WS 是上游协议细节,对外仍是 HTTP 流式接口)
+  # 配置就一句话:**什么都不填就能用**,四个键都只有特殊场景才动 ——
+  #   · 日常:edge 整段留空 → 走 Bing 公共通道(Edge 浏览器内置的公共
+  #     Token,免凭据零配置);代价是公共通道可能被微软风控(403/限流)
+  #   · 有 Azure 语音订阅密钥:只填 token → 先走微软官方主端点,
+  #     握手失败自动落回公共通道,不用二选一
+  #   · 公共通道被风控 / 部署在国内出网不稳:只填 wss_url → 指向你的
+  #     自建 edge-tts 代理(token 空时所有流量都走它)
+  edge:
+    token: ""                 # [选填] Azure 语音订阅密钥(Ocp-Apim-Subscription-Key);不填走公共通道
+    wss_url: ""               # [选填] 备用/代理端点(wss://...);空 = 内置 Bing 默认
+    read_timeout_seconds: 30  # [默认即可] 单次 read 超时(Edge 卡死检测)
     total_timeout_seconds: 180
 
 # ========== 字段级加密 & 盲索引 ==========

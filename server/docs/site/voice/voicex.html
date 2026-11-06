@@ -1207,28 +1207,34 @@ Neural 音色,seed 首启批量登记进 <code>sys_tts_voice</code>(<strong>只�
 <td><code>voice.edge.token</code></td>
 <td>string</td>
 <td>空</td>
-<td>Edge 主握手订阅密钥(可空,空则走 Bing 公共通道,零凭据可用)</td>
+<td>Azure 语音订阅密钥(主握手)。<strong>不填 = 走 Bing 公共通道,零凭据可用</strong>;填了先走微软官方主端点,握手失败自动落回公共通道</td>
 </tr>
 <tr>
 <td><code>voice.edge.wss_url</code></td>
 <td>string</td>
 <td>空</td>
-<td>Edge 备用握手端点(空 = 内置 Bing 默认)</td>
+<td>备用/代理握手端点。空 = 内置 Bing 默认;公共通道被风控或出网不稳时,指到自建 edge-tts 代理</td>
 </tr>
 <tr>
 <td><code>voice.edge.read_timeout_seconds</code></td>
 <td>int(秒)</td>
 <td><code>30</code></td>
-<td>Edge 单次 read 超时(卡死检测)</td>
+<td>单次 read 超时(卡死检测),默认即可</td>
 </tr>
 <tr>
 <td><code>voice.edge.total_timeout_seconds</code></td>
 <td>int(秒)</td>
 <td><code>180</code></td>
-<td>Edge 整次合成兜底超时</td>
+<td>整次合成兜底超时,默认即可</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>edge 怎么配,一句话:什么都不填就能用。</strong> 日常留空走 Bing 公共通道
+(Edge 浏览器内置的公共 TrustedClientToken,免凭据);公共通道被微软风控
+(403 / 空音频)时,要么填 <code>token</code> 换官方主端点,要么填 <code>wss_url</code> 过自建代理,
+二者都不用动超时参数。</p>
+</blockquote>
 <h3 id="业务路由移植后自带">业务路由(移植后自带)</h3>
 <table>
 <thead>
@@ -1392,7 +1398,7 @@ local / 无 https 部署下克隆会在 DashScope 侧失败,错误落进台账�
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"voicex(语音克隆与合成)","level":"9.1","depth":1,"next":{"title":"dynx(动态业务集合)","level":"10.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"slowquery(慢 SQL 报警)","level":"8.3","depth":1,"path":"scheduling/slowquery.md","ref":"scheduling/slowquery.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"voice/voicex.md","mtime":"2026-11-06T05:55:47.357Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T05:56:05.758Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"voicex(语音克隆与合成)","level":"9.1","depth":1,"next":{"title":"dynx(动态业务集合)","level":"10.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"slowquery(慢 SQL 报警)","level":"8.3","depth":1,"path":"scheduling/slowquery.md","ref":"scheduling/slowquery.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"voice/voicex.md","mtime":"2026-11-06T06:46:54.591Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T06:48:09.342Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
