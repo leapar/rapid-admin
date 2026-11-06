@@ -17,6 +17,7 @@
 import { AuthStore } from './AuthStore'
 import { ClientResponseError } from './ClientResponseError'
 import { RecordService } from './RecordService'
+import { VoiceService } from './VoiceService'
 import { preHashPassword } from './sha256'
 import type {
   AuthTokens,
@@ -67,6 +68,15 @@ export class DynClient {
   }
   private collectionCache = new Map<string, RecordService>()
 
+  /** 语音服务:音色列表 + 文本合成(整段 / 流式),见 VoiceService */
+  get voices(): VoiceService {
+    if (!this.voiceService) {
+      this.voiceService = new VoiceService(this)
+    }
+    return this.voiceService
+  }
+  private voiceService?: VoiceService
+
   /**
    * 发请求:拼 URL / 挂 token / 解信封,失败抛 ClientResponseError
    *
@@ -77,6 +87,41 @@ export class DynClient {
    * (业务失败不一定配非 200 的 HTTP 状态码,只看 HTTP 会漏)。
    */
   async send<T = any>(path: string, options: SendOptions = {}): Promise<T> {
+    const res = await this.sendRaw(path, options)
+
+    let body: unknown = null
+    const text = await res.text().catch(() => '')
+    if (text !== '') {
+      try {
+        body = JSON.parse(text)
+      } catch {
+        // 非 JSON(网关错误页、CORS 拦截的空响应等)—— 保 message 就够
+      }
+    }
+
+    const envelope = asEnvelope(body)
+    if (!res.ok || !envelope || envelope.code !== 0) {
+      throw new ClientResponseError(
+        res.url || this.buildURL(path, options.query),
+        res.status,
+        envelope?.code ?? 0,
+        envelope?.message ?? fallbackMessage(res.status, text),
+        body,
+      )
+    }
+    return envelope.data as T
+  }
+
+  /**
+   * 发请求:**不解信封**,把原始 Response 交出去
+   *
+   * # ⚠️ **给谁用**
+   *
+   * 只给"响应**不是**统一信封"的接口 —— 典型是音频二进制(TTS 合成,
+   * 后端直接写 wav/mp3 字节,不包 JSON,见 VoiceService)。
+   * 能走信封的接口请走 send(),错误处理(CSRF 403 空 body 等)那套是白捡的。
+   */
+  async sendRaw(path: string, options: SendOptions = {}): Promise<Response> {
     const method = options.method ?? 'GET'
     const url = this.buildURL(path, options.query)
 
@@ -100,37 +145,14 @@ export class DynClient {
       init = modified
     }
 
-    let res: Response
     try {
-      res = await this.fetchImpl(url, init)
+      return await this.fetchImpl(url, init)
     } catch (err: any) {
       if (isAbortError(err)) {
         throw new ClientResponseError(url, 0, 0, '请求已取消', undefined, true)
       }
       throw new ClientResponseError(url, 0, 0, `网络请求失败:${err?.message ?? err}`)
     }
-
-    let body: unknown = null
-    const text = await res.text().catch(() => '')
-    if (text !== '') {
-      try {
-        body = JSON.parse(text)
-      } catch {
-        // 非 JSON(网关错误页、CORS 拦截的空响应等)—— 保 message 就够
-      }
-    }
-
-    const envelope = asEnvelope(body)
-    if (!res.ok || !envelope || envelope.code !== 0) {
-      throw new ClientResponseError(
-        url,
-        res.status,
-        envelope?.code ?? 0,
-        envelope?.message ?? fallbackMessage(res.status, text),
-        body,
-      )
-    }
-    return envelope.data as T
   }
 
   // ── 鉴权:登录 / 验证码 / 刷新 / 登出 ────────────────────────────────

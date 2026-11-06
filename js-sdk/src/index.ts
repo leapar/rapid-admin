@@ -2,6 +2,7 @@ export { DynClient } from './Client'
 export { AuthStore } from './AuthStore'
 export { ClientResponseError } from './ClientResponseError'
 export { RecordService, buildListQuery } from './RecordService'
+export { VoiceService } from './VoiceService'
 export { sha256Pure, sha256Hex, preHashPassword } from './sha256'
 export type {
   AuthTokens,
@@ -16,3 +17,11 @@ export type {
   SchemaField,
   SendOptions,
 } from './types'
+export type {
+  SynthesizeOptions,
+  SynthesizeStreamOptions,
+  TtsFormat,
+  TtsProvider,
+  TtsVoiceModel,
+  VoiceListOptions,
+} from './VoiceService'
