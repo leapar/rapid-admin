@@ -72,10 +72,27 @@ voice:
 | `voice.timeout_seconds` | int(秒) | `120` | 克隆接口 HTTP 超时(远端审核链路偏慢,别配太小) |
 | `voice.synth_url` | string | 空 | 百炼 TTS 网关端点。**空 = 百炼合成不装配**(调用显式报错,与 email.provider 空串同一纪律) |
 | `voice.synth_timeout_seconds` | int(秒) | `60` | 百炼合成单次 HTTP 超时 |
-| `voice.edge.token` | string | 空 | Edge 主握手订阅密钥(可空,空则走 Bing 公共通道,零凭据可用) |
-| `voice.edge.wss_url` | string | 空 | Edge 备用握手端点(空 = 内置 Bing 默认) |
-| `voice.edge.read_timeout_seconds` | int(秒) | `30` | Edge 单次 read 超时(卡死检测) |
-| `voice.edge.total_timeout_seconds` | int(秒) | `180` | Edge 整次合成兜底超时 |
+| `voice.edge.token` | string | 空 | Azure 语音订阅密钥(主握手)。**不填 = 走 Bing 公共通道,零凭据可用**;填了先走微软官方主端点,握手失败自动落回公共通道 |
+| `voice.edge.wss_url` | string | 空 | 备用/代理握手端点。空 = 内置 Bing 默认;公共通道被风控或出网不稳时,指到自建 edge-tts 代理 |
+| `voice.edge.read_timeout_seconds` | int(秒) | `30` | 单次 read 超时(卡死检测),默认即可 |
+| `voice.edge.total_timeout_seconds` | int(秒) | `180` | 整次合成兜底超时,默认即可 |
+
+> **edge 怎么配,一句话:什么都不填就能用。** 日常留空走 Bing 公共通道
+> (Edge 浏览器内置的公共 TrustedClientToken,免凭据);公共通道被微软风控
+> (403 / 空音频)时,要么填 `token` 换官方主端点,要么填 `wss_url` 过自建代理,
+> 二者都不用动超时参数。
+
+### 配置中心(系统配置面板)
+
+百炼相关的 5 个键(`voice.api_key` / `workspace_id` / `region` /
+`default_target_model` / `synth_url`)已 seed 进**系统配置面板**
+(`sys_config`,`voice` 分组):配置文件打底,面板覆盖,**改完即生效,不用重启**
+—— 克隆 / 合成每次调用时都重新解析生效配置(`service.ResolveVoiceConfig`,
+消费方 `voiceCloneService` / `ttsVoiceService`)。
+
+合并规则与 `aliyun.sms.*` 完全一致:**面板值生效 ⇔ 该行非停用 且 值非空
+且 值 ≠ 该行自带的默认值**(即"运营改过的才算数");**清空某一格 = 退回
+配置文件**。edge 通道免凭据,不进面板;超时参数是运维调优项,也留在配置文件。
 
 ### 业务路由(移植后自带)
 

@@ -51,6 +51,9 @@ type ConfigCenterService interface {
 	// ResolveSMSConfig 用配置中心的 aliyun.sms.* 覆盖配置文件里的短信配置
 	//   合并规则见 config_center_sms.go 的注释(核心:"运营改过的才算数")
 	ResolveSMSConfig(ctx context.Context, base config.SMSConfig) (config.SMSConfig, error)
+	// ResolveVoiceConfig 用配置中心的 voice.*(百炼克隆 / 合成)覆盖配置文件里的语音配置
+	//   合并规则同上;消费方在每次调用时解析,面板改完即生效
+	ResolveVoiceConfig(ctx context.Context, base config.VoiceConfig) (config.VoiceConfig, error)
 }
 
 // ConfigAuditListQuery

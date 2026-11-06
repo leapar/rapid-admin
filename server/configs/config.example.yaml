@@ -454,6 +454,9 @@ file:
 #     克隆是花钱的外呼,失败必须可见。
 #   ⚠️ **synth_url 未配 = 百炼文本合成不装配**(合成接口报"未配置");
 #     Edge 通道无凭据依赖,请求 provider=edge 时始终可用。
+#   💡 百炼相关 5 键(api_key / workspace_id / region / default_target_model /
+#     synth_url)也可在「系统配置」面板的 voice 分组里改 —— 配置文件打底、
+#     面板覆盖,改完即生效不用重启;清空面板里的值 = 退回本文件。
 voice:
   api_key: ${VOICE_BAILIAN_API_KEY}
   workspace_id: ""            # 百炼业务空间 ID(拼进端点域名)

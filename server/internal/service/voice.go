@@ -147,27 +147,45 @@ type voiceCloneService struct {
 	prov      oss.Provider
 	cfg       config.VoiceConfig
 	keyPrefix string // 对象 key 第一段必须是静态挂载点(path_root),由 main 装配时传入
+	// resolve 配置中心覆盖(voice.* 组,nil = 只用配置文件)。
+	// ⚠️ 每次 client()/targetModel() 调用时解析 —— 面板改完即生效,不用重启。
+	resolve func(ctx context.Context) (config.VoiceConfig, error)
 }
 
 // NewVoiceCloneService 构造。keyPrefix 形如 "<path_root>/voice" ——
 // ⚠️ local provider 的直链规则是"剥掉 key 第一段拼到静态挂载点后面",
 // 第一段不是挂载点 ⇒ 直链 404,克隆必然失败。
-func NewVoiceCloneService(db *gorm.DB, prov oss.Provider, cfg config.VoiceConfig, keyPrefix string) VoiceCloneService {
-	return &voiceCloneService{db: db, prov: prov, cfg: cfg, keyPrefix: keyPrefix}
+func NewVoiceCloneService(db *gorm.DB, prov oss.Provider, cfg config.VoiceConfig, keyPrefix string, resolve func(ctx context.Context) (config.VoiceConfig, error)) VoiceCloneService {
+	return &voiceCloneService{db: db, prov: prov, cfg: cfg, keyPrefix: keyPrefix, resolve: resolve}
 }
 
-func (s *voiceCloneService) client() (*voicex.Client, error) {
+// effectiveCfg 生效的语音配置:配置中心打底覆盖配置文件。
+// resolver 抖一下(返回错误)⇒ 退回配置文件,不让克隆整体不可用。
+func effectiveVoiceCfg(ctx context.Context, base config.VoiceConfig, resolve func(context.Context) (config.VoiceConfig, error)) config.VoiceConfig {
+	if resolve == nil {
+		return base
+	}
+	merged, err := resolve(ctx)
+	if err != nil {
+		return base
+	}
+	return merged
+}
+
+func (s *voiceCloneService) client(ctx context.Context) (*voicex.Client, error) {
+	cfg := effectiveVoiceCfg(ctx, s.cfg, s.resolve)
 	return voicex.New(voicex.Config{
-		APIKey:         s.cfg.APIKey,
-		WorkspaceID:    s.cfg.WorkspaceID,
-		Region:         s.cfg.Region,
-		DefaultModel:   s.cfg.DefaultModel,
-		TimeoutSeconds: s.cfg.TimeoutSeconds,
+		APIKey:         cfg.APIKey,
+		WorkspaceID:    cfg.WorkspaceID,
+		Region:         cfg.Region,
+		DefaultModel:   cfg.DefaultModel,
+		TimeoutSeconds: cfg.TimeoutSeconds,
 	})
 }
 
-func (s *voiceCloneService) targetModel() string {
-	if m := strings.TrimSpace(s.cfg.DefaultTargetModel); m != "" {
+func (s *voiceCloneService) targetModel(ctx context.Context) string {
+	cfg := effectiveVoiceCfg(ctx, s.cfg, s.resolve)
+	if m := strings.TrimSpace(cfg.DefaultTargetModel); m != "" {
 		return m
 	}
 	return "cosyvoice-v3-plus"
@@ -225,7 +243,7 @@ func (s *voiceCloneService) CreateFromAudio(ctx context.Context, caller *Caller,
 		return nil, errcode.New(errcode.BadRequest, "请上传参考音频")
 	}
 	if req.TargetModel == "" {
-		req.TargetModel = s.targetModel()
+		req.TargetModel = s.targetModel(ctx)
 	}
 	if req.Prefix == "" {
 		req.Prefix = "voice"
@@ -256,7 +274,7 @@ func (s *voiceCloneService) CreateFromAudio(ctx context.Context, caller *Caller,
 	}
 
 	// 3. 调 DashScope 克隆
-	client, err := s.client()
+	client, err := s.client(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -349,7 +367,7 @@ func (s *voiceCloneService) Delete(ctx context.Context, caller *Caller, id uint6
 	// 远端音色 + 参考音频都尽力删,失败不阻断本地删除 ——
 	// 本地记录是事实源,远端残留可以靠 ListFromRemote 对账发现。
 	if m.VoiceID != "" {
-		if client, err := s.client(); err == nil {
+		if client, err := s.client(ctx); err == nil {
 			if derr := client.DeleteVoice(m.VoiceID); derr != nil {
 				logger.L().Warn("voice: 删除 DashScope 远端音色失败(本地继续删除)",
 					zap.Uint64("id", id), zap.Error(derr))
@@ -436,7 +454,7 @@ func (s *voiceCloneService) RefreshStatus(ctx context.Context, id uint64) (*mode
 	if m.VoiceID == "" {
 		return nil, errcode.New(errcode.BadRequest, "voice_id 为空(克隆失败记录),无法刷新")
 	}
-	client, err := s.client()
+	client, err := s.client(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -465,7 +483,7 @@ func (s *voiceCloneService) RefreshStatus(ctx context.Context, id uint64) (*mode
 }
 
 func (s *voiceCloneService) ListFromRemote(ctx context.Context, prefix string, page, size int) ([]voicex.RemoteVoice, error) {
-	client, err := s.client()
+	client, err := s.client(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -482,16 +500,19 @@ type ttsVoiceService struct {
 	prov      oss.Provider
 	cfg       config.VoiceConfig
 	keyPrefix string
+	// resolve 配置中心覆盖(voice.* 组,nil = 只用配置文件)—— 与克隆侧同一份
+	resolve func(ctx context.Context) (config.VoiceConfig, error)
 }
 
-func NewTtsVoiceService(db *gorm.DB, prov oss.Provider, cfg config.VoiceConfig, keyPrefix string) TtsVoiceService {
-	return &ttsVoiceService{db: db, prov: prov, cfg: cfg, keyPrefix: keyPrefix}
+func NewTtsVoiceService(db *gorm.DB, prov oss.Provider, cfg config.VoiceConfig, keyPrefix string, resolve func(ctx context.Context) (config.VoiceConfig, error)) TtsVoiceService {
+	return &ttsVoiceService{db: db, prov: prov, cfg: cfg, keyPrefix: keyPrefix, resolve: resolve}
 }
 
-func (s *ttsVoiceService) synthesizer() (*voicex.Synthesizer, error) {
+func (s *ttsVoiceService) synthesizer(ctx context.Context) (*voicex.Synthesizer, error) {
+	cfg := effectiveVoiceCfg(ctx, s.cfg, s.resolve)
 	return voicex.NewSynthesizer(voicex.SynthConfig{
-		Endpoint:       s.cfg.SynthURL,
-		TimeoutSeconds: s.cfg.SynthTimeoutSeconds,
+		Endpoint:       cfg.SynthURL,
+		TimeoutSeconds: cfg.SynthTimeoutSeconds,
 	})
 }
 
@@ -707,7 +728,7 @@ func (s *ttsVoiceService) createDemo(id uint64, voiceID, ttsType string) {
 		audio, err = s.edgeClient().Once(voicex.EdgeSynthParams{Text: demoTtsText, Voice: voiceID})
 	} else {
 		var synth *voicex.Synthesizer
-		if synth, err = s.synthesizer(); err == nil {
+		if synth, err = s.synthesizer(ctx); err == nil {
 			audio, err = synth.Once(voicex.SynthParams{
 				Text:  demoTtsText,
 				Voice: voiceID,
@@ -751,7 +772,7 @@ func (s *ttsVoiceService) Convert(ctx context.Context, req TtsConvertRequest) ([
 		}
 		return s.putAudio(ctx, audio, req.Dir)
 	}
-	synth, err := s.synthesizer()
+	synth, err := s.synthesizer(ctx)
 	if err != nil {
 		return nil, "", errcode.New(errcode.Internal, "文本合成未配置").WithDetail(err.Error())
 	}
@@ -788,7 +809,7 @@ func (s *ttsVoiceService) ConvertStream(ctx context.Context, req TtsConvertReque
 			Pitch:  req.Pitch,
 		})
 	}
-	synth, err := s.synthesizer()
+	synth, err := s.synthesizer(ctx)
 	if err != nil {
 		return nil, errcode.New(errcode.Internal, "文本合成未配置").WithDetail(err.Error())
 	}

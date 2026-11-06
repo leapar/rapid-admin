@@ -757,8 +757,14 @@ func main() {
 	//   (与 email provider 空串同一纪律:额外交付,没配就是没配;
 	//   但报错必须把"没配"三个字带到调用方)。
 	voiceKeyPrefix := strings.Trim(cfg.File.PathRoot, "/") + "/voice"
-	voiceCloneSvc := service.NewVoiceCloneService(db, fileProv, cfg.Voice, voiceKeyPrefix)
-	ttsVoiceSvc := service.NewTtsVoiceService(db, fileProv, cfg.Voice, voiceKeyPrefix)
+	// ⚠️ **配置中心覆盖**(voice.* 组)—— 克隆 / 合成每次调用时解析生效配置,
+	//   面板上改 api_key / synth_url 改完即生效,不用重启
+	//   (合并规则见 service.ResolveVoiceConfig,与 aliyun.sms 同一套纪律)。
+	voiceCfgResolve := func(ctx context.Context) (config.VoiceConfig, error) {
+		return ccSvc.ResolveVoiceConfig(ctx, cfg.Voice)
+	}
+	voiceCloneSvc := service.NewVoiceCloneService(db, fileProv, cfg.Voice, voiceKeyPrefix, voiceCfgResolve)
+	ttsVoiceSvc := service.NewTtsVoiceService(db, fileProv, cfg.Voice, voiceKeyPrefix, voiceCfgResolve)
 
 	// 6.8 文件系统自愈(M140)
 	//

@@ -825,7 +825,7 @@ func Run(db *gorm.DB, casbinModelPath, superAdminPassword string) error {
 	}
 
 	// 8. 平台配置 seed(2026-10-18 新增,配置中心落地)
-	//    17 个 key:aliyun.sms 9 + aliyun.oss 8
+	//    21 个 key:aliyun.sms 9 + aliyun.oss 7 + voice(百炼)5
 	//    业务级(monitor / business.*)走 P1+ 阶段,本期不 seed
 	//    基础设施类(mysql/redis/jwt/crypto)仍走 yaml,严禁上 sys_config
 	//    文档:docs/配置项清单.md
@@ -1566,7 +1566,8 @@ func SeedDictGuard(db *gorm.DB) error {
 // 平台配置 seed(2026-10-18 新增,配置中心落地)
 //
 // 范围(严格,严禁越界):
-//   - 12/15 上线 seed 17 个 key:aliyun.sms 9 + aliyun.oss 8
+//   - 12/15 上线 seed 16 个 key:aliyun.sms 9 + aliyun.oss 7
+//     (2026-11-06 起 +5:voice 组,百炼语音,消费方 ResolveVoiceConfig)
 //   - 业务级(monitor / business.*) P1+ 阶段再补,本期不 seed
 //   - 基础设施类(mysql/redis/jwt/crypto/casbin/cors/ratelimit/audit)严禁上 sys_config
 //
@@ -1619,6 +1620,15 @@ var mustSysConfigs = []SysConfigSeedItem{
 	{Group: "aliyun.oss", Key: "aliyun.oss.bucket", Name: "文件 bucket", Description: "**所有文件都在这一个桶里**,必须是公共读(public-read):直链是不带签名的稳定 URL", ValueType: "string", Value: "rapid-admin-prod", EnvVar: "OSS_BUCKET", Sort: 24},
 	{Group: "aliyun.oss", Key: "aliyun.oss.cdn_domain", Name: "CDN 加速域名", Description: "bucket 的 CDN 加速域名", ValueType: "string", Value: "cdn.rapid-admin.cn", EnvVar: "OSS_CDN_DOMAIN", Sort: 26},
 	{Group: "aliyun.oss", Key: "aliyun.oss.upload_token_ttl", Name: "STS 凭证有效期(秒)", Description: "前端直传 STS 临时凭证有效期", ValueType: "int", Value: "3600", MinLength: 60, MaxLength: 86400, EnvVar: "OSS_UPLOAD_TOKEN_TTL", Sort: 27},
+
+	// ===== voice · 百炼语音(5)=====
+	//   克隆 / 合成的运行时来源:配置文件打底 + 这里覆盖(ResolveVoiceConfig,
+	//   合并规则同 aliyun.sms:"运营改过的才算数")。edge 通道免凭据,不进面板。
+	{Group: "voice", Key: "voice.api_key", Name: "百炼 API Key", Description: "阿里云百炼 API Key(音色克隆必填;留空 = 克隆接口调用时显式报错)", ValueType: "secret", Value: "", IsSensitive: true, EnvVar: "VOICE_BAILIAN_API_KEY", Sort: 30},
+	{Group: "voice", Key: "voice.workspace_id", Name: "百炼业务空间 ID", Description: "拼进端点域名 https://{workspace_id}.{region}.maas.aliyuncs.com", ValueType: "string", Value: "", EnvVar: "VOICE_WORKSPACE_ID", Sort: 31},
+	{Group: "voice", Key: "voice.region", Name: "百炼端点地域", Description: "端点地域,默认 cn-beijing", ValueType: "string", Value: "cn-beijing", EnvVar: "VOICE_REGION", Sort: 32},
+	{Group: "voice", Key: "voice.default_target_model", Name: "克隆目标音色模型", Description: "克隆默认用的目标音色模型,默认 cosyvoice-v3-plus", ValueType: "string", Value: "cosyvoice-v3-plus", EnvVar: "VOICE_TARGET_MODEL", Sort: 33},
+	{Group: "voice", Key: "voice.synth_url", Name: "百炼合成端点", Description: "TTS 网关地址,如 https://tts.example.com/ai/tts/once;空 = 百炼合成不装配(Edge 通道不受影响)", ValueType: "string", Value: "", EnvVar: "VOICE_SYNTH_URL", Sort: 34},
 }
 
 // seedAllSysConfigs 配置项种子

@@ -82,6 +82,18 @@ voice:
 > (403 / 空音频)时,要么填 `token` 换官方主端点,要么填 `wss_url` 过自建代理,
 > 二者都不用动超时参数。
 
+### 配置中心(系统配置面板)
+
+百炼相关的 5 个键(`voice.api_key` / `workspace_id` / `region` /
+`default_target_model` / `synth_url`)已 seed 进**系统配置面板**
+(`sys_config`,`voice` 分组):配置文件打底,面板覆盖,**改完即生效,不用重启**
+—— 克隆 / 合成每次调用时都重新解析生效配置(`service.ResolveVoiceConfig`,
+消费方 `voiceCloneService` / `ttsVoiceService`)。
+
+合并规则与 `aliyun.sms.*` 完全一致:**面板值生效 ⇔ 该行非停用 且 值非空
+且 值 ≠ 该行自带的默认值**(即"运营改过的才算数");**清空某一格 = 退回
+配置文件**。edge 通道免凭据,不进面板;超时参数是运维调优项,也留在配置文件。
+
 ### 业务路由(移植后自带)
 
 | 路由 | 权限码 | 说明 |
