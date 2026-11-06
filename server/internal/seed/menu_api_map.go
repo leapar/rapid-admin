@@ -43,6 +43,10 @@ var menuRequiredAPIs = map[string][]string{
 	// field:list 只在自动选中 collection 后才发 → 不进最小集
 	"menu.system.dyn": {"dyn:design:collection:list", "dyn:design:type:list"},
 
+	// 语音管理:登记册列表挂载即发;克隆台账在页内按需切换才拉
+	// (voice_clone:list 是条件触发 → 不进最小集,同 file/list 的 folder:get 口径)
+	"menu.system.voice": {"tts_voice:list"},
+
 	// ── 文件管理 ────────────────────────────────────────────────
 	// list:列表 + 配额(file:read)+ 文件夹树(folder:list)挂载即发
 	"menu.file.list": {"file:list", "file:read", "folder:list"},

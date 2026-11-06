@@ -57,9 +57,9 @@ func newSeedTestDB(t *testing.T) *gorm.DB {
 // TestMenuList_BasicInvariants menuList 内部数据合法性(不需要 DB)
 func TestMenuList_BasicInvariants(t *testing.T) {
 	menus := menuList()
-	// 开源口径:23 = 5 顶级(dashboard / system / file / audit / approvalMgmt)
-	// + 18 二级(system 10(含 skin)+ file 2 + audit 4 + approval 2)
-	assert.Len(t, menus, 23, "菜单总数应为 23(5 顶级 + 18 二级)")
+	// 开源口径:24 = 5 顶级(dashboard / system / file / audit / approvalMgmt)
+	// + 19 二级(system 11(含 skin、voice)+ file 2 + audit 4 + approval 2)
+	assert.Len(t, menus, 24, "菜单总数应为 24(5 顶级 + 19 二级)")
 
 	// code 唯一
 	seen := make(map[string]bool, len(menus))
@@ -102,7 +102,7 @@ func TestRun_CreatesAllMenus(t *testing.T) {
 
 	var menus []model.SysResource
 	require.NoError(t, db.Where("type = ?", "menu").Order("sort ASC, id ASC").Find(&menus).Error)
-	assert.Len(t, menus, 23)
+	assert.Len(t, menus, 24)
 
 	// 顶级 menu 5 个(dashboard / system / file / audit / approvalMgmt)
 	var topMenus []model.SysResource
@@ -155,7 +155,7 @@ func TestRun_IsIdempotent(t *testing.T) {
 	var menuCount, apiCount int64
 	require.NoError(t, db.Model(&model.SysResource{}).Where("type = ?", "menu").Count(&menuCount).Error)
 	require.NoError(t, db.Model(&model.SysResource{}).Where("type = ?", "api").Count(&apiCount).Error)
-	assert.Equal(t, int64(23), menuCount, "菜单不应重复")
+	assert.Equal(t, int64(24), menuCount, "菜单不应重复")
 	// api 资源数 = resourceList() 里【非 button.*】的条目数。
 	// 不能直接拿 len(resourceList()):seed 按命名空间分流,button.* 落的是
 	// type='button' 而不是 'api'(见 seed.go 资源 upsert 分支)。
@@ -193,7 +193,7 @@ func TestRun_BindsMenuToSuperAdmin(t *testing.T) {
 			got++
 		}
 	}
-	assert.Equal(t, 23, got, "super_admin 应绑 23 个 menu 资源")
+	assert.Equal(t, 24, got, "super_admin 应绑 24 个 menu 资源")
 }
 
 // TestRun_BindsDomainMenuToPlatformOps 验证平台运营员拿到 system 域菜单(开源口径 3 角色)

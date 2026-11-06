@@ -318,6 +318,14 @@ func menuList() []MenuDef {
 		//   ⚠️ **Icon 'skin' 必须在 web/src/constants/resourceIcons.ts 登记**(已登记 BgColorsOutlined)。
 		{Code: "menu.system.skin", Name: "皮肤管理", Path: "/system/skin", Icon: "skin", Sort: 20, ParentCode: "menu.system"},
 
+		// 语音管理(音色登记册 + 克隆台账,2026-11-06)。Sort 21 接在「皮肤管理」后面 ——
+		//   ⚠️ **Path 必须和 web/src/router/routes.tsx 的 path 对上**(system/voice),
+		//   不一致的症状是「菜单点了跳 404」(menu-route-parity.test.ts 在守)。
+		//   ⚠️ **Icon 'voice' 必须在 web/src/constants/resourceIcons.ts 登记**(AudioOutlined)。
+		//   ⚠️ **不进 userAdminSystemMenus** —— 语音是平台级资产,voice_* / tts_* 码
+		//     只有 super_admin 有(同 skin 的口径:菜单可见 ≠ 接口有权)。
+		{Code: "menu.system.voice", Name: "语音管理", Path: "/system/voice", Icon: "voice", Sort: 21, ParentCode: "menu.system"},
+
 		// 文件(M82 前端页)。Sort 35 排在「房源」和「数字资产」中间:
 		// 它是后面几个业务域都要用的底座(传附件/存封面),但自己不是业务域。
 		// ⚠️ **Path 必须和 web/src/router/routes.tsx 里的 path 对上** ——
