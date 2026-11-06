@@ -2,7 +2,7 @@
 
 # module-list —— 框架模块速查
 
-> 共 52 个框架模块(`server/internal/pkg/`),每个模块都有可运行示例与手册章节。数据源:SUMMARY.md × internal/pkg × examples 三边对齐。
+> 共 53 个框架模块(`server/internal/pkg/`),每个模块都有可运行示例与手册章节。数据源:SUMMARY.md × internal/pkg × examples 三边对齐。
 
 | 组 | 模块 | 一句话 | 手册 | 示例 |
 |---|---|---|---|---|
@@ -56,7 +56,8 @@
 | 调度与可观测 | cronx | 定时任务调度:代码注册 + DB 覆盖 + 两层去重 | [手册](../../server/docs/scheduling/cronx.md) | `go run ./examples/cronx` |
 | 调度与可观测 | jobs | 平台内置定时任务:框架任务注册 + 执行记录清理 | [手册](../../server/docs/scheduling/jobs.md) | `go run ./examples/jobs` |
 | 调度与可观测 | slowquery | 慢 SQL 报警:两种接入方式 + Prometheus 指标 | [手册](../../server/docs/scheduling/slowquery.md) | `go run ./examples/slowquery` |
-| 语音与媒体 | voicex | 百炼 CosyVoice 克隆 + 双通道 TTS(百炼 / Edge,整段 / 流式) | [手册](../../server/docs/voice/voicex.md) | `go run ./examples/voicex` |
+| 语音与媒体 | voicex | DashScope 音色克隆 + TTS 文本合成(整段 / 流式两套形态,不用 WebSocket) | [手册](../../server/docs/voice/voicex.md) | `go run ./examples/voicex` |
+| 语音与媒体 | asrx | 百炼 Paraformer WS 实时识别 + 一句话识别(与 voicex 共用凭据) | [手册](../../server/docs/voice/asrx.md) | `go run ./examples/asrx` |
 | 接口文档 | swaggerx | Swagger UI + 自动生成的 OpenAPI 3.0 spec | [手册](../../server/docs/api-docs/swaggerx.md) | `go run ./examples/swaggerx` |
 
 跑某模块示例:`cd server && go run ./examples/<模块名>`;新增模块的流程见 [module-add.md](module-add.md)。

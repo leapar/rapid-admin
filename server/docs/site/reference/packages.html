@@ -1096,7 +1096,7 @@
                                 
                                 <h1 id="包速查表">包速查表</h1>
 <blockquote>
-<p><code>server/internal/pkg/</code> 下<strong>全部 59 个 Go 包</strong>的一句话索引(53 个一级目录 + 6 个子包)。
+<p><code>server/internal/pkg/</code> 下<strong>全部 64 个 Go 包</strong>的一句话索引(58 个一级目录 + 6 个子包)。
 想知道"有没有我要的能力",先翻这张表;想知道"怎么用",点进对应章节。</p>
 </blockquote>
 <p>命令自查:</p>
@@ -1314,7 +1314,7 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
 </tr>
 </tbody>
 </table>
-<h2 id="审计3">审计(3)</h2>
+<h2 id="审计4">审计(4)</h2>
 <table>
 <thead>
 <tr>
@@ -1339,9 +1339,14 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
 <td>短信发送审计:发了什么、谁发的、哪次请求</td>
 <td><a href="../audit/smsaudit.html">smsaudit</a></td>
 </tr>
+<tr>
+<td><code>auditx</code></td>
+<td>数据变更审计(sys_data_change_log)自动写入器:表级钩子记 diff</td>
+<td>—</td>
+</tr>
 </tbody>
 </table>
-<h2 id="消息与通知9">消息与通知(9)</h2>
+<h2 id="消息与通知10">消息与通知(10)</h2>
 <table>
 <thead>
 <tr>
@@ -1396,9 +1401,14 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
 <td>邮件下发:阿里云 DirectMail</td>
 <td><a href="../messaging/emailx.html">emailx</a></td>
 </tr>
+<tr>
+<td><code>eventx</code></td>
+<td>领域事件总线 + 事务性 outbox + 消费侧幂等(Deduper)</td>
+<td>—</td>
+</tr>
 </tbody>
 </table>
-<h2 id="调度与可观测3">调度与可观测(3)</h2>
+<h2 id="调度与可观测4">调度与可观测(4)</h2>
 <table>
 <thead>
 <tr>
@@ -1423,9 +1433,14 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
 <td>慢 SQL 报警:包装 GORM logger + Prometheus 指标</td>
 <td><a href="../scheduling/slowquery.html">slowquery</a></td>
 </tr>
+<tr>
+<td><code>sysmetrics</code></td>
+<td>服务器资源采样(CPU / 内存 / 磁盘),供系统监控面板</td>
+<td>—</td>
+</tr>
 </tbody>
 </table>
-<h2 id="语音与媒体1">语音与媒体(1)</h2>
+<h2 id="语音与媒体2">语音与媒体(2)</h2>
 <table>
 <thead>
 <tr>
@@ -1440,9 +1455,14 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
 <td>百炼 CosyVoice 音色克隆 + 双通道 TTS(百炼网关 / Edge 朗读,整段 / 流式)</td>
 <td><a href="../voice/voicex.html">voicex</a></td>
 </tr>
+<tr>
+<td><code>asrx</code></td>
+<td>百炼 Paraformer 实时语音识别(WS 逐句)+ 一句话识别,与 voicex 共用凭据</td>
+<td><a href="../voice/asrx.html">asrx</a></td>
+</tr>
 </tbody>
 </table>
-<h2 id="业务扩展1">业务扩展(1)</h2>
+<h2 id="业务扩展2">业务扩展(2)</h2>
 <table>
 <thead>
 <tr>
@@ -1456,6 +1476,11 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
 <td><code>dynx</code></td>
 <td>动态业务集合的字段类型注册表(DDL 类型 + 归一化 + 反归一化)+ 命名规则 + 动作清单</td>
 <td><a href="../business/dyn.html">dynx</a></td>
+</tr>
+<tr>
+<td><code>dynfilter</code></td>
+<td>动态记录筛选表达式 → 参数化 SQL(对标 PocketBase fexpr 的安全子集)</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
@@ -1608,7 +1633,7 @@ go list <span class="hljs-_">-f</span> <span class="hljs-string">'{{.ImportPath}
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"包速查表","level":"13.1","depth":1,"next":{"title":"示例目录","level":"13.2","depth":1,"path":"reference/examples.md","ref":"reference/examples.md","articles":[]},"previous":{"title":"theming(UI 皮肤)","level":"12.1","depth":1,"path":"web/theming.md","ref":"web/theming.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"reference/packages.md","mtime":"2026-11-06T05:55:56.246Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T08:44:30.706Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"包速查表","level":"13.1","depth":1,"next":{"title":"示例目录","level":"13.2","depth":1,"path":"reference/examples.md","ref":"reference/examples.md","articles":[]},"previous":{"title":"theming(UI 皮肤)","level":"12.1","depth":1,"path":"web/theming.md","ref":"web/theming.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"reference/packages.md","mtime":"2026-11-06T08:52:52.343Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T08:53:11.284Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

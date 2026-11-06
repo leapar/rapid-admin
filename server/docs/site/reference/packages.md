@@ -1,6 +1,6 @@
 # 包速查表
 
-> `server/internal/pkg/` 下**全部 59 个 Go 包**的一句话索引(53 个一级目录 + 6 个子包)。
+> `server/internal/pkg/` 下**全部 64 个 Go 包**的一句话索引(58 个一级目录 + 6 个子包)。
 > 想知道"有没有我要的能力",先翻这张表;想知道"怎么用",点进对应章节。
 
 命令自查:
@@ -60,15 +60,16 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `scope` | 数据范围(行级权限):规则 → 作用域 → WHERE 条件 | [scope](../security/scope.md) |
 | `fieldpolicy` | 字段级可见性(列级权限):三态模式 + 逐字段叠加 + 响应出口脱敏 | [fieldpolicy](../security/fieldpolicy.md) |
 
-## 审计(3)
+## 审计(4)
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
 | `piiaudit` | PII 访问审计(等保 P0):谁在什么时候看了完整手机号 | [piiaudit](../audit/piiaudit.md) |
 | `cryptaudit` | 密钥使用审计:哪个 key 被用过 / 解不开 | [cryptaudit](../audit/cryptaudit.md) |
 | `smsaudit` | 短信发送审计:发了什么、谁发的、哪次请求 | [smsaudit](../audit/smsaudit.md) |
+| `auditx` | 数据变更审计(sys_data_change_log)自动写入器:表级钩子记 diff | — |
 
-## 消息与通知(9)
+## 消息与通知(10)
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
@@ -81,26 +82,30 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `smslimit` | 短信发送限流:冷却 / 1 分钟 / 1 天三道闸 | [smslimit](../messaging/smslimit.md) |
 | `smstpl` | 短信模板审核流 + 发送前守卫 | [smstpl](../messaging/smstpl.md) |
 | `emailx` | 邮件下发:阿里云 DirectMail | [emailx](../messaging/emailx.md) |
+| `eventx` | 领域事件总线 + 事务性 outbox + 消费侧幂等(Deduper) | — |
 
-## 调度与可观测(3)
+## 调度与可观测(4)
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
 | `cronx` | 定时任务调度:代码注册 + DB 覆盖 + 两层去重 | [cronx](../scheduling/cronx.md) |
 | `jobs` | 平台内置定时任务:框架任务注册 + 执行记录清理 | [jobs](../scheduling/jobs.md) |
 | `slowquery` | 慢 SQL 报警:包装 GORM logger + Prometheus 指标 | [slowquery](../scheduling/slowquery.md) |
+| `sysmetrics` | 服务器资源采样(CPU / 内存 / 磁盘),供系统监控面板 | — |
 
-## 语音与媒体(1)
+## 语音与媒体(2)
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
 | `voicex` | 百炼 CosyVoice 音色克隆 + 双通道 TTS(百炼网关 / Edge 朗读,整段 / 流式) | [voicex](../voice/voicex.md) |
+| `asrx` | 百炼 Paraformer 实时语音识别(WS 逐句)+ 一句话识别,与 voicex 共用凭据 | [asrx](../voice/asrx.md) |
 
-## 业务扩展(1)
+## 业务扩展(2)
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
 | `dynx` | 动态业务集合的字段类型注册表(DDL 类型 + 归一化 + 反归一化)+ 命名规则 + 动作清单 | [dynx](../business/dyn.md) |
+| `dynfilter` | 动态记录筛选表达式 → 参数化 SQL(对标 PocketBase fexpr 的安全子集) | — |
 
 ## 接口文档(1)
 

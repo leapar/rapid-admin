@@ -130,6 +130,12 @@
 
 - [slowquery(慢 SQL 报警)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/scheduling/slowquery.md): 慢 SQL 报警:两种接入方式 + Prometheus 指标
 
+## 手册 · 语音与媒体
+
+- [voicex(语音克隆与合成)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/voice/voicex.md): DashScope 音色克隆 + TTS 文本合成(整段 / 流式两套形态,不用 WebSocket)
+
+- [asrx(实时语音识别)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/voice/asrx.md): 百炼 Paraformer WS 实时识别 + 一句话识别(与 voicex 共用凭据)
+
 ## 手册 · 业务扩展
 
 - [dynx(动态业务集合)](https://raw.githubusercontent.com/leapar/rapid-admin/main/server/docs/business/dyn.md): 用户自己设计业务表,菜单/接口/权限/页面全自动
