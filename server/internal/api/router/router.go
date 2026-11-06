@@ -224,6 +224,9 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 	approvalH := v1.NewApprovalHandler(svc)
 	// M151 动态业务集合(业务表单设计器 + 通用记录 CRUD)
 	dynH := v1.NewDynHandler(svc)
+	// 语音能力(音色克隆 + TTS 音色登记册/合成)
+	voiceH := v1.NewVoiceCloneHandler(svc)
+	ttsH := v1.NewTtsHandler(svc)
 	captchaMw := middleware.RateLimit("public_captcha", 10, time.Minute, "ip")
 
 	// ===== /rapid-admin/v1/public 公开 =====
@@ -587,6 +590,29 @@ func Register(h *server.Hertz, cfg *config.Server, svc *service.Registry, db *go
 		biz.POST("/guides", rbac("guide", "create"), guideH.Create)
 		biz.PATCH("/guides/:id", rbac("guide", "update"), guideH.Update)
 		biz.DELETE("/guides/:id", rbac("guide", "delete"), guideH.Delete)
+
+		// ---- 语音能力(音色克隆 + TTS)----
+		// ⚠️ **克隆上传走 brkUpload + 15s 超时**(与文件上传同款)——
+		//   参考音频几十 MB 是常态,默认 5s 业务超时会拦腰截断 multipart 解析。
+		// ⚠️ 远端列表挂 /voice-clones/remote(静态段),与 /voice-clones/:id
+		//   不冲突(Hertz 静态段优先)。
+		biz.POST("/voice-clones", brkUpload, tUpload15s, rbac("voice_clone", "create"), voiceH.Create)
+		biz.GET("/voice-clones", rbac("voice_clone", "list"), voiceH.List)
+		biz.GET("/voice-clones/remote", rbac("voice_clone", "remote_list"), voiceH.RemoteList)
+		biz.GET("/voice-clones/:id", rbac("voice_clone", "read"), voiceH.Get)
+		biz.PATCH("/voice-clones/:id", rbac("voice_clone", "update"), voiceH.Update)
+		biz.DELETE("/voice-clones/:id", rbac("voice_clone", "delete"), voiceH.Delete)
+		biz.POST("/voice-clones/batch-delete", rbac("voice_clone", "delete"), voiceH.BatchDelete)
+		biz.POST("/voice-clones/:id/refresh", rbac("voice_clone", "refresh"), voiceH.Refresh)
+
+		// TTS 合成 + 音色登记册
+		biz.POST("/tts/convert", brkUpload, tUpload15s, rbac("tts", "convert"), ttsH.Convert)
+		biz.GET("/tts/voices", rbac("tts_voice", "list"), ttsH.VoiceList)
+		biz.GET("/tts/voices/:id", rbac("tts_voice", "read"), ttsH.VoiceGet)
+		biz.POST("/tts/voices", rbac("tts_voice", "create"), ttsH.VoiceCreate)
+		biz.PATCH("/tts/voices/:id", rbac("tts_voice", "update"), ttsH.VoiceUpdate)
+		biz.DELETE("/tts/voices/:id", rbac("tts_voice", "delete"), ttsH.VoiceDelete)
+		biz.POST("/tts/voices/batch-delete", rbac("tts_voice", "delete"), ttsH.VoiceBatchDelete)
 
 		// §1.9 #11+#12 P1 —— 站内信 + 通知中心(框架占位,业务可在 main 注入 InboxNotifier)
 		biz.GET("/inbox/messages", rbac("inbox", "list"), inboxH.List)

@@ -281,6 +281,9 @@ var bizScopeUnwired = map[string]string{
 	"role":             "角色 —— 没有业务行",
 	"sms_template":     "短信模板 —— 没有业务行",
 	"wxtemplate":       "微信模板 —— 没有业务行",
+	"voice_clone":      "音色克隆台账 —— 平台级资产,按 API 码 all-or-nothing 管(同 wxtemplate),不做行级范围",
+	"tts":              "文本合成 —— 即时调用,没有业务行",
+	"tts_voice":        "TTS 音色登记册 —— 平台级资产(同 voice_clone),不做行级范围",
 }
 
 // bizScopeSpecFor 按业务域取接线声明

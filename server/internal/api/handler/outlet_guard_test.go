@@ -181,6 +181,16 @@ var outletBypassAllowlist = []outletBypass{
 			"两处分别是 206 分段(rangePartial)与 200 全量(default)",
 	},
 	{
+		File: "handler/v1/voice.go", Func: "Convert", Writer: "ctx.Write", Count: 1,
+		Reason: "TTS 整段合成的音频字节(audio/wav|mpeg 二进制),不是 JSON 业务行 ⇒ 字段级规则作用不到;" +
+			"包进统一响应体会变成一个巨大的 base64 字符串,下载/播放都坏",
+	},
+	{
+		File: "handler/v1/voice.go", Func: "convertStream", Writer: "ctx.Write", Count: 1,
+		Reason: "TTS 流式合成的 chunked 音频转发(循环里唯一一处写入点)," +
+			"同样是二进制音频流而非 JSON 业务行;错误都发生在首字节写出之前",
+	},
+	{
 		File: "handler/v1/event.go", Func: "Stream", Writer: "fmt.Fprint", Count: 1,
 		Reason: "SSE 心跳行(:heartbeat),没有任何数据",
 	},

@@ -27,6 +27,10 @@ type Registry struct {
 	WxTemplate WxTemplateService
 	Guide      GuideService
 	Captcha    CaptchaService
+	// VoiceClone 音色克隆台账(语音能力,voicex)
+	VoiceClone VoiceCloneService
+	// TtsVoice TTS 音色登记册 + 文本合成(语音能力,voicex)
+	TtsVoice TtsVoiceService
 	// §1.9 #11+#12 P1 —— 站内信 + 通知中心
 	Inbox InboxService
 	// Job 定时任务管理(M68)。与其它 service 不同,它只读 cronx 的内存态:

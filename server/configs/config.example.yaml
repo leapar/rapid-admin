@@ -447,6 +447,22 @@ file:
   transcode_workers: 2        # 转码并发数。⚠️ 每个转码是一个 ffmpeg 进程,
                                #   吃满一个核 —— 这个数就是"最多同时烧几个核"
 
+# ========== 语音能力(voicex:音色克隆 + 文本合成) ==========
+#   - 克隆:参考音频(https 公网 URL)→ 百炼注册音色,拿回 voice_id
+#   - 合成:POST JSON 到 synth_url 指向的 TTS 网关,拿回音频字节
+#   ⚠️ **api_key / workspace_id 未配 = 克隆接口显式报错**(不是静默降级)——
+#     克隆是花钱的外呼,失败必须可见。
+#   ⚠️ **synth_url 未配 = 文本合成不装配**(合成接口报"未配置")。
+voice:
+  api_key: ${VOICE_BAILIAN_API_KEY}
+  workspace_id: ""            # 百炼业务空间 ID(拼进端点域名)
+  region: cn-beijing          # 端点地域
+  default_model: voice-enrollment       # 配 qwen-voice-enrollment 走 Qwen-TTS 克隆
+  default_target_model: cosyvoice-v3-plus
+  timeout_seconds: 120        # 克隆接口单次 HTTP 超时(审核链路偏慢)
+  synth_url: ""               # 文本合成端点,如 https://tts.example.com/ai/tts/once
+  synth_timeout_seconds: 60
+
 # ========== 字段级加密 & 盲索引 ==========
 #   - field_key:  AES-256-GCM 密钥,必须 32 字节。**base64(标准 / 无 padding)
 #     或 32 字节原文两种都认**(生产由 K8s Secret / 信创密钥机注入 base64,

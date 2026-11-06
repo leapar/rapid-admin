@@ -746,6 +746,20 @@ func main() {
 	// 都挂在实例上,造第二个会让两处各记各的账。
 	fileSvc := service.NewFileService(db, fileProv, fileOpt)
 
+	// 6.75 语音能力(voicex):音色克隆 + 文本合成
+	//
+	// ⚠️ **共用 fileProv 而不是另建一个 provider** —— 参考音频/试听音频
+	//   就是普通对象,key 第一段必须是静态挂载点(path_root),否则
+	//   local 直链 404、克隆必挂。voiceKeyPrefix 的 "/voice" 子树只是
+	//   命名空间,不是另一套存储。
+	//
+	// ⚠️ **没配 voice.api_key 不拦启动** —— 克隆接口调用时才显式报错
+	//   (与 email provider 空串同一纪律:额外交付,没配就是没配;
+	//   但报错必须把"没配"三个字带到调用方)。
+	voiceKeyPrefix := strings.Trim(cfg.File.PathRoot, "/") + "/voice"
+	voiceCloneSvc := service.NewVoiceCloneService(db, fileProv, cfg.Voice, voiceKeyPrefix)
+	ttsVoiceSvc := service.NewTtsVoiceService(db, fileProv, cfg.Voice, voiceKeyPrefix)
+
 	// 6.8 文件系统自愈(M140)
 	//
 	// ⚠️ **两件事都不拦启动** —— 头像文件夹叫什么名字、info.json 在不在,
@@ -933,6 +947,9 @@ func main() {
 		// 原文件名与直链不在列里 ⇒ 读记录时要找文件服务解析(视图里的 `_files`),
 		// 写记录时要找它校验"这个 key 真的存在"。
 		Dyn: service.NewDynService(db, scopeSvc, fileSvc, approvalEngine),
+		// 语音能力(voicex)—— 音色克隆台账 + TTS 音色登记册/合成
+		VoiceClone: voiceCloneSvc,
+		TtsVoice:   ttsVoiceSvc,
 	}
 
 	// 7.2 异常登录检测启动自检(M128)

@@ -110,6 +110,15 @@ func resourceList() []string {
 		"inbox:list", "inbox:read", "inbox:mark_read",
 		// guide(指南/帮助中心)—— 框架保留的示例业务模块
 		"guide:list", "guide:read", "guide:create", "guide:update", "guide:delete",
+		// 语音能力(voicex,2026-11-06 移植)—— 音色克隆 + TTS
+		//   voice_clone:refresh     —— 拉 DashScope query_voice 同步克隆状态
+		//   voice_clone:remote_list —— 拉远端音色列表(不写库,对账用)
+		//   tts:convert             —— 文本合成(流式回音频 / 落 OSS)
+		// ⚠️ 这些是平台级能力(同 wxtemplate:配错/滥用影响全平台),只绑超管线。
+		"voice_clone:list", "voice_clone:read", "voice_clone:create",
+		"voice_clone:update", "voice_clone:delete", "voice_clone:refresh", "voice_clone:remote_list",
+		"tts:convert",
+		"tts_voice:list", "tts_voice:read", "tts_voice:create", "tts_voice:update", "tts_voice:delete",
 		"dashboard:read",
 		// 服务器资源监控(CPU/内存/磁盘,2026-11-03)—— **只绑平台运营线**:
 		//   服务器内部信息(goroutine 数 / Go 版本 / 磁盘水位)不广发给业务角色,

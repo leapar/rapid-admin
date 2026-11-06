@@ -84,6 +84,10 @@ func All() []any {
 		// guide
 		&model.Guide{},
 
+		// 语音能力(voicex)—— 音色克隆台账 + TTS 音色登记册
+		&model.SysVoiceClone{},
+		&model.SysTtsVoice{},
+
 		// §1.9 #11+#12 P1 —— 站内信 + 通知中心
 		&model.InboxMessage{},
 		&model.InboxUserPrefs{},

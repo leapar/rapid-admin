@@ -30,6 +30,8 @@ type Server struct {
 	Push      PushConfig      `mapstructure:"push"`  // 同上;与 SMS 的差别见 email.go / push.go(失败方向不一样)
 	OSS       OSSConfig       `mapstructure:"oss"`
 	File      FileConfig      `mapstructure:"file"`
+	// Voice 语音能力(音色克隆 + 文本合成)—— 见 internal/config/voice.go。
+	Voice VoiceConfig `mapstructure:"voice"`
 	Crypto    CryptoConfig    `mapstructure:"crypto"`
 	KMS       KMSConfig       `mapstructure:"kms"`
 	Captcha   CaptchaConfig   `mapstructure:"captcha"`
