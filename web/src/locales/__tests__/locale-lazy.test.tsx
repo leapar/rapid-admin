@@ -16,7 +16,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 
-import { useUIStore } from '@/stores/ui'
+import { useUIStore, type Lang } from '@/stores/ui'
 import { useI18n, tKey, ensureLocale, isLocaleLoaded } from '@/locales'
 
 afterEach(() => {
@@ -33,7 +33,7 @@ describe('懒加载语言包端到端(§2.6 #7)', () => {
   //   getDict 未命中 → 回落中文的分支(ensureLocale 对没登记 loader 的语言直接 resolve)。
   it('包未到:useI18n 的 t 同步回落中文(不空白、不抛错)', () => {
     act(() => {
-      useUIStore.getState().setLang('xx-XX')
+      useUIStore.getState().setLang('xx-XX' as Lang)
     })
     const { result } = renderHook(() => useI18n())
     expect(result.current.lang).toBe('xx-XX')
@@ -43,7 +43,7 @@ describe('懒加载语言包端到端(§2.6 #7)', () => {
 
   it('包未到:tKey(非 React 同步通道,axios 拦截器在用)同样回落中文', () => {
     act(() => {
-      useUIStore.getState().setLang('xx-XX')
+      useUIStore.getState().setLang('xx-XX' as Lang)
     })
     expect(isLocaleLoaded('xx-XX')).toBe(false)
     expect(tKey('common.save')).toBe('保存')

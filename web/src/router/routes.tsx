@@ -19,6 +19,7 @@ import {
   PermFlow,
   PermApproval,
   PermSmsTemplate,
+  PermVoice,
   PermDyn,
 } from '@/constants/permissions'
 import { RoleCode } from '@/constants/roles'
@@ -183,6 +184,22 @@ export const routes = [
         element: (
           <RoutePermissionGuard anyOf={[PermSmsTemplate.LIST, RoleCode.SUPER_ADMIN]}>
             {lazyLoad(() => import('@/pages/system/sms-template'))}
+          </RoutePermissionGuard>
+        ),
+      },
+      {
+        // 语音管理(2026-11-06):音色登记册 + 克隆台账 + 文本合成。
+        //
+        // ⚠️ **path 必须与后端 seed 的 menu.system.voice.Path 对上**
+        //   (后端写的是 /system/voice)—— 两侧不一致的症状是「菜单点了跳 404」,
+        //   见 web/src/router/__tests__/menu-route-parity.test.ts。
+        //
+        // ⚠️ **只绑 super_admin**(同 skin 的口径)—— voice_* / tts_* 码
+        //   只有 super_admin 有,页内按钮粒度走 RowActions 的 perm。
+        path: 'system/voice',
+        element: (
+          <RoutePermissionGuard anyOf={[PermVoice.LIST, RoleCode.SUPER_ADMIN]}>
+            {lazyLoad(() => import('@/pages/system/voice'))}
           </RoutePermissionGuard>
         ),
       },

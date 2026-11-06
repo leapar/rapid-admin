@@ -128,5 +128,5 @@ export function useRequest<T, P extends unknown[] = []>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
-  return { data, loading, error, refresh: () => run(...([] as unknown as P)), run, cancel }
+  return { data, loading, error, refresh: async () => { await run(...([] as unknown as P)) }, run, cancel }
 }

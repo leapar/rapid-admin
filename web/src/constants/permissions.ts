@@ -191,6 +191,30 @@ export const PermSmsTemplate = {
 } as const
 
 /**
+ * 语音(2026-11-06)—— 与后端 tts_voice:* / tts:* / voice_clone:* 一一对应
+ *
+ * ⚠️ **只绑 super_admin** —— 音色登记册是平台级资产:改一条音色 = 所有
+ * 用它的合成请求都换声音;克隆花钱(DashScope 计费),不该广发。
+ *
+ * ⚠️ **三个域、三组前缀,别混**:
+ *   - tts_voice:*   音色登记册 CRUD(页面主表)
+ *   - tts:convert   文本合成(试听 / 下载音频都走它)
+ *   - voice_clone:* 克隆台账(上传参考音频 → DashScope 注册)
+ */
+export const PermVoice = {
+  LIST: 'tts_voice:list',
+  READ: 'tts_voice:read',
+  CREATE: 'tts_voice:create',
+  UPDATE: 'tts_voice:update',
+  DELETE: 'tts_voice:delete',
+  CONVERT: 'tts:convert',
+  CLONE_LIST: 'voice_clone:list',
+  CLONE_CREATE: 'voice_clone:create',
+  CLONE_REFRESH: 'voice_clone:refresh',
+  CLONE_DELETE: 'voice_clone:delete',
+} as const
+
+/**
  * 动态业务集合(M151)—— 与后端 seed resourceList 一一对应
  *
  * ⚠️ **这里是"设计面"的码(四段)** —— 业务表单设计器那一页用的。
@@ -305,5 +329,6 @@ export type PermissionCode =
   | (typeof PermFlow)[keyof typeof PermFlow]
   | (typeof PermApproval)[keyof typeof PermApproval]
   | (typeof PermSmsTemplate)[keyof typeof PermSmsTemplate]
+  | (typeof PermVoice)[keyof typeof PermVoice]
   | (typeof PermDyn)[keyof typeof PermDyn]
   | (typeof PermButton)[keyof typeof PermButton]

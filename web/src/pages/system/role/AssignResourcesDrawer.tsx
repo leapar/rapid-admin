@@ -86,8 +86,6 @@ interface Props {
 export const AssignResourcesDrawer: React.FC<Props> = ({ open, role, onClose, onSaved, readOnly = false }) => {
   const { t } = useI18n()
   const { message } = App.useApp()
-  // 字典(2026-10-18):类型中文 label 取自 sys_dict
-  const { getLabel: getTypeLabel, getColor: getTypeColor } = useDict('resource_type')
 
   const [typeTab, setTypeTab] = useState<TypeTab>('all')
   const [keyword, setKeyword] = useState('')

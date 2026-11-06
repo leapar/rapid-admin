@@ -8,7 +8,7 @@
  */
 import { http } from './client'
 import { PageRequest, PageResponse } from '@/types/api'
-import { Role, Resource, RoleResource, Department } from '@/types/permission'
+import { Role, Resource, Department } from '@/types/permission'
 
 /* ====================== 角色 ====================== */
 

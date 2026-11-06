@@ -240,7 +240,7 @@ const PermissionList: React.FC = () => {
       //   隐藏之后 EditModal 用 validateFields() 收载荷,**没渲染的字段
       //   进不了载荷** ⇒ 提交不会碰 parent_id(历史脏值也保持原样,PATCH 语义)。
       ...(currentType === 'menu'
-        ? [
+        ? ([
             {
         name: 'parent_id',
         label: t('page.permission.parentResource'),
@@ -277,7 +277,7 @@ const PermissionList: React.FC = () => {
         ),
         help: t('page.permission.parentHelp'),
             },
-          ]
+          ] as EditField[])
         : []),
       {
         name: 'path',

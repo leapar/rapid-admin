@@ -50,7 +50,7 @@ interface GroupConfigFormProps {
   onSaved: () => void
 }
 
-const GroupConfigForm: React.FC<GroupConfigFormProps> = ({ group, items, onSaved }) => {
+const GroupConfigForm: React.FC<GroupConfigFormProps> = ({ items, onSaved }) => {
   const { message } = App.useApp()
   const { t } = useI18n()
   const { getLabel } = useDict('config_ui_label')

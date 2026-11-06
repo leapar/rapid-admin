@@ -14,7 +14,7 @@ import { STORAGE_KEYS } from '@/constants/app'
 // 照旧 —— 两道保险,非 React 场景(测试 / 脚本)调 setLang 也能拉到包。
 import { ensureLocale } from '@/locales/registry'
 
-type Lang = 'zh-CN' | 'en-US'
+export type Lang = 'zh-CN' | 'en-US'
 /** 皮肤 id(registry.getSkin 未知 id 显式降级 white,见 web/src/theme/registry.ts) */
 type Skin = string
 

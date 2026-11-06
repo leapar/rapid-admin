@@ -172,6 +172,10 @@ export const RESOURCE_ICON_MAP: Record<string, AntdIcon> = {
   table: TableOutlined,
   // 皮肤管理(2026-11-05 P3 编辑器)—— 后端 menu.system.skin 的 Icon 字段填 'skin'
   skin: BgColorsOutlined,
+  // 语音管理(2026-11-06)—— 后端 menu.system.voice 的 Icon 字段填 'voice',
+  // 这里必须登记对应条目,否则 resolveIcon 返回 null,菜单条目渲染成没有
+  // 图标的裸文字。CustomerServiceOutlined(耳机麦)比喇叭更贴"声音资产"语义。
+  voice: CustomerServiceOutlined,
 
   // ── 下拉可选的富余图标(2026-11-02 · 图标选择器扩容)────────────────
   //
