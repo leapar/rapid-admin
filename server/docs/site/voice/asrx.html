@@ -1125,7 +1125,8 @@ WebSocket)与 <strong>一句话识别</strong>(短音频整段进去,同步回�
 <li>不做<strong>录音文件识别</strong>(长录音转写,DashScope 的异步任务那套)—— 后台场景
 暂无此需求,要加时按 <code>sys_voice_clone</code> 台账的异步模式起一条新链路;</li>
 <li>不在包里管鉴权 —— asrx 是纯客户端,HTTP 面的权限闸在路由层
-(<code>asr:recognize</code>)与 handler(super_admin 短路)。</li>
+(<code>asr:recognize</code>)与 handler(实时 WS 用 <code>asr:stream</code>,handler 内
+<code>CanAccess</code> 判,同 dynGuard / SSE topic 口径)。</li>
 </ul>
 <h2 id="配置">配置</h2>
 <p>识别与克隆 / 合成<strong>共用 <code>voice:</code> 块的 <code>api_key</code> / <code>workspace_id</code></strong>(百炼同一
@@ -1221,6 +1222,10 @@ sess, err := client.Stream(ctx, asrx.RecognizeParams{Format: <span class="hljs-s
 包内 <code>Send</code> 只发 Binary、<code>Finish</code> 只发 Text,调用方没有犯错的机会;</li>
 <li><strong>一次会话一套参数</strong>:format / sample_rate 在 run-task 里定死,
 中途要换 = 重新 Stream(WS 代理把参数钉在握手 query 里,同口径);</li>
+<li><strong>终态即收线</strong>:<code>task-finished</code> 到达时包内自动断开上游连接,不等调用方
+<code>Close</code>(忘了关 = 白挂一条百炼连接);调用方提前放弃(浏览器断开等)
+调 <code>Close</code>,读协程从结果发送上脱身退出 —— <code>Results()</code> 在终态后关闭
+(<code>sen, ok := &lt;-Results()</code> 的 <code>ok=false</code>),"没有更多结果"可观测;</li>
 <li><strong>错误必须可见</strong>:task-failed / 连接中断 / 兜底超时都作为显式错误
 交给调用方,不让"识别失败"静默成空文本。</li>
 </ul>
@@ -1267,7 +1272,7 @@ sess, err := client.Stream(ctx, asrx.RecognizeParams{Format: <span class="hljs-s
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"asrx(实时语音识别)","level":"9.2","depth":1,"next":{"title":"dynx(动态业务集合)","level":"10.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"voicex(语音克隆与合成)","level":"9.1","depth":1,"path":"voice/voicex.md","ref":"voice/voicex.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"voice/asrx.md","mtime":"2026-11-06T07:42:11.124Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T07:47:42.500Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"asrx(实时语音识别)","level":"9.2","depth":1,"next":{"title":"dynx(动态业务集合)","level":"10.1","depth":1,"path":"business/dyn.md","ref":"business/dyn.md","articles":[]},"previous":{"title":"voicex(语音克隆与合成)","level":"9.1","depth":1,"path":"voice/voicex.md","ref":"voice/voicex.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"voice/asrx.md","mtime":"2026-11-06T08:44:18.143Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T08:44:30.706Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

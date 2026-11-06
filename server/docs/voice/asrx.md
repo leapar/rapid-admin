@@ -27,7 +27,8 @@
 - 不做**录音文件识别**(长录音转写,DashScope 的异步任务那套)—— 后台场景
   暂无此需求,要加时按 `sys_voice_clone` 台账的异步模式起一条新链路;
 - 不在包里管鉴权 —— asrx 是纯客户端,HTTP 面的权限闸在路由层
-  (`asr:recognize`)与 handler(super_admin 短路)。
+  (`asr:recognize`)与 handler(实时 WS 用 `asr:stream`,handler 内
+  `CanAccess` 判,同 dynGuard / SSE topic 口径)。
 
 ## 配置
 
@@ -101,5 +102,9 @@ go run ./examples/asrx
   包内 `Send` 只发 Binary、`Finish` 只发 Text,调用方没有犯错的机会;
 - **一次会话一套参数**:format / sample_rate 在 run-task 里定死,
   中途要换 = 重新 Stream(WS 代理把参数钉在握手 query 里,同口径);
+- **终态即收线**:`task-finished` 到达时包内自动断开上游连接,不等调用方
+  `Close`(忘了关 = 白挂一条百炼连接);调用方提前放弃(浏览器断开等)
+  调 `Close`,读协程从结果发送上脱身退出 —— `Results()` 在终态后关闭
+  (`sen, ok := <-Results()` 的 `ok=false`),"没有更多结果"可观测;
 - **错误必须可见**:task-failed / 连接中断 / 兜底超时都作为显式错误
   交给调用方,不让"识别失败"静默成空文本。
