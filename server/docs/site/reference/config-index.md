@@ -35,6 +35,7 @@
 | `push` | pushx | [pushx](../messaging/pushx.md) | provider 留空 ⇒ **不装配**推送通道 |
 | `oss` | oss | [oss](../storage/oss.md) | 连不上 OSS(响亮) |
 | `file` | oss / media | [oss](../storage/oss.md) / [media](../storage/media.md) | ✅ `path_root=rapid-admin` / `ffmpeg_path=ffmpeg` |
+| `voice` | voicex / asrx | [voicex](../voice/voicex.md) / [asrx](../voice/asrx.md) | ⚠️ `api_key` 留空 ⇒ 克隆 / 合成 / 识别**全不装配**(调用时才报错);Edge 朗读零配置可用 |
 | `crypto` | crypto | [crypto](../security/crypto.md) | ⚠️ **不配就没有字段加密** —— 明文入库 |
 | `kms` | kms | [kms](../security/kms.md) | 轮转检查**跳过**(不是失败) |
 | `ratelimit` | ratelimitx / kvstore | [ratelimitx](../security/ratelimitx.md) | 无大碍 |
@@ -67,6 +68,8 @@
 | `push.aliyun_emns` | [pushx](../messaging/pushx.md) | 阿里云 EMNS 凭证 |
 | `swagger.auth` | [swaggerx](../api-docs/swaggerx.md) | `mode` / `username` / `password` |
 | `file.allowed_biz` | [oss](../storage/oss.md) | 允许的业务类型白名单 |
+| `voice.edge` | [voicex](../voice/voicex.md) | Edge 朗读:全空走公共通道;`token` / `wss_url` / 超时 |
+| `voice.asr_model` / `asr_timeout_seconds` | [asrx](../voice/asrx.md) | 识别模型(空 = paraformer-realtime-v2)/ 任务兜底超时 |
 
 ## 密钥类配置:一律走环境变量
 
@@ -77,6 +80,7 @@ jwt.admin_secret / jwt.owner_secret / jwt.supplier_secret
 mysql.password
 redis.password
 sms.access_key / sms.access_secret
+voice.api_key
 oss.access_key / oss.access_secret
 kms.access_key / kms.secret_key
 crypto.field_key / crypto.blind_key

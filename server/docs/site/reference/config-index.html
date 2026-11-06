@@ -1289,6 +1289,12 @@
 <td>✅ <code>path_root=rapid-admin</code> / <code>ffmpeg_path=ffmpeg</code></td>
 </tr>
 <tr>
+<td><code>voice</code></td>
+<td>voicex / asrx</td>
+<td><a href="../voice/voicex.html">voicex</a> / <a href="../voice/asrx.html">asrx</a></td>
+<td>⚠️ <code>api_key</code> 留空 ⇒ 克隆 / 合成 / 识别<strong>全不装配</strong>(调用时才报错);Edge 朗读零配置可用</td>
+</tr>
+<tr>
 <td><code>crypto</code></td>
 <td>crypto</td>
 <td><a href="../security/crypto.html">crypto</a></td>
@@ -1417,6 +1423,16 @@
 <td><a href="../storage/oss.html">oss</a></td>
 <td>允许的业务类型白名单</td>
 </tr>
+<tr>
+<td><code>voice.edge</code></td>
+<td><a href="../voice/voicex.html">voicex</a></td>
+<td>Edge 朗读:全空走公共通道;<code>token</code> / <code>wss_url</code> / 超时</td>
+</tr>
+<tr>
+<td><code>voice.asr_model</code> / <code>asr_timeout_seconds</code></td>
+<td><a href="../voice/asrx.html">asrx</a></td>
+<td>识别模型(空 = paraformer-realtime-v2)/ 任务兜底超时</td>
+</tr>
 </tbody>
 </table>
 <h2 id="密钥类配置一律走环境变量">密钥类配置:一律走环境变量</h2>
@@ -1425,6 +1441,7 @@
 mysql.password
 redis.password
 sms.access_key / sms.access_secret
+voice.api_key
 oss.access_key / oss.access_secret
 kms.access_key / kms.secret_key
 crypto.field_key / crypto.blind_key
@@ -1481,7 +1498,7 @@ push.aliyun_emns.access_key / access_secret
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"配置项全表","level":"13.3","depth":1,"previous":{"title":"示例目录","level":"13.2","depth":1,"path":"reference/examples.md","ref":"reference/examples.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"reference/config-index.md","mtime":"2026-11-04T12:20:04.104Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T08:58:16.688Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"配置项全表","level":"13.3","depth":1,"previous":{"title":"示例目录","level":"13.2","depth":1,"path":"reference/examples.md","ref":"reference/examples.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"reference/config-index.md","mtime":"2026-11-06T09:01:53.878Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T09:02:04.989Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
