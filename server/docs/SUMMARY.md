@@ -78,6 +78,10 @@
 * [jobs(内置任务)](scheduling/jobs.md) — 平台内置定时任务:框架任务注册 + 执行记录清理
 * [slowquery(慢 SQL 报警)](scheduling/slowquery.md) — 慢 SQL 报警:两种接入方式 + Prometheus 指标
 
+## 语音与媒体
+
+* [voicex(语音克隆与合成)](voice/voicex.md) — DashScope 音色克隆 + TTS 文本合成(整段 / 流式两套形态,不用 WebSocket)
+
 ## 业务扩展
 
 * [dynx(动态业务集合)](business/dyn.md) — 用户自己设计业务表,菜单/接口/权限/页面全自动

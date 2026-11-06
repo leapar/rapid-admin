@@ -16,9 +16,9 @@
 - **通用审批**:可配置审批流引擎,提交人≠审批人强制分人
 - **文件系统**:单桶单树模型,分片上传、稳定直链、媒体探测(ffmpeg)
 - **消息与通知**:站内信、SSE 事件流、短信(多 provider + 限流 + 发送审计)、邮件
-- **框架原语 49 个**:两级缓存(LRU + Redis)、幂等键、分布式锁、重试、限流、熔断、灰度、KMS、数据变更审计、全文搜索……每个都有手册章节 + 可运行示例
+- **框架原语 52 个**:两级缓存(LRU + Redis)、幂等键、分布式锁、重试、限流、熔断、灰度、KMS、数据变更审计、全文搜索……每个都有手册章节 + 可运行示例
 - **工程化守卫**:框架原语可达性守卫、文档断链扫描、手册产物漂移检测、计数一致性校验 —— 文档说谎会让 CI 变红
-- **内置手册与 API 文档**:56 页 GitBook 手册(`go:embed` 嵌进二进制)+ OpenAPI 3.0(Swagger UI 挂在 `/swagger`)
+- **内置手册与 API 文档**:57 页 GitBook 手册(`go:embed` 嵌进二进制)+ OpenAPI 3.0(Swagger UI 挂在 `/swagger`)
 
 ## 技术栈
 
@@ -27,7 +27,7 @@
 | 后端 | Go 1.22+ · [CloudWeGo Hertz](https://github.com/cloudwego/hertz) · [GORM](https://gorm.io) · [Casbin](https://github.com/casbin/casbin) · [go-redis v9](https://github.com/redis/go-redis) · [Viper](https://github.com/spf13/viper) · [Zap](https://github.com/uber-go/zap) · [golang-jwt v5](https://github.com/golang-jwt/jwt) · [Sonyflake](https://github.com/sony/sonyflake) |
 | 前端 | React 18 · Ant Design 5 · TypeScript 5 · Vite 5 · Zustand · Axios · ECharts · Vitest |
 | SDK | [@rapid-admin/dyn-sdk](js-sdk/)(零运行时依赖,动态表单数据面) |
-| 文档 | HonKit(GitBook)56 页 · Swagger UI · 49 个 `go run` 即跑的示例 |
+| 文档 | HonKit(GitBook)57 页 · Swagger UI · 53 个 `go run` 即跑的示例 |
 | 数据库 | MySQL 8(生产) / SQLite(开发,免装依赖) · Redis(缓存/限流/幂等,可选) |
 
 ## 快速启动
@@ -58,7 +58,7 @@ cd server/docs && npm install && npm run serve   # 手册 → http://localhost:4
 
 ```
 rapid-admin/
-├── server/          # Go 后端(Hertz + GORM + Casbin,49 个框架原语 + 56 页手册)
+├── server/          # Go 后端(Hertz + GORM + Casbin,52 个框架原语 + 57 页手册)
 ├── web/             # React 18 + Ant Design 5 管理端
 ├── js-sdk/          # @rapid-admin/dyn-sdk —— 动态表单数据面 SDK(零运行时依赖)
 ├── docs/            # 设计文档(权限模型 / 文件系统 / 通用审批 / 完成清单 ROADMAP)

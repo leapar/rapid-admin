@@ -4,12 +4,8 @@
 
 本文件是 LLM 索引;链接指向各章节的纯 Markdown 版本,与 HTML 版同源同步。
 
-- [首页](README.md)
 ## 开始
-- [快速开始](getting-started/README.md)
 - [AI 接入(vibe coding)](getting-started/ai-coding.md): agent 入口文件 / 生成物清单 / 守卫红了怎么读
-- [配置体系](getting-started/configuration.md)
-- [框架约定](getting-started/conventions.md)
 ## 基础设施
 - [logger(日志)](infrastructure/logger.md): 多 Core 装配:控制台 + info/warn/error/audit/access 分文件
 - [errcode(业务错误码)](infrastructure/errcode.md): 分类、HTTP 映射、错误对象
@@ -67,6 +63,8 @@
 - [cronx(定时任务)](scheduling/cronx.md): 定时任务调度:代码注册 + DB 覆盖 + 两层去重
 - [jobs(内置任务)](scheduling/jobs.md): 平台内置定时任务:框架任务注册 + 执行记录清理
 - [slowquery(慢 SQL 报警)](scheduling/slowquery.md): 慢 SQL 报警:两种接入方式 + Prometheus 指标
+## 语音与媒体
+- [voicex(语音克隆与合成)](voice/voicex.md): DashScope 音色克隆 + TTS 文本合成(整段 / 流式两套形态,不用 WebSocket)
 ## 业务扩展
 - [dynx(动态业务集合)](business/dyn.md): 用户自己设计业务表,菜单/接口/权限/页面全自动
 - [approvalx(通用审批)](business/approval.md): 通用审批系统使用教程:一张单子的旅程(状态机)/ 或签会签详解(D5:逐级审批必须会签)/ 内置三条案例模板(请假/报销/采购,默认停用)+ 按角色配置的建模板教程 / 引擎内部逻辑(提交快照、会签数票、事务纪律、站内信与巡检)

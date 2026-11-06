@@ -1,7 +1,7 @@
 # AGENTS.md — rapid-admin
 
 > Go (Hertz + GORM + Casbin) + React 18 + Ant Design 5 的通用后台管理框架。
-> 51 个框架模块在 `server/internal/pkg/`,每个模块都有 `go run` 即跑的示例;
+> 52 个框架模块在 `server/internal/pkg/`,每个模块都有 `go run` 即跑的示例;
 > 56 页内嵌手册在 `server/docs/`。本文件是给 AI coding agent 的指令 ——
 > 人读的导览在 [README.md](README.md)。
 
@@ -21,7 +21,7 @@ scripts/   check_docs_links.py 等仓库守卫脚本
 ```bash
 # 后端(在 server/ 下)
 go test ./...                       # 全量测试
-go run ./examples/<模块名>           # 跑某模块的最小示例(51 个,见 docs/ai/module-list.md)
+go run ./examples/<模块名>           # 跑某模块的最小示例(52 个,见 docs/ai/module-list.md)
 go run ./cmd/migrate -config configs/config.yaml   # 建库 + seed(默认账号 admin / Admin@2026)
 go run ./cmd/server -c configs/config.yaml         # 启动(注意是 -c 不是 -config)
 make docs                           # 手册重建(honkit + buildinfo;产物 site/ 必须与源同步)

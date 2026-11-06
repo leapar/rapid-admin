@@ -1,6 +1,6 @@
 # 包速查表
 
-> `server/internal/pkg/` 下**全部 58 个 Go 包**的一句话索引(52 个一级目录 + 6 个子包)。
+> `server/internal/pkg/` 下**全部 59 个 Go 包**的一句话索引(53 个一级目录 + 6 个子包)。
 > 想知道"有没有我要的能力",先翻这张表;想知道"怎么用",点进对应章节。
 
 命令自查:
@@ -89,6 +89,12 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `cronx` | 定时任务调度:代码注册 + DB 覆盖 + 两层去重 | [cronx](../scheduling/cronx.md) |
 | `jobs` | 平台内置定时任务:框架任务注册 + 执行记录清理 | [jobs](../scheduling/jobs.md) |
 | `slowquery` | 慢 SQL 报警:包装 GORM logger + Prometheus 指标 | [slowquery](../scheduling/slowquery.md) |
+
+## 语音与媒体(1)
+
+| 包 | 一句话 | 章节 |
+|---|---|---|
+| `voicex` | DashScope 音色克隆 + TTS 合成(整段 / 流式,不用 WebSocket) | [voicex](../voice/voicex.md) |
 
 ## 业务扩展(1)
 

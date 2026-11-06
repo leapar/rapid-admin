@@ -887,11 +887,31 @@
 
     
         
+        <li class="header">语音与媒体</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../voice/voicex.html">
+            
+                <a href="../voice/voicex.html">
+            
+                    
+                    voicex(语音克隆与合成)
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
         <li class="header">业务扩展</li>
         
         
     
-        <li class="chapter " data-level="9.1" data-path="../business/dyn.html">
+        <li class="chapter " data-level="10.1" data-path="../business/dyn.html">
             
                 <a href="../business/dyn.html">
             
@@ -904,7 +924,7 @@
             
         </li>
     
-        <li class="chapter " data-level="9.2" data-path="../business/approval.html">
+        <li class="chapter " data-level="10.2" data-path="../business/approval.html">
             
                 <a href="../business/approval.html">
             
@@ -924,7 +944,7 @@
         
         
     
-        <li class="chapter " data-level="10.1" data-path="../api-docs/swaggerx.html">
+        <li class="chapter " data-level="11.1" data-path="../api-docs/swaggerx.html">
             
                 <a href="../api-docs/swaggerx.html">
             
@@ -937,7 +957,7 @@
             
         </li>
     
-        <li class="chapter " data-level="10.2" data-path="../api-docs/manual.html">
+        <li class="chapter " data-level="11.2" data-path="../api-docs/manual.html">
             
                 <a href="../api-docs/manual.html">
             
@@ -957,7 +977,7 @@
         
         
     
-        <li class="chapter " data-level="11.1" data-path="../web/theming.html">
+        <li class="chapter " data-level="12.1" data-path="../web/theming.html">
             
                 <a href="../web/theming.html">
             
@@ -977,7 +997,7 @@
         
         
     
-        <li class="chapter " data-level="12.1" data-path="packages.html">
+        <li class="chapter " data-level="13.1" data-path="packages.html">
             
                 <a href="packages.html">
             
@@ -990,7 +1010,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="12.2" data-path="examples.html">
+        <li class="chapter active" data-level="13.2" data-path="examples.html">
             
                 <a href="examples.html">
             
@@ -1003,7 +1023,7 @@
             
         </li>
     
-        <li class="chapter " data-level="12.3" data-path="config-index.html">
+        <li class="chapter " data-level="13.3" data-path="config-index.html">
             
                 <a href="config-index.html">
             
@@ -1063,7 +1083,7 @@
                                 
                                 <h1 id="示例目录">示例目录</h1>
 <blockquote>
-<p><code>server/examples/</code> 下 <strong>52 个最小可运行示例</strong>,一个框架模块一个。
+<p><code>server/examples/</code> 下 <strong>53 个最小可运行示例</strong>,一个框架模块一个。
 别人拿到 <code>pkg/cachex</code> 要自己读 200 行源码、拼出正确的初始化顺序、猜哪些参数
 不配会静默降级 —— 示例是开源框架降低上手成本最有效的一件工具。</p>
 </blockquote>
@@ -1079,7 +1099,7 @@ go run ./examples/cachex
 </code></pre>
 <h2 id="目录约定">目录约定</h2>
 <pre><code>examples/
-├── README.md              # 索引表(52 个包 → 这个示例演示什么)
+├── README.md              # 索引表(53 个包 → 这个示例演示什么)
 ├── doc.go                 # 目录级说明
 ├── examples_test.go       # 漂移网(4 条测试)
 └── &lt;包名&gt;/main.go         # 一包一个目录,package main + func main()
@@ -1180,6 +1200,10 @@ CREATE TABLE IF NOT EXISTS sys_pii_access_log (
 <td>cronx / jobs / slowquery</td>
 </tr>
 <tr>
+<td>语音与媒体</td>
+<td>voicex</td>
+</tr>
+<tr>
 <td>业务扩展</td>
 <td>dynx</td>
 </tr>
@@ -1233,7 +1257,7 @@ CREATE TABLE IF NOT EXISTS sys_pii_access_log (
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"示例目录","level":"12.2","depth":1,"next":{"title":"配置项全表","level":"12.3","depth":1,"path":"reference/config-index.md","ref":"reference/config-index.md","articles":[]},"previous":{"title":"包速查表","level":"12.1","depth":1,"path":"reference/packages.md","ref":"reference/packages.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"reference/examples.md","mtime":"2026-11-04T12:20:04.112Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-05T09:48:45.534Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"示例目录","level":"13.2","depth":1,"next":{"title":"配置项全表","level":"13.3","depth":1,"path":"reference/config-index.md","ref":"reference/config-index.md","articles":[]},"previous":{"title":"包速查表","level":"13.1","depth":1,"path":"reference/packages.md","ref":"reference/packages.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"reference/examples.md","mtime":"2026-11-06T05:27:16.236Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-06T05:32:14.311Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

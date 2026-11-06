@@ -119,6 +119,12 @@ go run ./examples/cachex
 | [jobs](jobs/main.go) | 平台内置定时任务(框架任务注册 + 执行记录清理) |
 | [slowquery](slowquery/main.go) | 慢 SQL 报警(两种接入方式 + 指标) |
 
+### 语音与媒体
+
+| 包 | 示例演示什么 |
+|---|---|
+| [voicex](voicex/main.go) | DashScope 音色克隆 + TTS 合成(凭据校验 / https 闸门 / ID 归一) |
+
 ### 接口文档
 
 | 包 | 示例演示什么 |

@@ -13,3 +13,7 @@ server/configs/config.dev.yaml
 .idea/
 .vscode/
 *.iml
+
+# Go 构建临时目录(C 盘满时的迁移产物)
+.gocache/
+.gotmp/
