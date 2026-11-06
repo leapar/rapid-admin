@@ -47,7 +47,7 @@
 | 路由 | 权限码 | 说明 |
 |---|---|---|
 | `POST /biz/asr/recognize` | `asr:recognize` | 一句话识别:multipart 传短音频(`format`/`sampleRate`/`languageHints` 选填),同步回 `{"text":"..."}` |
-| `GET /biz/asr/stream` | super_admin(handler 内短路) | 实时识别 WS 代理,握手参数 `?access_token=&format=&sample_rate=&language_hints=`;**豁免 rbac 的替代鉴权**见 consistency.go 注释 |
+| `GET /biz/asr/stream` | `asr:stream`(handler 内 CanAccess 判) | 实时识别 WS 代理,握手参数 `?access_token=&format=&sample_rate=&language_hints=`;**豁免 rbac 的替代鉴权**见 consistency.go 注释 |
 
 WS 代理的浏览器侧协议(收窄后的):
 

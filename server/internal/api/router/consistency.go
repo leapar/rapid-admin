@@ -171,10 +171,11 @@ func CheckResourceConsistency(h *server.Hertz, db *gorm.DB) error {
 		//	GET /rapid-admin/v1/biz/asr/stream
 		//
 		//	替代鉴权:middleware.SSEAuth()(Authorization / ?access_token= / cookie
-		//	          三级兜底,完整三道吊销闸)+ handler 内 super_admin 短路
-		//	          —— 识别是花钱的外呼,与克隆同档;浏览器 WebSocket 握手带不了
-		//	          Authorization 头,普通 Auth() 会先 401(同 /events 的教训)。
-		//	不能用 rbac():长连接不该占鉴权链;asr:stream 码等菜单/矩阵轮次再配。
+		//	          三级兜底,完整三道吊销闸)+ handler 内 CanAccess("asr","stream")
+		//	          —— 与 dynGuard / SSE topic 判定同一套 decideAccess;识别是
+		//	          花钱的外呼,与克隆同档,asr:stream 码只绑超管线。
+		//	不能用 rbac():浏览器 WebSocket 握手带不了 Authorization 头,普通
+		//	          Auth() 会先 401(同 /events 的教训);长连接也不该占鉴权链。
 		"/rapid-admin/v1/biz/asr/stream",
 
 		// ---- 动态业务集合的数据面(M151)----

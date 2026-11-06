@@ -119,10 +119,11 @@ func resourceList() []string {
 		"voice_clone:update", "voice_clone:delete", "voice_clone:refresh", "voice_clone:remote_list",
 		"tts:convert",
 		"tts_voice:list", "tts_voice:read", "tts_voice:create", "tts_voice:update", "tts_voice:delete",
-		// 语音识别(asrx,2026-11-06 移植)—— 一句话识别(同步)。
-		// 实时识别 WS 代理不走 rbac()(SSEAuth + handler 内 super_admin 短路,
-		// 见 consistency.go 豁免清单),这里只落 asr:recognize 一个码。
-		"asr:recognize",
+		// 语音识别(asrx,2026-11-06 移植)—— 一句话识别(同步)+ 实时识别(WS)。
+		// ⚠️ 实时 WS 代理不走 rbac()(长连接不该占鉴权链),路由在豁免清单,
+		// 权限闸在 handler 内 CanAccess("asr","stream") —— 码在这里登记,
+		// 角色管理页才看得见、勾得动。只绑超管线(同 voice_clone / tts)。
+		"asr:recognize", "asr:stream",
 		"dashboard:read",
 		// 服务器资源监控(CPU/内存/磁盘,2026-11-03)—— **只绑平台运营线**:
 		//   服务器内部信息(goroutine 数 / Go 版本 / 磁盘水位)不广发给业务角色,

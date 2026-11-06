@@ -18,7 +18,9 @@ import (
 	"github.com/hertz-contrib/websocket"
 
 	"rapid-admin/internal/api/handler"
+	"rapid-admin/internal/api/middleware"
 	"rapid-admin/internal/pkg/asrx"
+	"rapid-admin/internal/pkg/authz"
 	"rapid-admin/internal/pkg/errcode"
 	"rapid-admin/internal/service"
 )
@@ -129,11 +131,14 @@ func (h *AsrHandler) Stream(ctx context.Context, c *app.RequestContext) {
 	if caller == nil {
 		return
 	}
-	// ⚠️ **super_admin 短路**(豁免清单登记的替代鉴权)—— 识别是花钱的外呼,
-	// 与克隆同档;本路由不走 rbac(),权限闸在这里。等 asr:stream 配进
-	// casbin 矩阵后,这里换成正式断言(见 router.go 豁免条目注释)。
-	if !caller.HasRole("role_super_admin") {
-		h.FailCode(c, errcode.Forbidden, "实时语音识别仅超级管理员可用")
+	// ⚠️ **权限闸在 handler 内**(豁免清单登记的替代鉴权)—— 浏览器 WebSocket
+	// 握手带不了 Authorization 头,普通 Auth() 会先 401(同 /events 的教训),
+	// 路由层只有 SSEAuth;rbac() 不挂(长连接不该占鉴权链),这里用与
+	// dynGuard / SSE topic 判定同一套 decideAccess 判 asr:stream 码。
+	// 识别是花钱的外呼,与克隆同档,码只绑超管线。
+	principal, _ := authz.PrincipalFromContext(ctx)
+	if !middleware.CanAccess(caller, principal, "asr", "stream", 0) {
+		h.FailCode(c, errcode.Forbidden, "没有实时语音识别权限(asr:stream)")
 		return
 	}
 	p := asrx.RecognizeParams{
