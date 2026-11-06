@@ -5,12 +5,15 @@ package v1
 
 import (
 	"context"
+	"errors"
+	"io"
 	"strconv"
 	"strings"
 
 	"github.com/cloudwego/hertz/pkg/app"
 
 	"rapid-admin/internal/api/handler"
+	"rapid-admin/internal/api/middleware"
 	"rapid-admin/internal/model"
 	"rapid-admin/internal/pkg/errcode"
 	"rapid-admin/internal/service"
@@ -291,6 +294,12 @@ func (h *TtsHandler) convertStream(ctx context.Context, c *app.RequestContext, r
 			}
 		}
 		if rerr != nil {
+			if !errors.Is(rerr, io.EOF) {
+				// 上游(合成端点)中途断流 —— 响应头已发出(200),系统日志的
+				// 5xx 钩子抓不到,显式落一条;客户端断开走上面的 werr 分支,不算
+				middleware.RecordBizSystemLog(ctx, "POST", string(c.Path()), "tts_error",
+					"流式文本合成中断: "+rerr.Error(), "")
+			}
 			return // io.EOF 或上游错误 —— 头已发出,只能断流
 		}
 	}

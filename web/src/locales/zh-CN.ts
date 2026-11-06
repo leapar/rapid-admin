@@ -1082,6 +1082,8 @@ const zhCN = {
       sourceSlowHttp: '慢接口',
       sourceHttpError: '接口 5xx',
       sourcePanic: 'panic',
+      sourceAsrError: '语音识别失败',
+      sourceTtsError: '语音合成失败',
     },
     auditOperation: {
       description: '用户操作审计(只读) - 用于事后追溯与合规检查',

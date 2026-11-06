@@ -47,6 +47,10 @@ const SOURCE_META: Record<string, { labelKey: string; color: string }> = {
   slow_http: { labelKey: 'page.auditSystem.sourceSlowHttp', color: 'gold' },
   http_error: { labelKey: 'page.auditSystem.sourceHttpError', color: 'volcano' },
   panic: { labelKey: 'page.auditSystem.sourcePanic', color: 'red' },
+  // 业务失败(不走 HTTP 状态码的通道):asr_error 实时识别 WS 会话失败 /
+  // tts_error 已发响应头的流式合成断流 —— RecordBizSystemLog 钩子
+  asr_error: { labelKey: 'page.auditSystem.sourceAsrError', color: 'volcano' },
+  tts_error: { labelKey: 'page.auditSystem.sourceTtsError', color: 'volcano' },
 }
 
 const SystemLogList: FC = () => {

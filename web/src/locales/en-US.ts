@@ -1051,6 +1051,8 @@ const enUS: Locale = {
       sourceSlowHttp: 'Slow HTTP',
       sourceHttpError: 'HTTP 5xx',
       sourcePanic: 'Panic',
+      sourceAsrError: 'ASR failure',
+      sourceTtsError: 'TTS failure',
     },
     auditOperation: {
       description: 'User operation audit (read-only) - for after-the-fact tracing and compliance checks',

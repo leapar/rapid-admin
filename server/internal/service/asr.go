@@ -9,8 +9,11 @@ import (
 	"context"
 	"io"
 
+	"go.uber.org/zap"
+
 	"rapid-admin/internal/config"
 	"rapid-admin/internal/pkg/asrx"
+	"rapid-admin/internal/pkg/logger"
 )
 
 // AsrService 语音识别:一句话(同步)+ 实时会话(WS 代理用)
@@ -48,7 +51,15 @@ func (s *asrService) RecognizeOnce(ctx context.Context, p asrx.RecognizeParams, 
 	if err != nil {
 		return "", err
 	}
-	return client.Once(ctx, p, audio)
+	text, err := client.Once(ctx, p, audio)
+	if err != nil {
+		// 失败原因落一份应用日志:5xx 出去后系统日志(sys_system_log)只记
+		// "接口 5xx: POST /biz/asr/recognize status=500",凭据没配 /
+		// task-failed 的具体原因只在响应体里,翻日志查不到
+		logger.L().Warn("asr: 一句话识别失败", zap.Error(err))
+		return "", err
+	}
+	return text, nil
 }
 
 func (s *asrService) Stream(ctx context.Context, p asrx.RecognizeParams) (*asrx.Session, error) {
@@ -56,5 +67,10 @@ func (s *asrService) Stream(ctx context.Context, p asrx.RecognizeParams) (*asrx.
 	if err != nil {
 		return nil, err
 	}
-	return client.Stream(ctx, p)
+	sess, err := client.Stream(ctx, p)
+	if err != nil {
+		logger.L().Warn("asr: 实时识别建会话失败", zap.Error(err))
+		return nil, err
+	}
+	return sess, nil
 }

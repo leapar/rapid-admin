@@ -262,3 +262,93 @@ func TestAsrx_MissingAPIKey(t *testing.T) {
 		t.Fatal("空 api_key 必须显式报错")
 	}
 }
+
+// TestAsrx_Stream_TerminalClosesUpstream 终态即收线:task-finished 到达后,
+// 上游连接由读协程自动关闭 —— 不等调用方 Close(忘了关 = 白挂一条百炼连接)。
+func TestAsrx_Stream_TerminalClosesUpstream(t *testing.T) {
+	f := newFakeServer(t, []string{"你", "你好"})
+	defer f.srv.Close()
+	c := testClient(t, f.srv.URL)
+
+	sess, err := c.Stream(context.Background(), RecognizeParams{})
+	if err != nil {
+		t.Fatalf("Stream: %v", err)
+	}
+	defer sess.Close()
+
+	if err := sess.Send([]byte("audio-bytes")); err != nil {
+		t.Fatalf("Send: %v", err)
+	}
+	if err := sess.Finish(); err != nil {
+		t.Fatalf("Finish: %v", err)
+	}
+	select {
+	case <-sess.Done():
+	case <-time.After(3 * time.Second):
+		t.Fatal("终态没到")
+	}
+	// 终态后读协程应当自动收线(terminate:先关 closed 再关连接,同一函数内
+	// 顺序执行 —— closed 关闭即铁证)。⚠️ 不能从测试协程读 conn 验证:
+	// readLoop 还在读它,gorilla 的 NextReader 不许并发,那是 data race。
+	select {
+	case <-sess.closed:
+		// 已收线 —— 期望形态
+	case <-time.After(3 * time.Second):
+		t.Fatal("task-finished 后读协程没有自动收线")
+	}
+	// 读协程退出还会关闭 results —— "没有更多结果"可观测(done 关闭与
+	// results 关闭之间隔着一个 goroutine 收尾,所以要轮询,不能单发 select)
+	deadline := time.After(3 * time.Second)
+	for {
+		select {
+		case _, ok := <-sess.Results():
+			if !ok {
+				return // 读协程已退出,results 已关闭
+			}
+		case <-deadline:
+			t.Fatal("终态后 results 没有关闭")
+		}
+	}
+}
+
+// TestAsrx_Stream_ConsumerGoneReadLoopExits 消费者没了读协程必须能脱身:
+// 浏览器断开(handler 读侧返回 → sess.Close)后,不再有人消费 Results(),
+// 读协程若卡在 results 发送上就是 goroutine + 上游连接双泄漏。
+func TestAsrx_Stream_ConsumerGoneReadLoopExits(t *testing.T) {
+	// 脚本给足中间结果:发一块音频 + finish-task 后服务端连推 80 条,
+	// results 缓冲(64)被打满,读协程必然阻塞在发送上
+	script := make([]string, 80)
+	for i := range script {
+		script[i] = "词"
+	}
+	f := newFakeServer(t, script)
+	defer f.srv.Close()
+	c := testClient(t, f.srv.URL)
+
+	sess, err := c.Stream(context.Background(), RecognizeParams{})
+	if err != nil {
+		t.Fatalf("Stream: %v", err)
+	}
+	if err := sess.Send([]byte("audio-bytes")); err != nil {
+		t.Fatalf("Send: %v", err)
+	}
+	// 故意不消费 Results,直接收线(等价于 handler 里浏览器断开的路径)
+	if err := sess.Close(); err != nil {
+		t.Fatalf("Close: %v", err)
+	}
+	// 读协程应当从 results 发送上脱身并退出 —— 退出即关 results,这是
+	// 无竞态的观测点(不能读 sess.conn:readLoop 还在读它,gorilla 不许并发)。
+	// 若实现退化为"卡在发送",这里只会超时。
+	deadline := time.After(3 * time.Second)
+	for {
+		select {
+		case _, ok := <-sess.Results():
+			if !ok {
+				return // 读协程已退出并收线
+			}
+			// 缓冲里排出来的结果继续倒掉
+		case <-deadline:
+			t.Fatal("读协程卡在 results 发送上没有退出(goroutine + 连接双泄漏)")
+		}
+	}
+}

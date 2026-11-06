@@ -18,12 +18,14 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/hertz-contrib/websocket"
+	"go.uber.org/zap"
 
 	"rapid-admin/internal/api/handler"
 	"rapid-admin/internal/api/middleware"
 	"rapid-admin/internal/pkg/asrx"
 	"rapid-admin/internal/pkg/authz"
 	"rapid-admin/internal/pkg/errcode"
+	"rapid-admin/internal/pkg/logger"
 	"rapid-admin/internal/service"
 )
 
@@ -203,8 +205,11 @@ func (h *AsrHandler) Stream(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	// method / path 在升级前抓下来 —— 升级回调里 RequestContext 已被劫持,
+	// 不保证还能读;系统日志条目要用。
+	method, path := string(c.Method()), string(c.Path())
 	if err := h.upgrader.Upgrade(c, func(conn *websocket.Conn) {
-		runAsrRelay(ctx, conn, sess)
+		runAsrRelay(ctx, conn, sess, method, path)
 	}); err != nil {
 		sess.Close()
 	}
@@ -218,7 +223,7 @@ func (h *AsrHandler) Stream(ctx context.Context, c *app.RequestContext) {
 //
 // 任一侧退出,defer sess.Close() 兜底断上游 —— 写侧 goroutine 随之收敛,
 // 不会留下悬空的转发循环。
-func runAsrRelay(ctx context.Context, conn *websocket.Conn, sess *asrx.Session) {
+func runAsrRelay(ctx context.Context, conn *websocket.Conn, sess *asrx.Session, method, path string) {
 	defer sess.Close()
 
 	// 写侧 goroutine:上游结果 → 浏览器
@@ -242,6 +247,12 @@ func runAsrRelay(ctx context.Context, conn *websocket.Conn, sess *asrx.Session) 
 			case <-sess.Done():
 				msg := asrSentenceMsg{Event: "finished"}
 				if err := sess.Err(); err != nil {
+					// ⚠️ WS 通道不走 HTTP 状态码,access_log 的 5xx 钩子抓不到
+					// 升级后的会话失败 —— 上游 task-failed / 连接中断的原因
+					// 只在这里落日志,不然排障时服务端零痕迹
+					logger.L().Warn("asr: 实时识别会话失败", zap.Error(err))
+					middleware.RecordBizSystemLog(ctx, method, path, "asr_error",
+						"实时识别会话失败: "+err.Error(), "")
 					msg = asrSentenceMsg{Event: "failed", Message: err.Error()}
 				}
 				b, _ := json.Marshal(msg)

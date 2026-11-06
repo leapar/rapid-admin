@@ -210,6 +210,7 @@ type Session struct {
 
 	results   chan Sentence
 	done      chan struct{} // 关闭 = 终态已到(task-finished / task-failed)
+	closed    chan struct{} // 关闭 = Close/terminate 已执行(读协程从这里脱身)
 	closeOnce sync.Once
 
 	mu  sync.Mutex // 串行化写帧
@@ -241,7 +242,7 @@ func (s *Session) Err() error {
 }
 
 // Finish 发 finish-task(音频发完了,等服务端把尾巴吐完)。
-// 不关连接 —— 关连接交给 Close 或读协程在终态后自动做。
+// 不关连接 —— task-finished 到达时读协程自动收线,Close 是给调用方提前放弃用的。
 func (s *Session) Finish() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -258,12 +259,22 @@ func (s *Session) Finish() error {
 
 // Close 断开底层连接(幂等)。正常流程:Finish → 等 Done → Close。
 func (s *Session) Close() error {
-	s.closeOnce.Do(func() {
-		// 终态已到或调用方放弃 —— 直接关;读协程的读错误会落在没人收的
-		// results 上,不影响正确性。
-		_ = s.conn.Close()
-	})
+	s.closeOnce.Do(s.terminate)
 	return nil
+}
+
+// terminate 连接收尾(closeOnce 守着,幂等):先关 closed 唤醒可能阻塞在
+// results 发送上的读协程,再关连接。
+//
+// ⚠️ **顺序不能反** —— 读协程如果正卡在 `results <-`(没人消费),光关连接
+// 解不开它:它阻塞在 channel 上而不是 read 上,goroutine + 上游连接就双泄漏。
+func (s *Session) terminate() {
+	select {
+	case <-s.closed:
+	default:
+		close(s.closed)
+	}
+	_ = s.conn.Close()
 }
 
 // Stream 开一次实时识别会话:建连 → run-task → 等 task-started。
@@ -305,6 +316,7 @@ func (c *Client) Stream(ctx context.Context, p RecognizeParams) (*Session, error
 		timeout: c.timeout,
 		results: make(chan Sentence, 64),
 		done:    make(chan struct{}),
+		closed:  make(chan struct{}),
 	}
 
 	// 等 task-started(带兜底超时):协议硬约束,没等到不能发音频。
@@ -325,8 +337,12 @@ func (c *Client) Stream(ctx context.Context, p RecognizeParams) (*Session, error
 	}
 
 	// task-started 已到:读协程继续常驻,把 result-generated 推进 results,
-	// 终态关闭 done。
-	go func() { _ = s.readLoop(false) }()
+	// 终态关闭 done。⚠️ 读协程退出时关闭 results —— "没有更多结果"是可观测的
+	// (`sen, ok := <-Results()` 的 ok=false),消费者不用猜。
+	go func() {
+		defer close(s.results)
+		_ = s.readLoop(false)
+	}()
 	return s, nil
 }
 
@@ -358,14 +374,23 @@ func (s *Session) readLoop(waitStarted bool) error {
 			if sen.Heartbeat {
 				continue // 心跳帧滤掉,不给上层制造"结果闪空"
 			}
-			s.results <- Sentence{
+			select {
+			case s.results <- Sentence{
 				Text:      sen.Text,
 				BeginTime: sen.BeginTime,
 				EndTime:   sen.EndTime,
 				End:       sen.SentenceEnd,
+			}:
+			case <-s.closed:
+				// 调用方已收线(浏览器断开等)—— 消费者没了,读协程就地退出,
+				// 不许卡死在没人收的 channel 发送上
+				return nil
 			}
 		case "task-finished":
 			close(s.done)
+			// ⚠️ **终态即收线**:上游连接在 task-finished 之后没有存续价值,
+			// 不等调用方 Close(忘了关 / 关得晚 = 白挂一条百炼连接)
+			s.closeOnce.Do(s.terminate)
 			return nil
 		case "task-failed":
 			msg := f.Header.ErrorMessage
@@ -384,7 +409,7 @@ func (s *Session) fail(err error) {
 		s.err = err
 	}
 	s.mu.Unlock()
-	s.closeOnce.Do(func() { _ = s.conn.Close() })
+	s.closeOnce.Do(s.terminate)
 	select {
 	case <-s.done:
 	default:
@@ -428,6 +453,7 @@ func (c *Client) Once(ctx context.Context, p RecognizeParams, audio io.Reader) (
 
 	// 收侧:聚合终稿句子。
 	var b strings.Builder
+	res := sess.Results()
 	for {
 		select {
 		case err := <-sendErr:
@@ -435,9 +461,10 @@ func (c *Client) Once(ctx context.Context, p RecognizeParams, audio io.Reader) (
 				return "", err
 			}
 			sendErr = nil // 已正常收尾,不再读这个通道
-		case sen, ok := <-sess.Results():
+		case sen, ok := <-res:
 			if !ok {
-				// results 在终态后不会自动关 —— 这里等 Done 统一收口
+				// 读协程已退出、没有更多结果 —— 等终态统一收口
+				res = nil
 				continue
 			}
 			if sen.End && sen.Text != "" {
@@ -447,10 +474,14 @@ func (c *Client) Once(ctx context.Context, p RecognizeParams, audio io.Reader) (
 			if err := sess.Err(); err != nil {
 				return "", err
 			}
-			// 正常终态后可能还有缓存在管道里的终稿,排干再走
+			// 正常终态:读协程马上会退出并关 results,排干缓存里的终稿再走
 			for {
 				select {
-				case sen := <-sess.Results():
+				case sen, ok := <-res:
+					if !ok {
+						res = nil
+						continue
+					}
 					if sen.End && sen.Text != "" {
 						b.WriteString(sen.Text)
 					}

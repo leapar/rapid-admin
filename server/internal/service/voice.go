@@ -777,12 +777,16 @@ func (s *ttsVoiceService) Convert(ctx context.Context, req TtsConvertRequest) ([
 			Pitch:  req.Pitch,
 		})
 		if err != nil {
+			// 失败原因落应用日志 —— 系统日志只有"接口 5xx status=500",
+			// 上游(edge / 百炼)报了什么只在响应体里,翻日志查不到
+			logger.L().Warn("voice: edge 文本合成失败", zap.String("voice", req.Voice), zap.Error(err))
 			return nil, "", errcode.New(errcode.Internal, "文本合成失败").WithDetail(err.Error())
 		}
 		return s.putAudio(ctx, audio, req.Dir)
 	}
 	synth, err := s.synthesizer(ctx)
 	if err != nil {
+		logger.L().Warn("voice: 文本合成未配置", zap.Error(err))
 		return nil, "", errcode.New(errcode.Internal, "文本合成未配置").WithDetail(err.Error())
 	}
 	audio, err := synth.Once(voicex.SynthParams{
@@ -794,6 +798,7 @@ func (s *ttsVoiceService) Convert(ctx context.Context, req TtsConvertRequest) ([
 		Format: req.Format,
 	})
 	if err != nil {
+		logger.L().Warn("voice: 文本合成失败", zap.String("voice", req.Voice), zap.Error(err))
 		return nil, "", errcode.New(errcode.Internal, "文本合成失败").WithDetail(err.Error())
 	}
 	return s.putAudio(ctx, audio, req.Dir)
@@ -810,16 +815,22 @@ func (s *ttsVoiceService) ConvertStream(ctx context.Context, req TtsConvertReque
 		if strings.Contains(strings.ToLower(req.Format), "wav") {
 			return nil, errcode.New(errcode.BadRequest, "edge tts 仅输出 mp3,不支持 format=wav")
 		}
-		return s.edgeClient().OnceStream(voicex.EdgeSynthParams{
+		stream, err := s.edgeClient().OnceStream(voicex.EdgeSynthParams{
 			Text:   req.Text,
 			Voice:  req.Voice,
 			Volume: req.Volume,
 			Rate:   req.Rate,
 			Pitch:  req.Pitch,
 		})
+		if err != nil {
+			logger.L().Warn("voice: edge 流式合成失败", zap.String("voice", req.Voice), zap.Error(err))
+			return nil, err
+		}
+		return stream, nil
 	}
 	synth, err := s.synthesizer(ctx)
 	if err != nil {
+		logger.L().Warn("voice: 文本合成未配置", zap.Error(err))
 		return nil, errcode.New(errcode.Internal, "文本合成未配置").WithDetail(err.Error())
 	}
 	return synth.OnceStream(voicex.SynthParams{

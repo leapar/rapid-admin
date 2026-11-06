@@ -4,6 +4,7 @@ package middleware
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -67,6 +68,11 @@ func AccessLog() app.HandlerFunc {
 			if status >= 500 {
 				level, source = "error", "http_error"
 				msg = fmt.Sprintf("接口 5xx: %s %s status=%d", method, path, status)
+				// 失败原因跟着进条目 —— 原本只有 status,"为什么 500"只在
+				// 响应体里(TTS/ASR 的上游报错全走统一响应体的 message)
+				if r := responseErrMsg(c); r != "" {
+					msg += " —— " + r
+				}
 			}
 			recordSystemLog(&service.SystemLogEntry{
 				Level:      level,
@@ -91,10 +97,44 @@ const systemLogSlowHTTPThreshold = 2 * time.Second
 // recordSystemLog 系统日志薄封装(nil 安全)
 //
 // caller 已判过 SystemLogSvc != nil,这里再判一道是兜底;UserID 在这里补
-// (Principal 中间件在 AccessLog 内层已注入 caller,此时取得到)。
+// (Principal 中间件在 AccessLog 内层 RequestContext 仍有效,此时取得到)。
 func recordSystemLog(entry *service.SystemLogEntry) {
 	if SystemLogSvc == nil || entry == nil {
 		return
 	}
 	SystemLogSvc.RecordSystemLog(entry)
+}
+
+// responseErrMsg 从统一响应体里抠出失败原因(h.Fail 的 {"code":..,"message":..})。
+// 5xx 系统日志条目原本只有 status —— "为什么 500"只在响应体里(TTS/ASR 的
+// 上游报错全走统一响应体的 message),审计中心看不到。解析失败 / 非 JSON 体
+// (音频流等)返回空,调用方原样省略。
+func responseErrMsg(c *app.RequestContext) string {
+	body := c.Response.Body()
+	if len(body) == 0 || len(body) > 8<<10 {
+		return ""
+	}
+	var env struct {
+		Message string `json:"message"`
+	}
+	if json.Unmarshal(body, &env) != nil || env.Message == "" {
+		return ""
+	}
+	return env.Message
+}
+
+// RecordBizSystemLog 业务失败显式落系统日志 —— 给"不走 HTTP 状态码"的通道用:
+// 实时识别 WS 会话(升级后没有状态码)、已发出响应头的流式合成(200 已定,
+// 断流抓不到)等。同步接口的失败由上面的 5xx 钩子覆盖,**不要**在这里重复记。
+func RecordBizSystemLog(ctx context.Context, method, path, source, msg, detail string) {
+	recordSystemLog(&service.SystemLogEntry{
+		Level:   "error",
+		Source:  source,
+		Method:  method,
+		Path:    path,
+		Message: msg,
+		Detail:  detail,
+		TraceID: TraceIDFromContext(ctx),
+		UserID:  userIDFromCtx(ctx),
+	})
 }

@@ -209,8 +209,10 @@ export interface LoginLogQuery extends PageRequest {
  *
  *   slow_sql    慢 SQL(>500ms,slowquery 钩子)   path 列 = 表名
  *   slow_http   慢接口(>2s,AccessLog 钩子)
- *   http_error  接口 5xx(AccessLog 钩子)
+ *   http_error  接口 5xx(AccessLog 钩子,message 带响应体里的失败原因)
  *   panic       panic(Recover 钩子)               detail 列 = panic 栈
+ *   asr_error   实时识别 WS 会话失败(RecordBizSystemLog,不走 HTTP 状态码)
+ *   tts_error   流式合成断流(同上 —— 响应头已发出,5xx 钩子抓不到)
  */
 export interface SystemLog {
   id: string
@@ -244,7 +246,7 @@ export interface SystemLog {
 export interface SystemLogQuery extends PageRequest {
   /** info / warn / error;**不传 = 不筛** */
   level?: string
-  /** slow_sql / slow_http / http_error / panic;**不传 = 不筛** */
+  /** slow_sql / slow_http / http_error / panic / asr_error / tts_error;**不传 = 不筛** */
   source?: string
   /** 命中 path / message 任一列 */
   keyword?: string
