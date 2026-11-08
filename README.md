@@ -73,7 +73,6 @@ rapid-admin/
 `zustand` `jwt` `dynamic-form` `audit-log` `swagger` `openapi` `admin-panel`
 `scaffold` `rapid-admin` `后台管理系统` `权限管理` `快速开发平台`
 
-> 发布到 GitHub 后,建议把以上关键词同步填到仓库 **About → Topics**(下划线改连字符)。
 
 ## License
 
