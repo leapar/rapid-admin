@@ -2,7 +2,7 @@
 
 # module-list —— 框架模块速查
 
-> 共 57 个框架模块(`server/internal/pkg/`),每个模块都有可运行示例与手册章节。数据源:SUMMARY.md × internal/pkg × examples 三边对齐。
+> 共 58 个框架模块(`server/internal/pkg/`),每个模块都有可运行示例与手册章节。数据源:SUMMARY.md × internal/pkg × examples 三边对齐。
 
 | 组 | 模块 | 一句话 | 手册 | 示例 |
 |---|---|---|---|---|
@@ -28,6 +28,7 @@
 | 存储与缓存 | searchidx | 加密字段的全文搜索(盲索引) | [手册](../../server/docs/storage/searchidx.md) | `go run ./examples/searchidx` |
 | 存储与缓存 | media | 音视频处理:ffprobe 探测与 ffmpeg 转码 | [手册](../../server/docs/storage/media.md) | `go run ./examples/media` |
 | 存储与缓存 | oss | 对象存储统一抽象:本地磁盘 / 阿里云 OSS | [手册](../../server/docs/storage/oss.md) | `go run ./examples/oss` |
+| 存储与缓存 | querycache | GORM SELECT 缓存 + 写回调自动失效(借鉴 gdb Model.Cache) | [手册](../../server/docs/storage/querycache.md) | `go run ./examples/querycache` |
 | 安全与合规 | auth | JWT 签发 / 解析 / 吊销 + 强制下线 | [手册](../../server/docs/security/auth.md) | `go run ./examples/auth` |
 | 安全与合规 | authz | 资源级鉴权原语:principal / grant | [手册](../../server/docs/security/authz.md) | `go run ./examples/authz` |
 | 安全与合规 | casbinx | Casbin 初始化 + 策略行格式 | [手册](../../server/docs/security/casbinx.md) | `go run ./examples/casbinx` |

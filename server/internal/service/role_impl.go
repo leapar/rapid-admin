@@ -24,6 +24,7 @@ import (
 	"rapid-admin/internal/pkg/errcode"
 	"rapid-admin/internal/pkg/logger"
 	"rapid-admin/internal/pkg/permnotify"
+	"rapid-admin/internal/pkg/querycache"
 	"rapid-admin/internal/pkg/sonyflake"
 	"rapid-admin/internal/seed"
 )
@@ -518,12 +519,18 @@ func (s *roleService) ListResources(ctx context.Context, q ResourceListQuery) (*
 	return &model.PageResponse{List: rows, Total: total, Page: page, Size: size}, nil
 }
 
+// resourceTreeCacheTTL 资源授权树的查询缓存 TTL。
+// 写路径(Create/Update/DeleteResource)走 GORM,querycache.Install 的
+// 回调自动失效;TTL 是多实例 / 裸 SQL 写的兜底收敛上界,按"脏 5 分钟
+// 可接受"定。授权树读多写极少,值得缓存。
+const resourceTreeCacheTTL = 5 * time.Minute
+
 func (s *roleService) ResourceTree(ctx context.Context) ([]model.SysResource, error) {
 	var rows []model.SysResource
-	if err := s.db.WithContext(ctx).
+	q := querycache.On(s.db.WithContext(ctx).
 		Where("is_active = ?", true).
-		Order("sort ASC, id ASC").
-		Find(&rows).Error; err != nil {
+		Order("sort ASC, id ASC"), resourceTreeCacheTTL, "sys_resource")
+	if err := q.Find(ctx, &rows); err != nil {
 		return nil, errcode.New(errcode.Internal, "查询资源树失败").WithDetail(err.Error())
 	}
 	return rows, nil

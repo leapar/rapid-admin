@@ -1,6 +1,6 @@
 # 包速查表
 
-> `server/internal/pkg/` 下**全部 64 个 Go 包**的一句话索引(58 个一级目录 + 6 个子包)。
+> `server/internal/pkg/` 下**全部 65 个 Go 包**的一句话索引(59 个一级目录 + 6 个子包)。
 > 想知道"有没有我要的能力",先翻这张表;想知道"怎么用",点进对应章节。
 
 命令自查:
@@ -32,7 +32,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `apiverx` | API 版本协商(`X-API-Version` 头) | [apiverx](../infrastructure/apiverx.md) |
 | `grayx` | 灰度发布分组 header 透传 | [grayx](../infrastructure/grayx.md) |
 
-## 存储与缓存(5)
+## 存储与缓存(6)
 
 | 包 | 一句话 | 章节 |
 |---|---|---|
@@ -41,6 +41,7 @@ go list -f '{{.ImportPath}} {{.Doc}}' ./internal/pkg/...
 | `searchidx` | 加密字段的全文搜索(盲索引) | [searchidx](../storage/searchidx.md) |
 | `media` | 媒体探测:ffprobe 读时长/分辨率,ffmpeg 抽封面帧 / 转码 | [media](../storage/media.md) |
 | `oss` | 对象存储统一抽象(本地磁盘 / 阿里云 OSS)+ 上传凭证等高级特性 | [oss](../storage/oss.md) |
+| `querycache` | GORM 查询结果缓存:干跑建键 + 表标签写回调自动失效(借鉴 gdb Model.Cache) | [querycache](../storage/querycache.md) |
 
 ## 安全与合规(13)
 

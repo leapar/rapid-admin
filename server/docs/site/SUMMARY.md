@@ -36,6 +36,7 @@
 * [searchidx(盲索引搜索)](storage/searchidx.md) — 加密字段的全文搜索(盲索引)
 * [media(音视频处理)](storage/media.md) — 音视频处理:ffprobe 探测与 ffmpeg 转码
 * [oss(对象存储)](storage/oss.md) — 对象存储统一抽象:本地磁盘 / 阿里云 OSS
+* [querycache(查询结果缓存)](storage/querycache.md) — GORM SELECT 缓存 + 写回调自动失效(借鉴 gdb Model.Cache)
 
 ## 安全与合规
 
@@ -103,6 +104,6 @@
 
 ## 参考
 
-* [包速查表](reference/packages.md) — 64 个 Go 包一句话索引
-* [示例目录](reference/examples.md) — 58 个可运行示例怎么用
+* [包速查表](reference/packages.md) — 65 个 Go 包一句话索引
+* [示例目录](reference/examples.md) — 59 个可运行示例怎么用
 * [配置项全表](reference/config-index.md) — yaml 配置项 → 框架模块对照

@@ -27,6 +27,7 @@ import (
 	"rapid-admin/internal/pkg/auth/revocache"
 	"rapid-admin/internal/pkg/authz"
 	"rapid-admin/internal/pkg/cachex"
+	"rapid-admin/internal/pkg/querycache"
 	"rapid-admin/internal/pkg/casbinx"
 	"rapid-admin/internal/pkg/cronx"
 	"rapid-admin/internal/pkg/cryptaudit"
@@ -420,6 +421,22 @@ func main() {
 	cachex.SetDefault(cachePool)
 	log.Info("cachex ready", cachex.Describe(cachePool, cfg.Cache.Mode)...)
 	cachex.Verify(context.Background(), cachePool)
+
+	// 5.7.2 查询结果缓存(GORM SELECT 缓存 + 写回调自动失效,借鉴 gdb Model.Cache)
+	//   - opt-in:只有 querycache.On(...) 的查询被缓存,未接入的查询行为完全不变
+	//   - 后端选择:有 Redis → 共享 L2(写失效跨实例可见);没有 → 进程内
+	//     memory(与 cachex l1 模式同哲学:多实例失效收敛上界 = TTL)
+	//   - 事务内不缓存;裸 SQL 写路径打不着回调(dyn_* 等),必要时显式 Invalidate
+	qcSafe := cachex.NewWithBackend(cachex.NewMemoryBackend())
+	if cachePool != nil {
+		if s := cachePool.Safe(); s != nil {
+			qcSafe = s
+		}
+	}
+	querycache.Use(qcSafe)
+	if err := querycache.Install(db); err != nil {
+		log.Warn("querycache install failed; 查询缓存不生效(查询仍直查)", zap.Error(err))
+	}
 
 	// 5.7.1 缓存预热
 	//   服务起来后并发灌热点数据,让命中率从 t=0 就是有效值。
