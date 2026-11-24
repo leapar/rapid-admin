@@ -64,6 +64,7 @@ go run ./examples/cachex
 | [searchidx](searchidx/main.go) | 加密字段的全文搜索(盲索引) |
 | [media](media/main.go) | 音视频处理(ffmpeg 探测与转码) |
 | [oss](oss/main.go) | 对象存储统一抽象(本地 / OSS) |
+| [querycache](querycache/main.go) | GORM 查询结果缓存(干跑建键 + 写回调自动失效) |
 
 ### 动态数据建模
 
