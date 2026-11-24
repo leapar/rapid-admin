@@ -44,8 +44,10 @@ import (
 	"time"
 
 	"rapid-admin/internal/model"
+	"rapid-admin/internal/pkg/auditx"
 	"rapid-admin/internal/pkg/dynx"
 	"rapid-admin/internal/pkg/errcode"
+	"rapid-admin/internal/pkg/querycache"
 	"rapid-admin/internal/pkg/sonyflake"
 
 	"gorm.io/gorm"
@@ -177,6 +179,9 @@ func (s *dynService) RestoreRecord(ctx context.Context, caller *Caller, code str
 	if res.RowsAffected == 0 {
 		return errcode.New(errcode.NotFound, "记录不存在或不在回收站")
 	}
+	// 恢复只改 deleted_at(全局纪律:不进快照),审计行会变成"无 diff"——
+	// 与 GORM update 钩子对 deleted_at-only 变更的口径一致,不记;缓存失效照做
+	querycache.Invalidate(ctx, rc.col.PhysTable)
 	return nil
 }
 
@@ -205,12 +210,24 @@ func (s *dynService) BatchDeleteRecords(ctx context.Context, caller *Caller, cod
 	if err != nil {
 		return 0, err
 	}
+	// 删前快照:where 能匹配到的行就是要删的行(范围条件已内含),
+	// 逐行留 before 作审计证据
+	snapSQL := "SELECT " + strings.Join(rc.selectCols(), ", ") + " FROM `" + rc.col.PhysTable + "` WHERE " + where
+	snapRows, err := s.queryRows(ctx, snapSQL, args...)
+	if err != nil {
+		return 0, errcode.New(errcode.Internal, "读取删除快照失败").WithDetail(err.Error())
+	}
 	sql := "UPDATE `" + rc.col.PhysTable + "` SET `" + dynColDeletedAt + "` = ? WHERE " + where
 	full := append([]any{time.Now().UTC().Format(dynTimeLayout)}, args...)
 	res := s.db.WithContext(ctx).Exec(sql, full...)
 	if res.Error != nil {
 		return 0, errcode.New(errcode.Internal, "批量删除失败").WithDetail(res.Error.Error())
 	}
+	// 逐行审计(OpDelete,before = 整行)—— 口径与单条 DeleteRecord 一致
+	for _, row := range snapRows {
+		auditDynChange(ctx, s.db, rc.col.PhysTable, auditx.OpDelete, dynIDUint(row[dynColID]), row, nil)
+	}
+	querycache.Invalidate(ctx, rc.col.PhysTable)
 	return res.RowsAffected, nil
 }
 
@@ -247,6 +264,12 @@ func (s *dynService) BatchUpdateRecords(ctx context.Context, caller *Caller, cod
 	if err != nil {
 		return 0, err
 	}
+	// 改前快照:where 匹配到的行就是要改的行,逐行留该列旧值
+	snapSQL := "SELECT " + strings.Join(rc.selectCols(), ", ") + " FROM `" + rc.col.PhysTable + "` WHERE " + where
+	snapRows, err := s.queryRows(ctx, snapSQL, args...)
+	if err != nil {
+		return 0, errcode.New(errcode.Internal, "读取批量修改快照失败").WithDetail(err.Error())
+	}
 	sql := "UPDATE `" + rc.col.PhysTable + "` SET `" + f.Column + "` = ?, `" +
 		dynColUpdatedAt + "` = ? WHERE " + where
 	full := append([]any{v, time.Now().UTC().Format(dynTimeLayout)}, args...)
@@ -254,6 +277,17 @@ func (s *dynService) BatchUpdateRecords(ctx context.Context, caller *Caller, cod
 	if res.Error != nil {
 		return 0, errcode.New(errcode.Internal, "批量修改失败").WithDetail(res.Error.Error())
 	}
+	// 逐行审计(口径与单条 UpdateRecord 一致:只记真正变了值的行/列;
+	// 按 fmt.Sprint 比对值而不是看 RowsAffected —— SQLite 与 MySQL 的
+	// affected 语义相反,见 dyn_records.go 同款注释)
+	for _, row := range snapRows {
+		if fmt.Sprint(row[f.Column]) == fmt.Sprint(v) {
+			continue
+		}
+		auditDynChange(ctx, s.db, rc.col.PhysTable, auditx.OpUpdate, dynIDUint(row[dynColID]),
+			map[string]any{f.Column: row[f.Column]}, map[string]any{f.Column: v})
+	}
+	querycache.Invalidate(ctx, rc.col.PhysTable)
 	return res.RowsAffected, nil
 }
 
@@ -557,6 +591,9 @@ func (s *dynService) dynInsertRecord(ctx context.Context, db *gorm.DB, rc *dynRe
 	newID := sonyflake.Next()
 	cols := []string{"`" + dynColID + "`", "`" + dynColOwnerID + "`", "`" + dynColCreatedAt + "`", "`" + dynColUpdatedAt + "`"}
 	args := []any{newID, ownerID, now, now}
+	// after 快照(审计用):系统列 + 用户列全量;created/updated_at 由 auditx
+	// 的全局纪律剔除
+	after := map[string]any{dynColID: newID, dynColOwnerID: ownerID}
 	for _, f := range rc.fields {
 		raw, present := payload[f.FieldKey]
 		if !present {
@@ -566,6 +603,7 @@ func (s *dynService) dynInsertRecord(ctx context.Context, db *gorm.DB, rc *dynRe
 			if f.DefaultValue == "" {
 				cols = append(cols, "`"+f.Column+"`")
 				args = append(args, nil)
+				after[f.Column] = nil
 				continue
 			}
 			raw = f.DefaultValue
@@ -579,11 +617,14 @@ func (s *dynService) dynInsertRecord(ctx context.Context, db *gorm.DB, rc *dynRe
 		}
 		cols = append(cols, "`"+f.Column+"`")
 		args = append(args, v)
+		after[f.Column] = v
 	}
 	sql := "INSERT INTO `" + rc.col.PhysTable + "` (" + strings.Join(cols, ", ") + ") VALUES (" +
 		strings.TrimSuffix(strings.Repeat("?, ", len(cols)), ", ") + ")"
 	if err := db.WithContext(ctx).Exec(sql, args...).Error; err != nil {
 		return 0, errcode.New(errcode.Internal, "创建记录失败").WithDetail(err.Error())
 	}
+	auditDynChange(ctx, db, rc.col.PhysTable, auditx.OpCreate, newID, nil, after)
+	querycache.Invalidate(ctx, rc.col.PhysTable)
 	return newID, nil
 }

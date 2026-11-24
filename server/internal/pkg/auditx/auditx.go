@@ -24,9 +24,9 @@
 //     文件/文件夹(高频且界面可查)。
 //
 // ⚠️ **动态表单记录(dyn_* 物理表)记不到** —— dynx 的记录写路径是裸 SQL
-// (Exec,不走 GORM 回调),钩子物理上打不着。要在 dynx 的
-// CreateRecord/UpdateRecord/DeleteRecord 里显式调 auditx.RecordChange
-// (Dyn 改造时接,不急)。
+// (Exec,不走 GORM 回调),钩子物理上打不着。已按方案 A 在 dynx 的
+// CreateRecord / UpdateRecord / DeleteRecord(含 CSV 导入与批量软删)里
+// 显式调 auditx.RecordChange(见 service/dyn_records*.go 的 auditDynChange)。
 package auditx
 
 import (
@@ -261,7 +261,7 @@ func snapshotRow(tx *gorm.DB, table string, id uint64) (map[string]any, error) {
 func (a *auditor) sanitize(rule TableRule, m map[string]any) map[string]any {
 	maxLen := a.cfg.MaxValueLen
 	if maxLen <= 0 {
-		maxLen = 1000
+		maxLen = defaultMaxValueLen
 	}
 	out := make(map[string]any, len(m))
 	for k, v := range m {
@@ -270,6 +270,44 @@ func (a *auditor) sanitize(rule TableRule, m map[string]any) map[string]any {
 		}
 		if s, ok := v.(string); ok && len(s) > maxLen {
 			v = s[:maxLen] + "…(截断)"
+		}
+		out[k] = v
+	}
+	return out
+}
+
+// defaultMaxValueLen 快照单值的默认截断上限(Config.MaxValueLen 缺省值)
+const defaultMaxValueLen = 1000
+
+// sanitizeExplicit 显式通道(RecordChange)的快照净化。
+//
+// 显式调用方(dyn 裸 SQL 写路径)没有 TableRule 可传,只应用全局纪律:
+// 凭据类列(password / secret / token)、密钥材料后缀(_nonce / _aad / _hash)、
+// 时间戳列不进快照;字符串按默认上限截断 —— 与钩子路径的"凭据材料绝不进
+// 快照"纪律保持一致。
+//
+// ⚠️ **dyn 的用户列带 f_ 前缀**(f_password 不是 password)—— 裸列名和
+// 剥掉 f_ 前缀的名字都要查,只查裸名会让凭据列整个漏过去。
+func sanitizeExplicit(m map[string]any) map[string]any {
+	if m == nil {
+		return nil
+	}
+	out := make(map[string]any, len(m))
+	for k, v := range m {
+		skip := globalSkips[k] || globalSkips[strings.TrimPrefix(k, "f_")]
+		if !skip {
+			for _, suffix := range suffixSkips {
+				if strings.HasSuffix(k, suffix) {
+					skip = true
+					break
+				}
+			}
+		}
+		if skip {
+			continue
+		}
+		if s, ok := v.(string); ok && len(s) > defaultMaxValueLen {
+			v = s[:defaultMaxValueLen] + "…(截断)"
 		}
 		out[k] = v
 	}
@@ -435,6 +473,8 @@ func RecordChange(ctx context.Context, tx *gorm.DB, table string, op int, id uin
 		if m == nil {
 			return ""
 		}
+		// 显式通道与钩子同纪律:凭据 / 密钥材料不进快照,超长截断
+		m = sanitizeExplicit(m)
 		// 先把 []byte 归一成 string(json.Marshal 对 []byte 会 base64,可读性差)
 		for k, v := range m {
 			if b, ok := v.([]byte); ok {

@@ -38,6 +38,10 @@ var dynTestModels = []any{
 	//   去 sys_user 查出来的。表不在,那一步会失败并降级成"显示 id"
 	//   (见 dynOwnerNames 的旁路纪律)⇒ 断言 owner_name 的用例会恒绿。
 	&model.SysUser{},
+	// ⚠️ **sys_data_change_log 要在** —— 记录写路径的显式审计
+	//   (auditDynChange → auditx.RecordChange)落在这一张表上,
+	//   表不在审计用例(dyn_audit_test.go)会整个红。
+	&model.SysDataChangeLog{},
 }
 
 // newDynFixture 起一个内存库 + 一个 dynService

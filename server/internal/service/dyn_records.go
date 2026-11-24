@@ -36,12 +36,15 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 
 	"rapid-admin/internal/model"
+	"rapid-admin/internal/pkg/auditx"
 	"rapid-admin/internal/pkg/dynfilter"
 	"rapid-admin/internal/pkg/dynx"
 	"rapid-admin/internal/pkg/errcode"
 	"rapid-admin/internal/pkg/logger"
+	"rapid-admin/internal/pkg/querycache"
 )
 
 // dynTimeLayout 落库的时间格式(UTC ISO-8601)
@@ -683,6 +686,50 @@ func (s *dynService) getRecordInto(ctx context.Context, caller *Caller, rc *dynR
 	return view, nil
 }
 
+// ── 审计与缓存失效(方案 A:保持裸 SQL,显式接通道)─────────────────
+//
+// dyn 的记录写路径是手拼 SQL 走 db.Exec,auditx 的 GORM 回调与
+// querycache 的写失效回调都打不着 —— 显式补两件事:
+//
+//	auditDynChange        审计证据(auditx.RecordChange 包装,失败只 warn)
+//	querycache.Invalidate 查询缓存失效(现在没有 dyn 查询接缓存,调用是
+//	                      no-op;接上之后无需再改写路径)
+
+// readRawRow 按范围条件读一行的**原始列值**(审计快照用,不做 view 归一)。
+// key 是物理列名(f_* / id / owner_id / ...),值是 DB 原样;found=false
+// 表示范围条件下查无此行。
+func (s *dynService) readRawRow(ctx context.Context, rc *dynRecordCtx, caller *Caller, id uint64) (map[string]any, bool, error) {
+	where, args, err := s.recordScope(ctx, rc, caller, id)
+	if err != nil {
+		return nil, false, err
+	}
+	sql := "SELECT " + strings.Join(rc.selectCols(), ", ") + " FROM `" + rc.col.PhysTable +
+		"` WHERE " + where
+	rows, err := s.queryRows(ctx, sql, args...)
+	if err != nil {
+		return nil, false, errcode.New(errcode.Internal, "读取记录快照失败").WithDetail(err.Error())
+	}
+	if len(rows) == 0 {
+		return nil, false, nil
+	}
+	return rows[0], true, nil
+}
+
+// auditDynChange 显式审计通道(auditx.RecordChange 包装)。
+// 审计写失败不炸业务(与钩子路径 write() 同纪律),只 warn。
+func auditDynChange(ctx context.Context, db *gorm.DB, table string, op int, id uint64, before, after map[string]any) {
+	if err := auditx.RecordChange(ctx, db, table, op, id, before, after); err != nil {
+		logger.L().Warn("dyn: 记录审计写入失败", zap.String("table", table),
+			zap.Uint64("id", id), zap.Error(err))
+	}
+}
+
+// dynIDUint 行快照里的 id 列 → uint64(驱动返回类型不定,int64 / []byte 都有)
+func dynIDUint(v any) uint64 {
+	n, _ := strconv.ParseUint(dynIDString(v), 10, 64)
+	return n
+}
+
 // CreateRecord 新建记录
 //
 // ⚠️ **落库装配在 dynInsertRecord**(与 CSV 导入共用同一份)——
@@ -715,6 +762,8 @@ func (s *dynService) UpdateRecord(ctx context.Context, caller *Caller, code stri
 	}
 	sets := make([]string, 0, len(rc.fields)+1)
 	args := make([]any, 0, len(rc.fields)+3)
+	// 新值留一份给审计快照(只记本次真正改的列,与钩子路径的 diff 口径一致)
+	newVals := make(map[string]any, len(rc.fields))
 	for _, f := range rc.fields {
 		raw, present := payload[f.FieldKey]
 		if !present {
@@ -729,6 +778,7 @@ func (s *dynService) UpdateRecord(ctx context.Context, caller *Caller, code stri
 		}
 		sets = append(sets, "`"+f.Column+"` = ?")
 		args = append(args, v)
+		newVals[f.Column] = v
 	}
 	sets = append(sets, "`"+dynColUpdatedAt+"` = ?")
 	args = append(args, time.Now().UTC().Format(dynTimeLayout))
@@ -737,6 +787,15 @@ func (s *dynService) UpdateRecord(ctx context.Context, caller *Caller, code stri
 		return err
 	}
 	args = append(args, whereArgs...)
+	// 改前快照:范围条件下读不到 = 记录不存在(或不在可见范围),提前返回;
+	// 读得到才允许 UPDATE,审计 before 也有了着落。
+	beforeRow, found, err := s.readRawRow(ctx, rc, caller, id)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return errcode.New(errcode.NotFound, "记录不存在")
+	}
 	sql := "UPDATE `" + rc.col.PhysTable + "` SET " + strings.Join(sets, ", ") + " WHERE " + where
 	res := s.db.WithContext(ctx).Exec(sql, args...)
 	if res.Error != nil {
@@ -754,7 +813,26 @@ func (s *dynService) UpdateRecord(ctx context.Context, caller *Caller, code stri
 		if !exists {
 			return errcode.New(errcode.NotFound, "记录不存在")
 		}
+		// 记录在、值没变:没有 diff,不产生审计行(与钩子路径口径一致)
+		return nil
 	}
+	// 审计:只记**真正变了**的列(before = 旧值,after = 新值)。
+	// ⚠️ 不能拿 RowsAffected 当"有变化"的判据 —— SQLite 的 changes() 数的是
+	// 匹配行(值没变也算),MySQL 数的是**变了**的行;两边的 0/1 语义相反,
+	// 只有自己比对值才是跨驱动一致的口径(与钩子路径的 diff 口径一致)。
+	before := make(map[string]any, len(newVals))
+	after := make(map[string]any, len(newVals))
+	for col, nv := range newVals {
+		if fmt.Sprint(beforeRow[col]) == fmt.Sprint(nv) {
+			continue
+		}
+		before[col] = beforeRow[col]
+		after[col] = nv
+	}
+	if len(after) > 0 {
+		auditDynChange(ctx, s.db, rc.col.PhysTable, auditx.OpUpdate, id, before, after)
+	}
+	querycache.Invalidate(ctx, rc.col.PhysTable)
 	return nil
 }
 
@@ -777,6 +855,16 @@ func (s *dynService) DeleteRecord(ctx context.Context, caller *Caller, code stri
 	if err != nil {
 		return err
 	}
+	// 删前快照:读不到 = 记录不存在(或不在可见范围)。范围条件下"看不见
+	// 就当不存在"与本方法原有的 RowsAffected 判定同口径,还顺带拿到审计
+	// 的 before。
+	beforeRow, found, err := s.readRawRow(ctx, rc, caller, id)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return errcode.New(errcode.NotFound, "记录不存在")
+	}
 	sql := "UPDATE `" + rc.col.PhysTable + "` SET `" + dynColDeletedAt + "` = ? WHERE " + where
 	full := make([]any, 0, len(args)+1)
 	full = append(full, time.Now().UTC().Format(dynTimeLayout))
@@ -788,6 +876,10 @@ func (s *dynService) DeleteRecord(ctx context.Context, caller *Caller, code stri
 	if res.RowsAffected == 0 {
 		return errcode.New(errcode.NotFound, "记录不存在")
 	}
+	// 审计语义对齐钩子路径:软删 = OpDelete,before 是整行(deleted_at 列
+	// 由 auditx 的全局纪律剔除),after = nil
+	auditDynChange(ctx, s.db, rc.col.PhysTable, auditx.OpDelete, id, beforeRow, nil)
+	querycache.Invalidate(ctx, rc.col.PhysTable)
 	return nil
 }
 

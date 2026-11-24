@@ -226,6 +226,14 @@ func main() {
 	}); err != nil {
 		log.Warn("auditx install failed; 数据变更审计未启用", zap.Error(err))
 	}
+	// ⚠️ 显式通道(RecordChange,dyn 裸 SQL 写路径在用)的取人也走这里 ——
+	// 不注册的话,动态记录的审计行会永远记 "system"。
+	auditx.SetCallerLookup(func(ctx context.Context) (uint64, string) {
+		if c, ok := service.FromContext(ctx); ok {
+			return c.UserID, c.Username
+		}
+		return 0, ""
+	})
 
 	// 4. Redis(可选:redis.addr 为空时跳过,适用于本地零依赖 dev 模式)
 	if cfg.Redis.Addr != "" {

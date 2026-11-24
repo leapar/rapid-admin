@@ -68,7 +68,9 @@ go run ./examples/querycache
 
 - **裸 SQL 写路径打不着回调**(`db.Exec` 没有 `Statement.Table`)—— 与
   [auditx](../audit/auditx.md) 的 dyn_* 同款坑,补救通道是显式
-  `querycache.Invalidate(ctx, "表")`;
+  `querycache.Invalidate(ctx, "表")`;dyn 的记录写路径(增删改 / 导入 /
+  批量)已预接了 `Invalidate` —— 现在没有 dyn 查询接缓存所以是 no-op,
+  以后哪条 dyn 查询挂了缓存标签,失效天然闭环;
 - **索引登记是读改写,并发有丢更新窗口** —— 失效尽力而为,TTL 兜底,
   所以 TTL 要按"脏几分钟可接受"来定;
 - **只支持 Find 形状的 SELECT**(整个结果集按 JSON 存);Count / 聚合 /
