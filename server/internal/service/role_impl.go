@@ -865,12 +865,19 @@ func (s *roleService) ListDepartments(ctx context.Context, q DepartmentListQuery
 	return &model.PageResponse{List: rows, Total: total, Page: page, Size: size}, nil
 }
 
+// departmentTreeCacheTTL 部门树的查询缓存 TTL,与 resourceTreeCacheTTL 同纪律
+// (写路径走 GORM 自动失效;leader_name / member_count 是 Find 后的**新鲜
+// 回查**,不在缓存里,所以挂到 sys_user / 成员变动也不会脏)。
+const departmentTreeCacheTTL = 5 * time.Minute
+
 func (s *roleService) DepartmentTree(ctx context.Context) ([]model.SysDepartment, error) {
 	var rows []model.SysDepartment
-	if err := s.db.WithContext(ctx).
+	// 缓存的是**基础行**(部门字段);leader_name / member_count 在下面
+	// 每次 Find 之后新鲜回查,不在缓存里 —— 挂到 sys_user / 成员变动也不脏。
+	q := querycache.On(s.db.WithContext(ctx).
 		Where("is_active = ?", true).
-		Order("sort ASC, id ASC").
-		Find(&rows).Error; err != nil {
+		Order("sort ASC, id ASC"), departmentTreeCacheTTL, "sys_department")
+	if err := q.Find(ctx, &rows); err != nil {
 		return nil, errcode.New(errcode.Internal, "查询部门树失败").WithDetail(err.Error())
 	}
 	// 2026-10-18:真正建树 — 按 parent_id 分组递归挂 children

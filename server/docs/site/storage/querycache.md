@@ -55,6 +55,15 @@ l1 模式同哲学,**多实例失效收敛上界 = TTL**。
 go run ./examples/querycache
 ```
 
+平台内已接入(读多写少 + 写路径全走 GORM,失效闭环成立):
+
+- 资源授权树([role_impl.go](../../internal/service/role_impl.go) ResourceTree,tag `sys_resource`)
+- 角色可见资源([auth_impl.go](../../internal/service/auth_impl.go) resourcesForRole —— 全后台最热的查询,
+  每次页面加载的菜单 / 按钮都走它;JOIN 查询挂双 tag `sys_resource` + `sys_role_resource`)
+- 部门树(role_impl.go DepartmentTree,tag `sys_department`;leader_name /
+  member_count 是 Find 后新鲜回查,不在缓存里,不会脏)
+- 字典已有 DictCache(按点缓存),不再叠加查询缓存
+
 ## 失效的边界(如实说)
 
 - **裸 SQL 写路径打不着回调**(`db.Exec` 没有 `Statement.Table`)—— 与

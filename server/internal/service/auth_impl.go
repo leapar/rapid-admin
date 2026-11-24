@@ -24,6 +24,7 @@ import (
 	"rapid-admin/internal/pkg/logger"
 	"rapid-admin/internal/pkg/loginlock"
 	"rapid-admin/internal/pkg/msn"
+	"rapid-admin/internal/pkg/querycache"
 	"rapid-admin/internal/pkg/smslimit"
 	"rapid-admin/internal/pkg/sonyflake"
 	"rapid-admin/internal/pkg/uainfo"
@@ -1868,6 +1869,14 @@ func (s *authService) AccessibleResources(ctx context.Context, caller *Caller, t
 //	⚠️ 这里**不过滤 sys_role.is_active**:执行层(casbin 策略行)在角色停用时
 //	并不会被清掉(停用只级联停用 identity),所以过滤了就会出现
 //	"菜单没了但接口还能调"的反向不一致。要改得连执行层一起改。
+// permResourcesCacheTTL 角色可见资源(菜单 / 按钮渲染数据源)的查询缓存 TTL。
+//
+// 这是全后台**最热**的查询:AccessibleResources 每次页面加载都跑
+// (GetCurrentUser / 菜单 / 按钮)。写路径(资源 CRUD / AssignResources /
+// 角色停用)全走 GORM,querycache.Install 的回调按表标签自动失效;TTL 是
+// 多实例 / 裸 SQL 写的兜底收敛上界,按"脏 5 分钟可接受"定。
+const permResourcesCacheTTL = 5 * time.Minute
+
 func (s *authService) resourcesForRole(ctx context.Context, roleCode, typeFilter string) ([]model.SysResource, error) {
 	// 构造 type 过滤(空 = 不加条件)
 	typeClause := ""
@@ -1884,7 +1893,8 @@ func (s *authService) resourcesForRole(ctx context.Context, roleCode, typeFilter
 			q = q.Where("type = ?", typeFilter)
 		}
 		var resources []model.SysResource
-		if err := q.Order("sort ASC, id ASC").Find(&resources).Error; err != nil {
+		sc := querycache.On(q.Order("sort ASC, id ASC"), permResourcesCacheTTL, "sys_resource")
+		if err := sc.Find(ctx, &resources); err != nil {
 			return nil, errcode.New(errcode.Internal, "查询资源失败").WithDetail(err.Error())
 		}
 		return resources, nil
@@ -1895,9 +1905,9 @@ func (s *authService) resourcesForRole(ctx context.Context, roleCode, typeFilter
 		return []model.SysResource{}, nil
 	}
 	var roles []model.SysRole
-	if err := s.db.WithContext(ctx).
-		Where("code = ?", roleCode).
-		Find(&roles).Error; err != nil {
+	if err := querycache.On(s.db.WithContext(ctx).
+		Where("code = ?", roleCode), permResourcesCacheTTL, "sys_role").
+		Find(ctx, &roles); err != nil {
 		return nil, errcode.New(errcode.Internal, "查询角色失败").WithDetail(err.Error())
 	}
 	roleIDs := make([]uint64, 0, len(roles))
@@ -1910,12 +1920,15 @@ func (s *authService) resourcesForRole(ctx context.Context, roleCode, typeFilter
 	// raw SQL 拼 type(因为 gorm 的 Joins+Where 拼字符串太啰嗦)
 	sql := "rr.role_id IN ? AND sys_resource.is_active = ?" + typeClause
 	var resources []model.SysResource
-	if err := s.db.WithContext(ctx).
+	// 双 tag:资源行变(sys_resource)或角色绑定变(sys_role_resource,
+	// AssignResources 覆盖式重写)任一都要失效这条 JOIN 查询
+	sc := querycache.On(s.db.WithContext(ctx).
 		Table("sys_resource").
 		Joins("INNER JOIN sys_role_resource rr ON rr.resource_id = sys_resource.id").
 		Where(sql, append([]any{roleIDs}, typeArgs...)...).
-		Order("sys_resource.sort ASC, sys_resource.id ASC").
-		Find(&resources).Error; err != nil {
+		Order("sys_resource.sort ASC, sys_resource.id ASC"),
+		permResourcesCacheTTL, "sys_resource", "sys_role_resource")
+	if err := sc.Find(ctx, &resources); err != nil {
 		return nil, errcode.New(errcode.Internal, "查询资源失败").WithDetail(err.Error())
 	}
 	return resources, nil
