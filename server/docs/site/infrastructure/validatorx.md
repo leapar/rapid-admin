@@ -74,6 +74,21 @@ err := v.RegisterCustom("starts_with_hz", func(fl validator.FieldLevel) bool {
 
 完整示例见 `examples/validatorx/main.go`。
 
+### 覆盖规则文案(不改代码)
+
+文案表可在运行期覆盖(借鉴 gvalid 的自定义消息层:调用方覆盖 → 包级默认表兜底),
+以后要接 DB 下发 / 多语言也不用动包本身:
+
+```go
+v := validatorx.Get()
+v.RegisterMessages(map[string]string{
+    "min":    "至少 %s 个字",  // 含 %s 按带参模板填
+    "oneof":  "必须是 %s 之一",
+    "idcard": "身份证号不正确,请检查",  // 不含 %s 原样使用
+})
+v.RegisterMessages(nil) // 清空覆盖,回到包级默认表
+```
+
 ## 注意事项
 
 - ⚠️ **注册"受限 tag"会直接 panic,不是返 error**。

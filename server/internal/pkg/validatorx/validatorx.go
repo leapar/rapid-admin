@@ -32,7 +32,7 @@ var (
 
 // Validator 封装 validator + 中文翻译
 type Validator struct {
-	// mu 保护 v 内部 validations map 的读改写。
+	// mu 保护 v 内部 validations map 与 msgOverrides 的读改写。
 	//
 	// ⚠️ v10.30.5 的这张 map **读写都没锁**(cache.go:289 在 Struct 路径上读、
 	// validator_instance.go:756 在 RegisterValidation 时裸写),并发注册 +
@@ -41,6 +41,11 @@ type Validator struct {
 	// 可忽略;代价是注册期间校验会短暂串行 —— 可接受。
 	mu sync.RWMutex
 	v  *validator.Validate
+
+	// msgOverrides 规则文案覆盖表(RegisterMessages 写入),借鉴 gvalid
+	// 的自定义消息层:调用方覆盖 → 包级默认表兜底。文案错误不再需要
+	// 改代码发版,以后还能从配置/DB 下发。
+	msgOverrides map[string]string
 }
 
 // Get 取单例
@@ -108,8 +113,52 @@ func (val *Validator) Explain(err error) (field, message string) {
 	ve := ves[0]
 	field = ve.Field() // 已经被 RegisterTagNameFunc 替换成 json tag
 	rule := ve.Tag()
-	message = ruleLabel(rule, ve.Param())
+	message = val.ruleLabel(rule, ve.Param())
 	return field, message
+}
+
+// RegisterMessages 覆盖规则的错误文案(运行期可调,借鉴 gvalid 的
+// 自定义消息层:调用方覆盖 → 包级默认表兜底)。
+//
+// # 形状约定
+//
+// 值含 "%s" 时按"带参数模板"填参(参数来自校验器,如 min 的上限值);
+// 不含 "%s" 则原样使用。传 nil / 空表 = 清空覆盖,回到包级默认表。
+//
+// # 线程安全
+//
+// 与 RegisterCustom 同锁(mu):写锁与 Struct / Explain 的读路径互斥。
+func (val *Validator) RegisterMessages(messages map[string]string) {
+	val.mu.Lock()
+	defer val.mu.Unlock()
+	if len(messages) == 0 {
+		val.msgOverrides = nil
+		return
+	}
+	cp := make(map[string]string, len(messages))
+	for k, v := range messages {
+		cp[k] = v
+	}
+	val.msgOverrides = cp
+}
+
+// ruleLabel 规则 → 中文短句:先查覆盖表,再落包级默认表 ruleLabel。
+// (方法与包函数同名,方法优先,包函数只当默认表用。)
+func (val *Validator) ruleLabel(rule, param string) string {
+	val.mu.RLock()
+	tpl := val.msgOverrides[rule]
+	val.mu.RUnlock()
+	if tpl != "" {
+		if rule == "oneof" {
+			// oneof 的参数是空格分隔的候选值,展示时换成 " / " 分隔
+			param = strings.ReplaceAll(param, " ", " / ")
+		}
+		if strings.Contains(tpl, "%s") {
+			return fmt.Sprintf(tpl, param)
+		}
+		return tpl
+	}
+	return ruleLabel(rule, param)
 }
 
 // ruleLabels 无参数规则 → 中文短句

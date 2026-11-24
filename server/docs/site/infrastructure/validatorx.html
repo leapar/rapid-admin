@@ -1200,6 +1200,17 @@ go-playground/validator/v10),线程安全,业务全局复用。</li>
 </code></pre>
 <p>业务侧建议加业务前缀(如 <code>wx_appid</code>),避免与内置保留字撞名。</p>
 <p>完整示例见 <code>examples/validatorx/main.go</code>。</p>
+<h3 id="覆盖规则文案不改代码">覆盖规则文案(不改代码)</h3>
+<p>文案表可在运行期覆盖(借鉴 gvalid 的自定义消息层:调用方覆盖 → 包级默认表兜底),
+以后要接 DB 下发 / 多语言也不用动包本身:</p>
+<pre><code class="lang-go">v := validatorx.Get()
+v.RegisterMessages(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">string</span>{
+    <span class="hljs-string">"min"</span>:    <span class="hljs-string">"至少 %s 个字"</span>,  <span class="hljs-comment">// 含 %s 按带参模板填</span>
+    <span class="hljs-string">"oneof"</span>:  <span class="hljs-string">"必须是 %s 之一"</span>,
+    <span class="hljs-string">"idcard"</span>: <span class="hljs-string">"身份证号不正确,请检查"</span>,  <span class="hljs-comment">// 不含 %s 原样使用</span>
+})
+v.RegisterMessages(<span class="hljs-literal">nil</span>) <span class="hljs-comment">// 清空覆盖,回到包级默认表</span>
+</code></pre>
 <h2 id="注意事项">注意事项</h2>
 <ul>
 <li>⚠️ <strong>注册"受限 tag"会直接 panic,不是返 error</strong>。
@@ -1286,7 +1297,7 @@ DTO 上写 <code>validate:"phone"</code> 会得到 <code>Undefined validation fu
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"validatorx(参数校验)","level":"3.4","depth":1,"next":{"title":"pagination(分页)","level":"3.5","depth":1,"path":"infrastructure/pagination.md","ref":"infrastructure/pagination.md","articles":[]},"previous":{"title":"response(统一响应体)","level":"3.3","depth":1,"path":"infrastructure/response.md","ref":"infrastructure/response.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"infrastructure/validatorx.md","mtime":"2026-11-01T08:23:33.778Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-24T04:08:25.722Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"validatorx(参数校验)","level":"3.4","depth":1,"next":{"title":"pagination(分页)","level":"3.5","depth":1,"path":"infrastructure/pagination.md","ref":"infrastructure/pagination.md","articles":[]},"previous":{"title":"response(统一响应体)","level":"3.3","depth":1,"path":"infrastructure/response.md","ref":"infrastructure/response.md","articles":[]},"dir":"ltr"},"config":{"plugins":["betterchinese","highlight","-fontsettings","-lunr","-search","search-pro","theme-default","-toolbar","-sharing","chapter-fold","back-to-top-button","hide-element","custom-favicon","addcssjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"chapter-fold":{},"search-pro":{},"addcssjs":{"js":[],"css":["styles/website.css"]},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"favicon":"favicon.ico","back-to-top-button":{},"custom-favicon":{},"betterchinese":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"通用后台管理框架手册","gitbook":"*","description":"Go + Hertz + GORM 后台管理框架的分章说明:每个框架模块的功能 / 配置 / 使用方法,附 49 个可运行示例。"},"file":{"path":"infrastructure/validatorx.md","mtime":"2026-11-24T04:11:29.240Z","type":"markdown"},"gitbook":{"version":"6.2.5","time":"2026-11-24T04:11:33.598Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
