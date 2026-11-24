@@ -71,6 +71,21 @@ errcode.Msg(errcode.ApprovalNoAssignee)
 
 完整示例见 `examples/errcode/main.go`。
 
+### 错误堆栈链(排障用)
+
+`New` / `Newf` / `Wrap` / `Wrapf` 在调用瞬间拍下调用点栈,整条包装链的栈合并
+去重后用 `Stack()` / `StackOf(err)` 取出 —— **只进日志,不进 wire**
+(`Fail` 仍只发 Message,前端零感知):
+
+```go
+err := errcode.Wrapf(bizErr, "查 %d 关审批人失败", n)
+code := errcode.CodeOf(err)        // errors.As 照常穿透,码不丢
+log := errcode.StackOf(err)        // 编号层 + file:line,空链返回 ""
+```
+
+`BaseHandler.Fail` 对落到 `Internal` 的错误自动带 `err_stack` 字段落 app 日志;
+纯 `fmt.Errorf` 链没有栈,`StackOf` 诚实地返回空串。
+
 ## 注意事项
 
 ### 段位表(新增码先看这里)

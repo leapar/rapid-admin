@@ -7,8 +7,10 @@ import (
 	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	"go.uber.org/zap"
 
 	"rapid-admin/internal/pkg/errcode"
+	"rapid-admin/internal/pkg/logger"
 	"rapid-admin/internal/pkg/pagination"
 	"rapid-admin/internal/pkg/response"
 	"rapid-admin/internal/pkg/validatorx"
@@ -129,9 +131,22 @@ func (h *BaseHandler) PageWith(c *app.RequestContext, list any, total int64, pag
 }
 
 // Fail 失败
+//
+// # ⚠️ Internal 错误要带栈落 app 日志
+//
+// 5xx 已由 AccessLog 记 http_error,但 message 只有响应体文案
+// ("服务器内部错误"),不知道错在哪一行。errcode.New/Wrap 在创建/包装
+// 瞬间拍了栈,这里取整条链的栈一起落盘 —— 排障时从日志直接定位产生点。
+// 4xx 业务错误是正常分支,不在此处记日志(AccessLog 已有访问记录)。
 func (h *BaseHandler) Fail(c *app.RequestContext, err error) {
 	var e *errcode.Error
 	if errors.As(err, &e) {
+		if e.Code == errcode.Internal {
+			logger.L().Error("handler: 业务错误以 Internal 落地",
+				zap.Int("code", e.Code),
+				zap.String("error", err.Error()),
+				zap.String("err_stack", errcode.StackOf(err)))
+		}
 		if e.Detail != nil {
 			response.FailWithData(c, e.Code, e.Message, e.Detail)
 			return
@@ -139,6 +154,9 @@ func (h *BaseHandler) Fail(c *app.RequestContext, err error) {
 		response.Fail(c, e.Code, e.Message)
 		return
 	}
+	logger.L().Error("handler: 未包装错误以 Internal 落地",
+		zap.String("error", err.Error()),
+		zap.String("err_stack", errcode.StackOf(err)))
 	response.Fail(c, errcode.Internal, "服务器内部错误")
 }
 

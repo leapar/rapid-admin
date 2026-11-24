@@ -10,19 +10,22 @@ import (
 type Error struct {
 	Code    int
 	Message string
-	// Detail 附加数据(例如校验错误的字段级明细)
+	// Detail 附加数据(例如校验错误的对象,详见 errcode.go 的码表)
 	Detail interface{}
+	// st 创建点调用栈(New/Newf 在调用瞬间捕获),只进日志不进 wire。
+	// 直接字面量构造 &Error{} 的地方没有栈,Stack() 诚实地不渲染帧。
+	st Stack
 }
 
 func (e *Error) Error() string { return fmt.Sprintf("[%d] %s", e.Code, e.Message) }
 
-// New 创建业务错误
+// New 创建业务错误(捕获创建点调用栈)
 func New(code int, msg ...string) *Error {
 	m := Msg(code)
 	if len(msg) > 0 && msg[0] != "" {
 		m = msg[0]
 	}
-	return &Error{Code: code, Message: m}
+	return &Error{Code: code, Message: m, st: capture()}
 }
 
 // WithDetail 附加数据
@@ -37,9 +40,9 @@ func (e *Error) WithMsg(msg string) *Error {
 	return e
 }
 
-// Newf 用 format 创建业务错误
+// Newf 用 format 创建业务错误(捕获创建点调用栈)
 func Newf(code int, format string, args ...interface{}) *Error {
-	return &Error{Code: code, Message: fmt.Sprintf(format, args...)}
+	return &Error{Code: code, Message: fmt.Sprintf(format, args...), st: capture()}
 }
 
 // CodeOf 从 error 提取业务码(非 *Error 返回 Internal)
